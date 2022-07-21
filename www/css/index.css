@@ -1,0 +1,134 @@
+/* COMMON */
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.margin {
+    padding: 0 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.top {
+    display: flex;
+    flex-direction: column;
+    top: 0;
+    position: absolute;
+    position: fixed;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.icon {
+    width: 48px;
+    height: 48px;
+}
+
+.header .left img {
+    width: 169px;
+}
+
+.header .right {
+    display: flex;
+    align-items: center;
+}
+
+/* BG */
+
+.bg {
+    position: absolute;
+    display: flaot;
+    width: 100%;
+    height: 792px;
+    left: 0px;
+    top: -112px;
+    z-index: -1;
+
+    background: linear-gradient(
+        180.02deg,
+        #f4f8fc 13.84%,
+        rgba(244, 248, 252, 0) 99.98%
+    );
+}
+
+/* TIPS */
+
+.section--tips {
+    position: relative;
+    top: 100px;
+}
+
+.section_title {
+    height: 30px;
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+}
+
+.section_title div {
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 180%;
+    color: #2d313e;
+    margin-right: 5px;
+}
+
+.section_title img {
+    width: 20px;
+}
+
+.tips {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    overflow: scroll;
+    white-space: nowrap;
+}
+
+.tips::-webkit-scrollbar {
+    display: none;
+}
+
+.tip {
+    width: 141px;
+    height: 221px;
+    background-color: white;
+    border: 1px solid #ebf0f8;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+
+.tip .title {
+    padding: 15px 8px 0 15px;
+    box-sizing: border-box;
+
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 180%;
+    color: #2d313e;
+}
+
+.section--tips .tips .tip img {
+    width: 141px;
+}
