@@ -1,0 +1,39 @@
+@import "/www/css/common.css";
+.access_item {
+    display: flex;
+    align-itmes: center;
+    justify-content: space-between;
+    padding: 0 8px 0 20px;
+    box-sizing: border-box;
+    height: 60px;
+}
+
+.access_item_left {
+    display: flex;
+    align-items: center;
+
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+
+    letter-spacing: -0.24px;
+
+    /* Normal */
+}
+
+.access_item_left .nickname {
+    color: #5b616b;
+}
+
+.access_item_left .id {
+    color: #9baab7;
+    margin-left: 10px;
+}
+
+.access_item_right {
+    display: flex;
+    align-items: center;
+}

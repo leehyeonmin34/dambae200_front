@@ -1,51 +1,4 @@
-/* COMMON */
-
-body {
-    margin: 0;
-    padding: 0;
-}
-
-a {
-    text-decoration: none;
-}
-
-.margin {
-    padding: 0 20px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.top {
-    display: flex;
-    flex-direction: column;
-    top: 0;
-    position: absolute;
-    position: fixed;
-}
-
-.header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.icon {
-    width: 48px;
-    height: 48px;
-}
-
-.header .left img {
-    width: 169px;
-}
-
-.header .right {
-    display: flex;
-    align-items: center;
-}
+@import "./common.css";
 
 /* BG */
 
@@ -59,7 +12,7 @@ a {
     z-index: -1;
 
     background: linear-gradient(
-        180.02deg,
+        180deg,
         #f4f8fc 13.84%,
         rgba(244, 248, 252, 0) 99.98%
     );
@@ -69,7 +22,7 @@ a {
 
 .section--tips {
     position: relative;
-    top: 100px;
+    margin-top: 100px;
 }
 
 .section_title {
@@ -110,7 +63,7 @@ a {
 
 .tip {
     width: 141px;
-    height: 221px;
+
     background-color: white;
     border: 1px solid #ebf0f8;
     border-radius: 20px;
@@ -131,4 +84,243 @@ a {
 
 .section--tips .tips .tip img {
     width: 141px;
+}
+
+/* 매장 카드 */
+.section--stores {
+    margin-top: 30px;
+    position: relative;
+}
+
+.store_cards {
+}
+
+.store_card {
+    height: 220px;
+    width: 335px;
+    background: #ddf9ff;
+    align-content: space-between;
+    border-radius: 10px;
+    position: relative;
+}
+
+.store_card .more_icon {
+    position: absolute;
+    right: 0px;
+}
+
+.store_card .store_icon_container {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.store_card .store_icon {
+    width: 153px;
+    height: 104px;
+}
+
+.store_card .admin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+
+    width: 94px;
+    height: 30px;
+
+    background: #ffffff;
+    border-radius: 20px;
+
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    /* identical to box height, or 157% */
+
+    text-align: center;
+    letter-spacing: -0.408px;
+
+    /* Black */
+
+    color: #2d313e;
+}
+
+.store_card .admin img {
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+}
+
+.store_card .store_name {
+    height: max-content;
+    position: absolute;
+    right: 17px;
+    bottom: 19px;
+
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 22px;
+    /* identical to box height, or 122% */
+
+    text-align: right;
+    letter-spacing: -0.408px;
+
+    /* Black */
+
+    color: #2d313e;
+}
+
+.add_store_container {
+    width: 335px;
+    height: 60px;
+    margin-top: 10px;
+
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16.3333px;
+    line-height: 26px;
+    position: relative;
+
+    color: #9baab7;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.add_store_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 10px dashed #ebf0f8;
+    position: absolute;
+    border-radius: 16px;
+    top: -8px;
+    bottom: -8px;
+    left: -8px;
+    right: -8px;
+}
+
+/* .add_store_container:before {
+    content: "";
+    position: absolute;
+    border: 10px dashed #ebf0f8;
+    top: -8px;
+    bottom: -8px;
+    left: -8px;
+    right: -8px;
+} */
+
+.add_store_container .add_icon {
+    width: 28px;
+    margin-right: 6px;
+    fill: #9baab7;
+}
+
+.add_store_dialog_screen {
+    visibility: hidden;
+    z-index: 999;
+    /* width: 100%; */
+    /* height: 100%; */
+    top: 0;
+    height: 100vh;
+
+    /* height: device-height; */
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+}
+
+.add_store_dialog {
+    background: white;
+    width: 335px;
+    border-radius: 20px;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.add_store_dialog .close_icon {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+}
+
+.add_store_dialog .message {
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 150%;
+
+    text-align: center;
+    color: #2d313e;
+    height: 128px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add_store_dialog .btn {
+    height: 160px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    background-color: #f4f8fc;
+    border-radius: 10px;
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-between;
+    align-items: center;
+    /* align-items: flex-end; */
+}
+
+.add_store_dialog .apply_btn {
+    margin-bottom: 10px;
+}
+
+.add_store_dialog ._icon {
+    width: 30px;
+}
+
+.add_store_dialog_screen .btn .btn_title {
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    margin-top: 4px;
+
+    color: #2d313e;
+}
+.add_store_dialog_screen .btn .btn_desc {
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 160%;
+    margin-top: 4px;
+    /* or 19px */
+
+    letter-spacing: -0.24px;
+
+    /* Normal */
+
+    color: #5b616b;
+}
+
+.add_store_dialog .btn .arrow_icon {
 }

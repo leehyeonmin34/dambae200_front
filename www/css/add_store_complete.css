@@ -1,0 +1,52 @@
+@import "/www/css/common.css";
+
+body {
+    position: relative;
+    overflow: hidden;
+}
+
+.title {
+    margin-top: 100px;
+    margin-left: 20px;
+
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 150%;
+    /* or 30px */
+
+    letter-spacing: -0.408px;
+
+    /* Black */
+
+    color: #2d313e;
+}
+
+.desc {
+    height: 21px;
+    margin-top: 10px;
+    margin-left: 20px;
+
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 150%;
+    /* identical to box height, or 21px */
+
+    letter-spacing: -0.408px;
+
+    /* Normal */
+
+    color: #5b616b;
+}
+
+img {
+    position: absolute;
+    width: 400px;
+
+    left: -20px;
+    top: 150%;
+    z-index: -1;
+}
