@@ -75,9 +75,9 @@ a {
     color: #5b616b;
 }
 
-.header_1 img {
+.header_1 .left_icon {
     position: absolute;
-    left: 20px;
+    left: 8px;
 }
 
 .header_2 {
@@ -145,6 +145,7 @@ input {
     display: flex;
     flex-direction: column-reverse;
     padding-bottom: 10px;
+    /* position: absolute; */
 }
 
 .full_floating_btn {
@@ -156,6 +157,7 @@ input {
     align-items: center;
     justify-content: center;
     margin: 0 20px;
+    position: relative;
 }
 
 .page_contents_with_header1 {
@@ -186,4 +188,188 @@ input {
 
     color: #9baab7;
     background-color: #f4f8fc;
+}
+
+.popup_screen {
+    visibility: hidden;
+    z-index: 999;
+    /* width: 100%; */
+    /* height: 100%; */
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    /* height: device-height; */
+    /* left: 0;
+    right: 0; */
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+}
+
+.popup_container {
+    background: white;
+    width: 270px;
+    border-radius: 20px;
+    position: fixed;
+    padding: 20px 0 0;
+    box-sizing: border-box;
+}
+
+.popup_container .title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 22px;
+    /* or 122% */
+
+    text-align: center;
+    margin: 0 16px;
+
+    /* Black */
+
+    color: #2d313e;
+}
+
+.popup_container .desc {
+    margin: 6px 16px 18px;
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 150%;
+    /* or 21px */
+
+    text-align: center;
+    letter-spacing: -0.078px;
+    /* margin-bottom: 18px; */
+
+    /* Normal */
+
+    color: #5b616b;
+}
+
+.popup_container .popup_bottom {
+}
+
+.popup_container .top_border {
+    background-color: #9baab7;
+    height: 1px;
+    width: 100%;
+
+    /* position: absolute; */
+    top: 0;
+}
+
+.popup_container .buttons {
+    width: 100%;
+    height: 44px;
+    display: flex;
+}
+
+.popup_container .cancel_btn {
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-family: No;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 22px;
+    /* identical to box height, or 129% */
+
+    text-align: center;
+    /* width: 100%; */
+    /* Normal */
+
+    color: #5b616b;
+}
+
+.popup_container .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.popup_screen .action_btn {
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 22px;
+    /* width: 100%; */
+    /* identical to box height, or 129% */
+
+    text-align: center;
+
+    /* Primary */
+}
+
+.popup_screen .btn_divider {
+    background-color: #9baab7;
+    height: 100%;
+    width: 1px;
+
+    /* position: absolute; */
+    /* top: 0; */
+}
+
+.popup_container .green {
+    color: #30cf8c;
+}
+
+.popup_container .red {
+    color: #ff716a;
+}
+
+.btn_pressed {
+    background-color: rgba(155, 170, 183, 0);
+    /* width: 100%; */
+    /* height: 100%; */
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.btn_pressed:active {
+    background-color: rgba(155, 170, 183, 0.1);
+}
+
+.menu {
+    visibility: hidden;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+    padding: 4px 0;
+    box-sizing: border-box;
+    width: 178px;
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+
+    text-align: right;
+
+    color: #000000;
+
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    top: 36px;
+}
+
+.menu_item {
+    width: 100%;
+    height: 44px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
 }

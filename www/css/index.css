@@ -70,6 +70,10 @@
     margin-right: 10px;
 }
 
+.tip:active {
+    background-color: #ebf0f8;
+}
+
 .tip .title {
     padding: 15px 8px 0 15px;
     box-sizing: border-box;
@@ -102,6 +106,7 @@
     align-content: space-between;
     border-radius: 10px;
     position: relative;
+    overflow: hidden;
 }
 
 .store_card .more_icon {
@@ -285,6 +290,7 @@
     /* flex-direction: column; */
     justify-content: space-between;
     align-items: center;
+    position: relative;
     /* align-items: flex-end; */
 }
 
