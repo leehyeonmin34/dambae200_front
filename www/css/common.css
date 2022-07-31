@@ -4,10 +4,22 @@ body {
     margin: 0;
     padding: 0;
     position: relative;
+    color: #5b616b;
+    font-family: "Noto Sans CJK KR";
 }
 
 a {
     text-decoration: none;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    list-style: none;
 }
 
 .icon {
@@ -25,13 +37,27 @@ a {
     justify-content: center;
 }
 
+.invisible {
+    display: none !important;
+    opacity: 0;
+    transition: 0.3s;
+}
+
 .top {
     display: flex;
     flex-direction: column;
     top: 0;
+    width: 100%;
     position: absolute;
     position: fixed;
-    z-index: 1;
+    z-index: 100;
+    transition: 0.3s;
+    background: #f5f9fc;
+}
+
+.top.scrolled {
+    background: white;
+    transition: 0.3s;
 }
 
 .header {
@@ -191,17 +217,10 @@ input {
 }
 
 .popup_screen {
-    visibility: hidden;
     z-index: 999;
-    /* width: 100%; */
-    /* height: 100%; */
     top: 0;
     height: 100vh;
     width: 100vw;
-    /* height: device-height; */
-    /* left: 0;
-    right: 0; */
-    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -209,10 +228,14 @@ input {
 }
 
 .popup_container {
+    z-index: 9900;
     background: white;
     width: 270px;
     border-radius: 20px;
     position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     padding: 20px 0 0;
     box-sizing: border-box;
 }
@@ -250,9 +273,6 @@ input {
     color: #5b616b;
 }
 
-.popup_container .popup_bottom {
-}
-
 .popup_container .top_border {
     background-color: #9baab7;
     height: 1px;
@@ -266,6 +286,9 @@ input {
     width: 100%;
     height: 44px;
     display: flex;
+}
+.popup_container .buttons .btn:active {
+    background-color: rgba(155, 170, 183, 0.1);
 }
 
 .popup_container .cancel_btn {
@@ -331,7 +354,7 @@ input {
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 1;
+    z-index: 10;
 }
 
 .btn_pressed:active {
@@ -339,7 +362,6 @@ input {
 }
 
 .menu {
-    visibility: hidden;
     background: white;
     border-radius: 20px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
@@ -362,6 +384,9 @@ input {
     position: absolute;
     right: 0;
     top: 36px;
+    z-index: 9000;
+    display: flex;
+    overflow: hidden;
 }
 
 .menu_item {
@@ -372,4 +397,128 @@ input {
     align-items: center;
     padding: 0 20px;
     box-sizing: border-box;
+}
+
+.menu_item:active {
+    background-color: rgba(155, 170, 183, 0.1);
+    /* background-color: red; */
+}
+
+.escape_screen {
+    z-index: -9999;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.escape {
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+/* .escape_screen .esc_dark { */
+/* background-color: rgba(0, 0, 0, 0.2); */
+/* } */
+
+#toast {
+    background: rgba(41, 48, 57, 0.9);
+    /* width: 100%; */
+    margin: 0 20px;
+    height: 60px;
+    padding: 0 20px;
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    position: fixed;
+    bottom: -100px;
+    width: 80vw;
+    /* identical to box height */
+
+    /* SubButtonBG */
+
+    color: #ebf0f8;
+
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.toast_up {
+    transform: translateY(-120px);
+    transition: transform 0.3s;
+}
+
+.btn_i {
+    transition: 0.3s;
+    transform: scale(100%);
+}
+
+.btn_i.pressed {
+    transition: 0.3s;
+    transform: scale(95%);
+}
+
+.dialog {
+    z-index: 9500;
+    position: fixed;
+}
+
+.modal {
+    z-index: 9400;
+    position: absolute;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: end;
+    /* background: red; */
+}
+
+.modal_container {
+    z-index: 9401;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+    bottom: 0;
+    padding: 0 0 20px 0;
+    box-sizing: border-box;
+}
+
+.modal .modal_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px 0 24px;
+    height: 60px;
+}
+
+.modal .modal_title {
+    color: #2d313e;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.modal .modal_item {
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    height: 54px;
+    font-size: 14px;
+}
+
+.modal .modal_item:active {
+    background: rgba(155, 170, 183, 0.1);
 }

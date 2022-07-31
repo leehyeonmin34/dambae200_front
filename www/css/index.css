@@ -96,22 +96,52 @@
     position: relative;
 }
 
-.store_cards {
-}
-
 .store_card {
     height: 220px;
-    width: 335px;
-    background: #ddf9ff;
+    /* background: #ddf9ff; */
     align-content: space-between;
     border-radius: 10px;
     position: relative;
     overflow: hidden;
+    margin-bottom: 10px;
 }
 
-.store_card .more_icon {
+.store_card_bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.store_card.inaccessible .store_card_bg,
+.store_card.inaccessible .store_icon_container,
+.store_card.inaccessible .store_name,
+.store_card.waiting .store_card_bg,
+.store_card.waiting .store_icon_container,
+.store_card.waiting .store_name {
+    filter: grayscale(100%);
+}
+
+.store_card.inaccessible .store_name,
+.store_card.waiting .store_name {
+    color: #9baab7;
+}
+
+.store_card .more_icon,
+.store_card .close_icon {
     position: absolute;
     right: 0px;
+    z-index: 11;
+}
+
+.store_card.inaccessible .more_icon,
+.store_card.waiting .more_icon,
+.store_card.accessible .more_icon {
+    display: none;
+}
+
+.store_card.admin_access .close_icon {
+    position: absolute;
+    display: none;
 }
 
 .store_card .store_icon_container {
@@ -128,7 +158,7 @@
     height: 104px;
 }
 
-.store_card .admin {
+.store_card .store_tag {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -158,10 +188,27 @@
     color: #2d313e;
 }
 
-.store_card .admin img {
+.store_card.waiting .store_tag {
+    color: #30cf8c;
+}
+
+.store_card.inaccessible .store_tag {
+    color: #ff716a;
+}
+
+.store_card .store_tag img {
+    display: none;
+}
+
+.store_card.admin_access .store_tag img {
+    display: block;
     width: 18px;
     height: 18px;
     margin-right: 4px;
+}
+
+.store_card.accessible .store_tag {
+    display: none;
 }
 
 .store_card .store_name {
@@ -172,7 +219,7 @@
 
     font-family: "Noto Sans CJK KR";
     font-style: normal;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 18px;
     line-height: 22px;
     /* identical to box height, or 122% */
@@ -185,10 +232,21 @@
     color: #2d313e;
 }
 
+.store_card .menu_item {
+    display: none;
+}
+
+.store_card.admin_access .for_admin {
+    display: flex;
+}
+
+.store_card.accessible .for_staff {
+    display: flex;
+}
+
 .add_store_container {
     width: 335px;
     height: 60px;
-    margin-top: 10px;
 
     font-family: "Noto Sans CJK KR";
     font-style: normal;
@@ -216,16 +274,6 @@
     right: -8px;
 }
 
-/* .add_store_container:before {
-    content: "";
-    position: absolute;
-    border: 10px dashed #ebf0f8;
-    top: -8px;
-    bottom: -8px;
-    left: -8px;
-    right: -8px;
-} */
-
 .add_store_container .add_icon {
     width: 28px;
     margin-right: 6px;
@@ -233,18 +281,11 @@
 }
 
 .add_store_dialog_screen {
-    visibility: hidden;
-    z-index: 999;
-    /* width: 100%; */
-    /* height: 100%; */
+    display: flex;
     top: 0;
     height: 100vh;
-
-    /* height: device-height; */
     left: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
     align-items: center;
     justify-content: center;
     position: fixed;
@@ -254,9 +295,13 @@
     background: white;
     width: 335px;
     border-radius: 20px;
-    position: relative;
+    /* position: relative; */
     padding: 20px;
     box-sizing: border-box;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .add_store_dialog .close_icon {
@@ -302,7 +347,7 @@
     width: 30px;
 }
 
-.add_store_dialog_screen .btn .btn_title {
+.add_store_dialog .btn .btn_title {
     font-family: "Noto Sans CJK KR";
     font-style: normal;
     font-weight: 700;
@@ -312,7 +357,7 @@
 
     color: #2d313e;
 }
-.add_store_dialog_screen .btn .btn_desc {
+.add_store_dialog .btn .btn_desc {
     font-family: "Noto Sans CJK KR";
     font-style: normal;
     font-weight: 400;
