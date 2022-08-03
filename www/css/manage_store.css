@@ -1,48 +1,9 @@
 @import "./common.css";
+@import "./complete.css";
 
 .header {
     display: flex;
     flex-direction: column;
-}
-
-.store_list {
-}
-
-.store_list_item {
-    height: 60px;
-    display: flex;
-    align-items: center;
-    padding: 0 8px;
-    box-sizing: border-box;
-
-    font-family: "Noto Sans CJK KR";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 21px;
-    /* identical to box height */
-
-    /* Normal */
-
-    color: #5b616b;
-}
-
-.store_list_item .store_icon {
-    width: 55px;
-    margin-right: 7px;
-}
-
-.small_section_title {
-    font-family: "Apple SD Gothic Neo";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 24px;
-    /* identical to box height, or 200% */
-
-    /* Detail */
-
-    color: #9baab7;
 }
 
 .store_name_section input {

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="/www/css/notificationsAndSettings.css" />
+    </head>
+    <body>
+        <div class="top">
+            <img src="/www/img/ios/top_black.png" />
+            <div class="header">
+                <div class="header_1">
+                    <img
+                        src="/www/img/icons/arrow-left 1.svg"
+                        class="icon left_icon"
+                    />
+                </div>
+            </div>
+        </div>
+        <div class="page_contents_with_header1">
+            <div class="page_title_section">
+                <img class="page_icon" src="/www/img/icons/noti_gray.svg" />
+
+                <div class="page_title">설정</div>
+            </div>
+            <div class="noti_list">
+                <!-- NOTIFICATIONS -->
+            </div>
+            <div class="load_more_btn">
+                <img src="/www/img/icons/small_down_arrow.svg" /> 더 불러오기
+            </div>
+        </div>
+
+        <script type="rv-template" id="notification_template">
+            <div class="noti_item" id={{id}}>
+                <div class="new {{new}}"></div>
+                <div class="right">
+                    <div class="title">{{title}}</div>
+                    <div class="desc">{{desc}}</div>
+                    <div class="date">{{date}}</div>
+                </div>
+                <div class="full_border bottom"></div>
+            </div>
+        </script>
+
+        <script type="module" src="/www/js/notifications.js"></script>
+        <script type="module" src="/www/js/common.js"></script>
+
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
+            integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+    </body>
+</html>

@@ -16,5 +16,6 @@
     "bugs": {
         "url": "https://github.com/leehyeonmin34/dambae200_front/issues"
     },
-    "homepage": "https://github.com/leehyeonmin34/dambae200_front#readme"
+    "homepage": "https://github.com/leehyeonmin34/dambae200_front#readme",
+    "type": "module"
 }

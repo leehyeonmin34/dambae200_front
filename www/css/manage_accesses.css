@@ -1,7 +1,7 @@
 @import "/www/css/common.css";
 .access_item {
     display: flex;
-    align-itmes: center;
+    align-items: center;
     justify-content: space-between;
     padding: 0 8px 0 20px;
     box-sizing: border-box;
@@ -36,4 +36,12 @@
 .access_item_right {
     display: flex;
     align-items: center;
+}
+
+.staffs .add_icon {
+    display: none;
+}
+
+.applicators .admin_icon {
+    display: none;
 }

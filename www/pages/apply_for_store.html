@@ -5,19 +5,30 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
         <link rel="stylesheet" href="/www/css/manage_store.css" />
+        <link rel="stylesheet" href="/www/css/complete.css" />
     </head>
     <body>
         <div class="top">
             <img src="/www/img/ios/top_black.png" />
             <div class="header">
                 <div class="header_1">
-                    <img src="/www/img/icons/arrow-left 1.svg" />
-                    담배 목록 접근 신청하기
+                    <img
+                        class="left_icon icon"
+                        src="/www/img/icons/arrow-left 1.svg"
+                    />
+                    <label> 담배 목록 접근 신청하기 </label>
                 </div>
                 <div class="header_2">
                     <div class="search_input">
-                        <input />
-                        <img src="/www/img/icons/search.svg" />
+                        <input
+                            type="text"
+                            name="storeName"
+                            placeholder="매장 이름을 검색해보세요"
+                        />
+                        <img
+                            class="search_icon"
+                            src="/www/img/icons/search.svg"
+                        />
                     </div>
                 </div>
                 <div class="full_border"></div>
@@ -25,32 +36,77 @@
         </div>
         <div class="page_contents_with_header2">
             <div class="store_list">
-                <div class="store_list_item">
-                    <img
-                        class="radio_btn"
-                        src="/www/img/icons/radio_active.svg"
-                    />
-                    <img class="store_icon" src="/www/img/store_logos/cu.png" />
-                    CU 서울사랑점
-                </div>
-                <div class="store_list_item">
-                    <img
-                        class="radio_btn"
-                        src="/www/img/icons/radio_inactive.svg"
-                    />
-                    <img
-                        class="store_icon"
-                        src="/www/img/store_logos/gs25.png"
-                    />
-                    GS25 서울사랑점
-                </div>
+                <!-- STORE_LIST -->
             </div>
             <div class="full_floating_btn_container">
-                <div class="full_floating_btn">
+                <div class="full_floating_btn disabled">
                     <div class="btn_pressed"></div>
                     권한 신청하기
                 </div>
             </div>
         </div>
+
+        <div id="toast">{{message}}</div>
+
+        <div class="bg_1"></div>
+
+        <div id="complete">
+            <div class="top">
+                <img src="/www/img/ios/top_black.png" />
+            </div>
+            <div class="page_contents_with_header1">
+                <div class="title">
+                    담배 목록 접근 신청이 <br />
+                    성공적으로 이루어졌습니다 !
+                </div>
+                <div class="desc">
+                    목록 관리자가 승인하면 알림으로 알려드려요
+                </div>
+            </div>
+            <img src="/www/img/illustrations/application.png" />
+            <div class="full_floating_btn_container">
+                <div class="full_floating_btn">
+                    <div class="btn_pressed"></div>
+                    확인
+                </div>
+            </div>
+        </div>
+
+        <script type="rv-template" id="storeRadioButtonTemplate">
+            <div class="form_radio_btn">
+                <input
+                    type="radio"
+                    name="storeBrand"
+                    id="{{id}}"
+                    value="{{id}}"
+                />
+                <label for="{{id}}">
+                    <img
+                        class="radio_btn_icon active"
+                        src="/www/img/icons/radio_active.svg"
+                    />
+                    <img
+                        class="radio_btn_icon inactive"
+                        src="/www/img/icons/radio_inactive.svg"
+                    />
+                    <img
+                        class="store_icon"
+                        src={{logo_path}}
+                    />
+                    {{name}}
+                </label>
+            </div>
+        </script>
+
+        <script type="module" src="/www/js/apply_access.js"></script>
+        <script type="module" src="/www/js/common.js"></script>
+        <script type="module" src="/www/js/storeBrand.js"></script>
+
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
+            integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
     </body>
 </html>

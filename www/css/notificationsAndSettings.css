@@ -1,0 +1,102 @@
+@import "./common.css";
+
+.page_title_section {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.page_icon {
+    width: 40px;
+    height: 40px;
+}
+
+.page_title {
+    margin-left: 14px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 170%;
+    color: #2d313e;
+}
+
+.noti_item {
+    width: 100%;
+    position: relative;
+}
+
+.noti_item .new {
+    width: 6px;
+    height: 6px;
+    background-color: red;
+    border-radius: 50%;
+    display: none;
+    position: absolute;
+    left: 38px;
+    top: 27px;
+}
+
+.noti_item .new.visible {
+    display: block;
+}
+
+.noti_item .right {
+    padding: 16px 20px 16px 75px;
+    box-sizing: border-box;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.noti_item .right .title {
+    font-size: 16px;
+    line-height: 24px;
+    color: #5b616b;
+}
+
+.noti_item .right .desc {
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 21px;
+    color: #9baab7;
+}
+
+.noti_item .right .date {
+    margin-top: 11px;
+    font-size: 12px;
+    line-height: 18px;
+    color: #9baab7;
+}
+
+.load_more_btn {
+    height: 80px;
+    margin-bottom: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9baab7;
+}
+
+.load_more_btn img {
+    margin-right: 20px;
+}
+
+.btn_list {
+    margin-top: 20px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #5b616b;
+}
+
+.btn_list .btn_item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.btn_list .btn_item img {
+    margin-left: 6px;
+    margin-right: 20px;
+}

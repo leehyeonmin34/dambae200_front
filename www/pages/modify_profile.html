@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/www/css/modify_profile.css" />
+        <title>Document</title>
+    </head>
+    <body>
+        <div class="top">
+            <img src="/www/img/ios/top_black.png" />
+            <div class="header">
+                <div class="header_1">
+                    <img
+                        src="/www/img/icons/arrow-left 1.svg"
+                        class="icon left_icon"
+                    />
+                    <label>
+                        <img src="/www/img/icons/settings_profile.svg" />
+                        <div>프로필</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="page_contents_with_header1">
+            <div class="email_section">
+                <img src="/www/img/icons/profile_gray.svg" />
+                example@email.com
+            </div>
+            <div class="nickname_section margin">
+                <label class="input_label" for="nickname">닉네임</label>
+                <input
+                    type="text"
+                    placeholder="닉네임을 입력해주세요"
+                    name="nickname"
+                />
+            </div>
+            <div class="full_floating_btn_container">
+                <div id="sendBtn" class="full_floating_btn disabled">
+                    <div class="btn_pressed"></div>
+                    수정하기
+                </div>
+            </div>
+
+            <div id="toast">{{message}}</div>
+        </div>
+        <sciprt type="module" src="/www/js/common.js"></sciprt>
+        <script type="module" src="/www/js/modify_profile.js"></script>
+    </body>
+</html>

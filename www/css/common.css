@@ -22,6 +22,14 @@ li {
     list-style: none;
 }
 
+.bg_1 {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    background: white;
+    z-index: -1;
+}
+
 .icon {
     /* width: 48px; */
     /* height: 48px; */
@@ -37,12 +45,6 @@ li {
     justify-content: center;
 }
 
-.invisible {
-    display: none !important;
-    opacity: 0;
-    transition: 0.3s;
-}
-
 .top {
     display: flex;
     flex-direction: column;
@@ -51,18 +53,22 @@ li {
     position: absolute;
     position: fixed;
     z-index: 100;
-    transition: 0.3s;
+    /* transition: 0.3s; */
+    background: white;
+}
+
+.top.main {
     background: #f5f9fc;
 }
 
-.top.scrolled {
+.top.main.scrolled {
     background: white;
     transition: 0.3s;
 }
 
 .header {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
     width: 100%;
@@ -73,7 +79,7 @@ li {
     height: 48px;
 }
 
-.header .left img {
+.header .logo {
     width: 169px;
 }
 
@@ -83,14 +89,17 @@ li {
 }
 
 .header_1 {
+    position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     height: 60px;
+    padding: 0 8px;
+    box-sizing: border-box;
 
     font-family: "Noto Sans CJK KR";
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 14px;
     line-height: 21px;
     /* identical to box height */
@@ -101,9 +110,15 @@ li {
     color: #5b616b;
 }
 
-.header_1 .left_icon {
+.main .header_1 {
+    margin: 0 8px 0 20px;
+}
+
+.header_1 label {
     position: absolute;
-    left: 8px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .header_2 {
@@ -132,6 +147,13 @@ li {
     width: 100%;
     background-color: #ebf0f8;
     position: absolute;
+}
+
+.full_border.top {
+    top: 0;
+}
+
+.full_border.bottom {
     bottom: 0;
 }
 
@@ -145,6 +167,18 @@ li {
     bottom: 0;
 }
 
+label.input_label {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 24px;
+    /* identical to box height, or 200% */
+
+    /* Detail */
+
+    color: #9baab7;
+}
+
 input {
     background: #f4f8fc;
     border-radius: 10px;
@@ -153,6 +187,59 @@ input {
     border: none;
     padding: 0 15px;
     box-sizing: border-box;
+}
+
+.form_radio_btn {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    box-sizing: border-box;
+
+    font-family: "Noto Sans CJK KR";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+
+    /* Normal */
+
+    color: #5b616b;
+}
+
+.form_radio_btn input[type="radio"] {
+    display: none;
+}
+
+.form_radio_btn label {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.form_radio_btn input[type="radio"] + label .active,
+.form_radio_btn input[type="radio"]:checked + label .inactive {
+    display: none;
+}
+
+.form_radio_btn input[type="radio"]:checked + label .active,
+.form_radio_btn input[type="radio"] + label .inactive {
+    display: block;
+}
+
+.form_radio_btn label .store_icon {
+    width: 55px;
+    margin-right: 7px;
+}
+
+input:focus {
+    outline: 2px solid #30cf8c;
+}
+
+input::placeholder {
+    color: #9baab7;
 }
 
 .full_floating_btn_container {
@@ -186,6 +273,15 @@ input {
     position: relative;
 }
 
+.full_floating_btn.primary {
+    background: #2eb87e;
+}
+
+.full_floating_btn.disabled {
+    background: #ebf0f8;
+    color: #9baab7;
+}
+
 .page_contents_with_header1 {
     margin-top: 105px;
 }
@@ -201,6 +297,7 @@ input {
     display: flex;
     align-items: center;
     padding-left: 20px;
+    box-sizing: border-box;
     /* justify-content: center; */
 
     font-family: "Noto Sans CJK KR";
@@ -217,7 +314,7 @@ input {
 }
 
 .popup_screen {
-    z-index: 999;
+    z-index: 9999;
     top: 0;
     height: 100vh;
     width: 100vw;
@@ -225,6 +322,10 @@ input {
     align-items: center;
     justify-content: center;
     position: fixed;
+}
+
+.popup_screen.dialog_off {
+    transition: 0.3s;
 }
 
 .popup_container {
@@ -238,6 +339,7 @@ input {
     transform: translate(-50%, -50%);
     padding: 20px 0 0;
     box-sizing: border-box;
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
 }
 
 .popup_container .title {
@@ -245,13 +347,8 @@ input {
     font-weight: 600;
     font-size: 18px;
     line-height: 22px;
-    /* or 122% */
-
     text-align: center;
     margin: 0 16px;
-
-    /* Black */
-
     color: #2d313e;
 }
 
@@ -361,6 +458,14 @@ input {
     background-color: rgba(155, 170, 183, 0.1);
 }
 
+.primary .btn_pressed {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.primary .btn_pressed:active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
 .menu {
     background: white;
     border-radius: 20px;
@@ -384,7 +489,7 @@ input {
     position: absolute;
     right: 0;
     top: 36px;
-    z-index: 9000;
+    /* z-index: 9000; */
     display: flex;
     overflow: hidden;
 }
@@ -415,9 +520,29 @@ input {
 
 .escape {
     background-color: rgba(0, 0, 0, 0.3);
+    transition: 0.3s;
     width: 100%;
     height: 100%;
     position: absolute;
+}
+
+.dialog_off .escape {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.dialog_dialog {
+    display: flex;
+    top: 0;
+    height: 100vh;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 8000;
+}
+
+.dialog_dialog.dialog_off {
 }
 
 /* .escape_screen .esc_dark { */
@@ -428,7 +553,7 @@ input {
     background: rgba(41, 48, 57, 0.9);
     /* width: 100%; */
     margin: 0 20px;
-    height: 60px;
+    min-height: 60px;
     padding: 0 20px;
     font-family: "Noto Sans CJK KR";
     font-style: normal;
@@ -466,9 +591,24 @@ input {
     transform: scale(95%);
 }
 
+.invisible {
+    /* animation: fadeout 0.3s; */
+    display: none !important;
+    /* z-index: -9999; */
+    /* opacity: 0; */
+    /* transition: 0.3s; */
+}
+
 .dialog {
-    z-index: 9500;
+    /* z-index: -9500; */
     position: fixed;
+}
+
+.dialog_off {
+    z-index: -9999 !important;
+    transition: 0.3s;
+    /* position: absolute; */
+    opacity: 0;
 }
 
 .modal {
@@ -481,6 +621,7 @@ input {
     height: 100%;
     display: flex;
     align-items: end;
+    transition: 0.3s;
     /* background: red; */
 }
 
@@ -494,6 +635,12 @@ input {
     bottom: 0;
     padding: 0 0 20px 0;
     box-sizing: border-box;
+    transition: 0.3s;
+}
+
+.dialog_off .modal_container {
+    transform: translateY(100%);
+    transition: 0.3s;
 }
 
 .modal .modal_header {
@@ -521,4 +668,23 @@ input {
 
 .modal .modal_item:active {
     background: rgba(155, 170, 183, 0.1);
+}
+
+.slide-in {
+    animation: change 0.5s ease forwards;
+}
+
+@keyframes pushFromRight {
+    from {
+        transform: translateX(100%);
+        visibility: visible;
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+.page_slide_in {
+    animation: pushFromRight 0.3s ease forwards;
 }

@@ -258,6 +258,7 @@
     color: #9baab7;
     overflow: hidden;
     border-radius: 10px;
+    margin-bottom: 200px;
 }
 
 .add_store_button {
@@ -278,17 +279,6 @@
     width: 28px;
     margin-right: 6px;
     fill: #9baab7;
-}
-
-.add_store_dialog_screen {
-    display: flex;
-    top: 0;
-    height: 100vh;
-    left: 0;
-    right: 0;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
 }
 
 .add_store_dialog {

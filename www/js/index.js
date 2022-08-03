@@ -1,3 +1,7 @@
+import * as common from "./common.js";
+import accessEnum from "./accessType.js";
+import storeInfoEnum from "./storeBrand.js";
+
 // import { createRequire } from "module";
 // const require = createRequire(import.meta.url);
 // const common = require("./js");
@@ -24,46 +28,24 @@
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 // document.addEventListener("deviceready", onDeviceReady, false);
 
-// function onDeviceReady() {
-//     // Cordova is now initialized. Have fun!
-
-//     console.log(
-//         "Running cordova-" + cordova.platformId + "@" + cordova.version
-//     );
-//     document.getElementById("deviceready").classList.add("ready");
-// }
-
-// const escapeScreen = document.querySelector(".escape_screen");
 const storeManageDialog = document.querySelector("#store_manage_modal");
 const popup = document.querySelector("#popup");
-const BTN_PRESSED_Z = 10;
-const MODAL_Z = 9400;
-const DIALOG_Z = 9500;
-const MENU_Z = 9000;
-const HEADER_Z = 100;
-const ESC_UP_Z = 8000;
-const ESC_DOWN_Z = -8000;
-const POPUP_Z = 9900;
 
 document.addEventListener("DOMContentLoaded", function () {
+    basicInteraction();
     headerEventListner();
     initStoreUnit();
     initialAddStoreUnit();
 });
 
 function initStoreUnit() {
-    basicInteraction();
     loadMyStores_mock();
     storeEventListener();
     initStoreManageUnit();
 }
 
 function basicInteraction() {
-    document.querySelectorAll(".dialog").forEach((dialog) => {
-        dialog
-            .querySelector(".escape")
-            .addEventListener("click", () => closeDialog(dialog));
-    });
+    common.initDialogInteraction();
 }
 
 // HEADER
@@ -77,21 +59,22 @@ function headerEventListner() {
             top.classList.remove("scrolled");
         }
     });
-    var storeCardsSection = document.querySelector(".store_cards");
-    storeCardsSection.addEventListener("scroll", (e) =>
-        console.log(e.target.scrollTop)
-    );
 
-    addEventListenerToDOMbySelector(".store_cards", "scroll", (e) => {
-        console.log(e.target.scrollTop);
-        console.log(20);
-    });
-    addEventListenerToDOMbySelector(".header .noti_icon", "click", (e) => {
-        location.href = "http://127.0.0.1:5500/www/pages/notifications.html";
-    });
-    addEventListenerToDOMbySelector(".header .setting_icon", "click", (e) => {
-        location.href = "http://127.0.0.1:5500/www/pages/settings.html";
-    });
+    common.addEventListenerToDOMbySelector(
+        ".header .noti_icon",
+        "click",
+        (e) => {
+            location.href =
+                "http://127.0.0.1:5500/www/pages/notifications.html";
+        }
+    );
+    common.addEventListenerToDOMbySelector(
+        ".header .setting_icon",
+        "click",
+        (e) => {
+            location.href = "http://127.0.0.1:5500/www/pages/settings.html";
+        }
+    );
 }
 
 // STORE CARDS -- LOADING
@@ -100,8 +83,8 @@ function loadMyStores() {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-            storesJson = JSON.parse(hr.responseText);
-            mappingStoreData(store);
+            var storesJson = JSON.parse(hr.responseText).stores;
+            mappingStoreData(stores);
             // initStoreManageUnit();
         }
     };
@@ -109,50 +92,32 @@ function loadMyStores() {
     hr.send();
 }
 
-function storeEventListener() {
-    addEventListenerToDOMbySelector(".store_cards", "click", (e) => {
-        // var btnDOM = e.target.closest(".btn_i");
-        // btnDOM.classList.add("pressed");
-        // console.log(e.target);
-        // console.log(10);
-    });
-    // addEventListenerToDOMbySelector(".btn_pressed", "mouseup", (e) => {
-    //     var btnDOM = e.target.closest(".btn_i");
-    //     btnDOM.classList.remove("pressed");
-    // });
-    document
-        .querySelector(".top")
-        .addEventListener("mouseup", (e) => console.log(10));
-    document
-        .querySelector(".top")
-        .addEventListener("mousedown", (e) => console.log(10));
-}
+function storeEventListener() {}
 
 function initStoreManageUnit() {
     // // 매장관리 DIALOG
-    // initStoreManageDialog();
 
     // SEE_MORE_BUTTON
-    addEventListenerToDOMbySelector(".store_cards .more_icon", "click", (e) => {
-        const storeDOM = e.target.closest(".store_card");
-        initStoreManageDialog(storeDOM);
-        openDialog(storeManageDialog);
-        storeManageDialog
-            .querySelector(".delete_store")
-            .addEventListener("click", () => {
-                givePopup(popupEnum.DELETE_STORE, [storeDOM]);
-            });
-    });
+    common.addEventListenerToDOMbySelector(
+        ".store_cards .more_icon",
+        "click",
+        seeMoreButtonHandler
+    );
 
     initStoreCloseButton();
+}
+
+function seeMoreButtonHandler(e) {
+    const storeDOM = e.target.closest(".store_card");
+    initStoreManageDialog(storeDOM);
+    common.openDialog(storeManageDialog);
 }
 
 function initStoreManageDialog(storeDOM) {
     // -- CLOSE
     const closeBtn = storeManageDialog.querySelector(".close_icon");
-    console.log(closeBtn);
     closeBtn.addEventListener("click", () => {
-        closeDialog(storeManageDialog);
+        common.closeDialog(storeManageDialog);
         console.log(10);
     });
 
@@ -173,19 +138,37 @@ function initStoreManageDialog(storeDOM) {
             "click",
             () =>
                 (location.href =
-                    "http://127.0.0.1:5500/www/pages/create_a_store.html")
+                    "http://127.0.0.1:5500/www/pages/modify_store_info.html")
         );
 
     // -- 삭제하기
     storeManageDialog
         .querySelector(".delete_store")
         .addEventListener("click", (e) => {
-            givePopup(popupEnum.DELETE_STORE, [storeDOM]);
+            common.givePopup(popupEnum.DELETE_STORE, [storeDOM]);
         });
 }
 
+function initStoreCloseButton() {
+    common.addEventListenerToDOMbySelector(
+        ".store_card.accessible .close_icon",
+        "click",
+        (e) => giveStorePopup(e, popupEnum.LOSE_ACCESS)
+    );
+    common.addEventListenerToDOMbySelector(
+        ".store_card.waiting .close_icon",
+        "click",
+        (e) => giveStorePopup(e, popupEnum.WITHDRAW_ACCESS)
+    );
+    common.addEventListenerToDOMbySelector(
+        ".store_card.inaccessible .close_icon",
+        "click",
+        removeDeniedStore
+    );
+}
+
 function loadMyStores_mock() {
-    storesJson = {
+    const storesJson = {
         stores: [
             {
                 id: 1,
@@ -254,15 +237,13 @@ function loadMyStores_mock() {
         ],
         total: 6,
     };
-    mappingStoreData(storesJson);
+    mappingStoreData(storesJson.stores);
 }
 
-function mappingStoreData(storesJson) {
+function mappingStoreData(stores) {
     var storeCardSection = document.querySelector(".store_cards");
-    var storeCardTemplateText = document.querySelector("#storeCardTemplate")
-        .innerText;
 
-    var storeCardTemplate = Handlebars.compile(storeCardTemplateText);
+    var storeCardTemplate = common.getTemplate("#storeCardTemplate");
 
     // TODO
     // if (storesJson.total == 0){
@@ -270,81 +251,34 @@ function mappingStoreData(storesJson) {
 
     //     }
     // }
-    stores = storesJson.stores;
     for (var key in stores) {
         var { id, name, brand, access } = stores[key];
-        var storeInfo = getEnumValueByCode(storeInfoEnum, brand.code);
-        var { code, background, logoPath } = storeInfo;
-        var accessInfo = getEnumValueByCode(accessEnum, access);
+        var storeInfo = common.getEnumValueByCode(storeInfoEnum, brand.code);
+        var { code, background, logo_path } = storeInfo;
+        var accessInfo = common.getEnumValueByCode(accessEnum, access);
         var data = {
             id: id,
             storeName: name,
             storeBrand: code,
             bgColor: background,
-            storeIconUrl: logoPath,
+            storeIconUrl: logo_path,
             accessType: accessInfo.desc,
-            store_tag: accessInfo.storeTag,
+            store_tag: accessInfo.store_tag,
         };
         storeCardSection.innerHTML += storeCardTemplate(data);
     }
 }
 
-function initStoreCloseButton() {
-    addEventListenerToDOMbySelector(
-        ".store_card.accessible .close_icon",
-        "click",
-        (e) => giveStorePopup(e, popupEnum.LOSE_ACCESS)
-    );
-    addEventListenerToDOMbySelector(
-        ".store_card.waiting .close_icon",
-        "click",
-        (e) => giveStorePopup(e, popupEnum.WITHDRAW_ACCESS)
-    );
-    addEventListenerToDOMbySelector(
-        ".store_card.inaccessible .close_icon",
-        "click",
-        removeDeniedStore
-    );
-}
-
 // function addBasicEventListenerToStoreMenu() {
-//     addEventListenerToDOMbySelector(".store_card .menu_item", "click", (e) => {
-//         hideDOM(e.target.closest(".menu"));
-//         setZ(escapeScreen, ESC_DOWN_Z);
+//     common.addEventListenerToDOMbySelector(".store_card .menu_item", "click", (e) => {
+//         common.hideDOM(e.target.closest(".menu"));
+//         common.setZ(escapeScreen, ESC_DOWN_Z);
 //     });
 // }
 
 function giveStorePopup(e, popupInfo) {
     var storeDOM = e.target.closest(".store_card");
-    givePopup(popupInfo, [storeDOM]);
-}
-
-function givePopup(popupInfo, params) {
-    // popup 생성 by handlebar
-    // var popupTemplateText = document.querySelector("#popupTemplate").innerText;
-    // var popupTemplate = Handlebars.compile(popupTemplateText);
-    // popupTemplate(popupInfo);
-    // document.querySelector(".body_container").innerHTML += popupTemplate(
-    // popupInfo
-    // );
-
-    // popup 생성
-    var popup = document.querySelector("#popup");
-    popup.querySelector(".title").innerText = popupInfo.title;
-    popup.querySelector(".desc").innerText = popupInfo.desc;
-    popup.querySelector(".action_btn").innerText = popupInfo.action_btn_label;
-    popup
-        .querySelector(".action_btn")
-        .classList.add(popupInfo.action_btn_color);
-
-    // popup 이벤트리스너 추가
-    addBasicEventListenerToPopup();
-    popup
-        .querySelector(".action_btn")
-        .addEventListener("click", () => popupInfo.action_btn_event(params));
-
-    // SHOW
-    openDialog(popup);
+    common.givePopup(popupInfo, [storeDOM]);
 }
 
 function deleteStoreByAccessId(id) {
@@ -365,8 +299,8 @@ function removeDeniedStore(e) {
     var accessId = storeDOM.getAttribute("id");
 
     deleteAccessById(accessId);
-    hideDOM(storeDOM);
-    giveToastNoti("1개의 매장을 목록에서 제거했습니다");
+    common.hideDOM(storeDOM);
+    common.giveToastNoti("1개의 매장을 목록에서 제거했습니다");
 }
 
 function deleteAccessById(id) {
@@ -382,16 +316,7 @@ function deleteAccessById(id) {
     // hr.send();
 }
 
-// 모든 팝업에 대해, popup 외부 클릭 or 취소버튼 클릭시 popup 사라지게 함
-function addBasicEventListenerToPopup() {
-    var popup = document.querySelector("#popup");
-    popup
-        .querySelectorAll(".cancel_btn, .action_btn")
-        .forEach((btn) =>
-            btn.addEventListener("click", () => closeDialog(popup))
-        );
-}
-
+// 매장 추가 SECTION
 function initialAddStoreUnit() {
     addEventListenerAddStoreButton();
     addEventListerStoreDialog();
@@ -400,9 +325,13 @@ function initialAddStoreUnit() {
 function addEventListenerAddStoreButton() {
     var dialogScreen = document.querySelector(".add_store_dialog_screen");
 
-    addEventListenerToDOMbySelector(".add_store_container", "click", (e) => {
-        openDialog(dialogScreen);
-    });
+    common.addEventListenerToDOMbySelector(
+        ".add_store_container",
+        "click",
+        (e) => {
+            common.openDialog(dialogScreen);
+        }
+    );
 }
 
 function addEventListerStoreDialog() {
@@ -411,7 +340,7 @@ function addEventListerStoreDialog() {
     var createStoreBtn = dialogScreen.querySelector(".create_btn");
     var applyBtn = dialogScreen.querySelector(".apply_btn");
 
-    closeBtn.addEventListener("click", () => closeDialog(dialogScreen));
+    closeBtn.addEventListener("click", () => common.closeDialog(dialogScreen));
 
     createStoreBtn.addEventListener(
         "click",
@@ -427,93 +356,6 @@ function addEventListerStoreDialog() {
     );
 }
 
-function openDialog(dialogDOM) {
-    showDOM(dialogDOM);
-}
-
-function closeDialog(dialogDOM) {
-    // escapeScreenDown();
-    hideDOM(dialogDOM);
-}
-
-function escapeScreenDown() {
-    hideDOM(escapeScreen);
-    setZ(escapeScreen, ESC_DOWN_Z);
-}
-
-function escapeScreenUp() {
-    showDOM(escapeScreen);
-    setZ(escapeScreen, ESC_UP_Z);
-}
-
-const accessEnum = {
-    INACCESIBLE: {
-        code: "AT01",
-        desc: "inaccessible",
-        storeTag: "거절됨",
-    },
-    WAITING: {
-        code: "AT02",
-        desc: "waiting",
-        storeTag: "신청 대기중",
-    },
-    ACCESSIBLE: {
-        code: "AT03",
-        desc: "accessible",
-        storeTag: "근무자",
-    },
-    ADMIN: {
-        code: "AT04",
-        desc: "admin_access",
-        storeTag: "관리자",
-    },
-};
-
-const storeInfoEnum = {
-    CU: {
-        code: "SB01",
-        name: "씨유",
-        logoPath: "store_logos/cu.png",
-        background: "#F2F8E0",
-    },
-    GS25: {
-        code: "SB02",
-        name: "지에스25",
-        logoPath: "store_logos/gs25.png",
-        background: "#DDF9FF",
-    },
-    EMART: {
-        code: "SB03",
-        name: "이마트24",
-        logoPath: "store_logos/emart24.png",
-        background: "#FFF3D8",
-    },
-    SEVEN_ELEVEN: {
-        code: "SB04",
-        name: "세븐일레븐",
-        logoPath: "store_logos/seven_eleven.png",
-        background: "#DEF3EE",
-    },
-    MINISTOP: {
-        code: "SB05",
-        name: "미니스톱",
-        logoPath: "store_logos/ministop.png",
-        background: "#E0F0FF",
-    },
-    STORYWAY: {
-        code: "SB06",
-        name: "스토리웨이",
-        logoPath: "store_logos/storyway.png",
-        background: "#FFEAE0",
-    },
-    ETC: {
-        code: "SB99",
-        name: "기타",
-        logoPath: "store_logos/etc.png",
-        background: "#F4F8FC",
-    },
-};
-
 const popupEnum = {
     DELETE_STORE: {
         title: "담배 목록을 영구적으로<br />삭제하시겠습니까?",
@@ -526,10 +368,9 @@ const popupEnum = {
             const [storeDOM] = params;
             const accessId = storeDOM.getAttribute("id");
             deleteStoreByAccessId(accessId);
-            console.log(storeDOM);
-            hideDOM(storeDOM);
-            giveToastNoti("매장 1개를 삭제했습니다");
-            closeDialog(storeManageDialog);
+            common.hideDOM(storeDOM);
+            common.giveToastNoti("매장 1개를 삭제했습니다");
+            common.closeDialog(storeManageDialog);
         },
     },
     LOSE_ACCESS: {
@@ -543,8 +384,8 @@ const popupEnum = {
             const [storeDOM] = params;
             const accessId = storeDOM.getAttribute("id");
             deleteAccessById(accessId);
-            hideDOM(storeDOM);
-            giveToastNoti("1개의 매장을 목록에서 제거했습니다");
+            common.hideDOM(storeDOM);
+            common.giveToastNoti("1개의 매장을 목록에서 제거했습니다");
         },
     },
     WITHDRAW_ACCESS: {
@@ -558,55 +399,8 @@ const popupEnum = {
             const [storeDOM] = params;
             const accessId = storeDOM.getAttribute("id");
             deleteAccessById(accessId);
-            hideDOM(storeDOM);
-            giveToastNoti("1개의 매장을 목록에서 제거했습니다");
+            common.hideDOM(storeDOM);
+            common.giveToastNoti("1개의 매장을 목록에서 제거했습니다");
         },
     },
 };
-
-function addEventListenerToDOMbySelector(selector, event, handler) {
-    var DOM = document
-        .querySelectorAll(selector)
-        .forEach((item) => item.addEventListener(event, handler));
-}
-
-function getEnumValueByCode(enumObject, code) {
-    foundKey = Object.keys(enumObject)
-        .filter((key) => enumObject[key].code == code)
-        .pop();
-    return enumObject[foundKey];
-}
-
-function setZ(DOM, zIndex) {
-    DOM.setAttribute("style", `z-index:${zIndex}`);
-}
-
-function giveToastNoti(message) {
-    const toastDOM = document.querySelector("#toast");
-    toastDOM.innerText = message;
-    toastDOM.classList.add("toast_up");
-    // toastDOM.setAttribute("style", "bottom: 70px");
-    setTimeout(() => {
-        toastDOM.classList.remove("toast_up");
-        console.log("down");
-    }, 3000);
-}
-
-function showDOM(DOM) {
-    DOM.classList.remove("invisible");
-}
-
-function showDOMbySelector(selector) {
-    var DOM = document.querySelector(selector);
-    showDOM(DOM);
-    return DOM;
-}
-
-function hideDOM(DOM) {
-    DOM.classList.add("invisible");
-}
-
-function hideDOMbySelector(selector) {
-    var DOM = document.querySelector(selector);
-    hideDOM(DOM);
-}
