@@ -1,5 +1,5 @@
 export default {
-    INACCESIBLE: {
+    INACCESSIBLE: {
         code: "AT01",
         desc: "inaccessible",
         store_tag: "거절됨",

@@ -22,19 +22,22 @@
             <div class="page_title_section">
                 <img class="page_icon" src="/www/img/icons/noti_gray.svg" />
 
-                <div class="page_title">설정</div>
+                <div class="page_title">알림</div>
             </div>
-            <div class="noti_list">
+            <div class="noti_list slide_up_slightly">
                 <!-- NOTIFICATIONS -->
             </div>
             <div class="load_more_btn">
+                <div class="btn_pressed"></div>
                 <img src="/www/img/icons/small_down_arrow.svg" /> 더 불러오기
             </div>
         </div>
+        <div id="toast">{{message}}</div>
 
         <script type="rv-template" id="notification_template">
             <div class="noti_item" id={{id}}>
                 <div class="new {{new}}"></div>
+                <img src="/www/img/icons/close_gray.svg" class="icon delete_icon" />
                 <div class="right">
                     <div class="title">{{title}}</div>
                     <div class="desc">{{desc}}</div>

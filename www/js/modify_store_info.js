@@ -13,6 +13,7 @@ function basicInteraction() {
     common.initDialogInteraction();
     inputInteraction();
     common.backButton();
+    customBackInteraction();
 
     // common.radioButtonInteraction();
 }
@@ -35,7 +36,11 @@ function mapMyStoreInfo() {
 }
 
 function getStoreInfo() {
-    return mockStoreInfo;
+    return {
+        id: window.sessionStorage.getItem("currStoreId"),
+        name: window.sessionStorage.getItem("currStoreName"),
+        brand_code: window.sessionStorage.getItem("currStoreBrandCode"),
+    };
 }
 
 const mockStoreInfo = {
@@ -83,55 +88,59 @@ function inputInteraction() {
     );
 }
 
+function tryModify() {
+    var hr = new XMLHttpRequest();
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            const responseBody = JSON.parse(hr.responseText);
+            if (hr.status == 200) {
+                modifySuccess();
+            } else if (hr.status == 400) {
+                if (responseBody.errorCode == errorCode.STORE.DUPLICATE_STORE)
+                    duplicateStore();
+            }
+        }
+    };
+
+    const data = getFormData();
+    const storeId = getStoreId();
+    hr.open("PUT", `http://localhost:8060/api/stores/${storeId}`);
+    hr.setRequestHeader("Content-Type", "application/json");
+    hr.send(JSON.stringify(data));
+}
+
 function getFormData() {
     const checkedBrandCode = document.querySelector(".store_list input:checked")
         .value;
     return {
         name: storeNameInput.value,
-        brand_code: checkedBrandCode,
+        storeBrandCode: checkedBrandCode,
     };
 }
 
-function tryModify() {
-    if (!validateForm()) {
-        common.giveToastNoti("생성 불가능한 이름입니다");
-        btnManager.disableBtn();
-        storeNameInput.focus();
-    } else {
-        modifyRequest();
-    }
+function getStoreId() {
+    return window.sessionStorage.getItem("currStoreId");
 }
 
-function modifyRequest() {
-    common.giveToastNoti("수정되었습니다.");
+function modifySuccess() {
+    common.giveToastNoti("목록 정보가 변경되었습니다");
     btnManager.disableBtn();
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         var storesJson = JSON.parse(hr.responseText).stores;
-    //         // initStoreManageUnit();
-    //     }
-    // };
-    //
-    // hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
-    // hr.send();
 }
 
-function validateForm() {
-    const data = getFormData();
-    // console.log(data);
-    // console.log(`validation 되었습니다.`);
+function duplicateStore() {
+    common.giveToastNoti("이미 있는 이름입니다");
+    btnManager.disableBtn();
+    storeNameInput.focus();
+}
 
-    return true;
+function removeCurrStoreData() {
+    window.sessionStorage.removeItem("currStoreId");
+    window.sessionStorage.removeItem("currStoreName");
+    window.sessionStorage.removeItem("currStoreBrandCode");
+}
 
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         var storesJson = JSON.parse(hr.responseText).stores;
-    //         // initStoreManageUnit();
-    //     }
-    // };
-    //
-    // hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
-    // hr.send();
+function customBackInteraction() {
+    document
+        .querySelector(".header .left_icon")
+        .addEventListener("click", removeCurrStoreData);
 }

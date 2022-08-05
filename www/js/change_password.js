@@ -1,4 +1,5 @@
 import * as common from "./common.js";
+import errorCode from "./errorCode.js";
 
 const bottomBtn = document.querySelector("#sendBtn");
 const prevInput = document.querySelector("input[name='prev_pw']");
@@ -33,14 +34,43 @@ function checkEmpty() {
 }
 
 function trySend() {
-    if (!validateForm()) {
-        common.giveToastNoti("입력된 값을 다시 한 번 확인해주세요");
-    } else {
-        postRequest();
-        common.giveToastNoti("비밀번호가 변경되었습니다.");
-        clearInputs();
-    }
-    btnManager.disableBtn();
+    if (validateForm()) sendRequest();
+}
+
+function sendRequest() {
+    var hr = new XMLHttpRequest();
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            const responseBody = JSON.parse(hr.responseText);
+            if (hr.status == 200) {
+                requestSuccess();
+            } else if (hr.status == 400) {
+                if (
+                    responseBody.errorCode == errorCode.USER.LOGIN_INPUT_INVALID
+                )
+                    prevPwFail();
+                else
+                    common.giveToastNoti(
+                        "알 수 없는 이유로 수정할 수 없습니다"
+                    );
+            } else common.giveToastNoti("알 수 없는 이유로 수정할 수 없습니다");
+        }
+    };
+
+    const data = getData();
+    hr.open(
+        "PUT",
+        `http://localhost:8060/api/users/${common.getUserId()}/change_pw`
+    );
+    hr.setRequestHeader("Content-Type", "application/json");
+    hr.send(JSON.stringify(data));
+}
+
+function getData() {
+    return {
+        oldPw: prevInput.value,
+        newPw: newInput.value,
+    };
 }
 
 function clearInputs() {
@@ -51,12 +81,46 @@ function clearInputs() {
 
 function validateForm() {
     // 조건 비밀번호 조건 충족하는지 필요
-    if (
-        newInput.value != prevInput.value &&
-        newInput.value == confirmInput.value
-    )
-        return true;
-    else return false;
+    const reg = /^[A-Za-z0-9]{6,20}$/;
+
+    if (newInput.value == prevInput.value) {
+        samePwFail();
+        return false;
+    } else if (newInput.value != confirmInput.value) {
+        confirmPwFail();
+        return false;
+    } else if (!reg.test(newInput.value)) {
+        invalidNewPwFail();
+    } else return true;
 }
 
-function postRequest() {}
+function requestSuccess() {
+    btnManager.disableBtn();
+    common.giveToastNoti("비밀번호가 변경되었습니다.");
+    clearInputs();
+}
+
+function prevPwFail() {
+    inputFail(prevInput, "이전 비밀번호가 정확하지 않습니다.");
+}
+
+function confirmPwFail() {
+    inputFail(confirmInput, "비밀번호 확인이 일치하지 않습니다.");
+}
+
+function invalidNewPwFail() {
+    inputFail(newInput, "비밀번호는 영문과 숫자를 포함한 6-20자여야 합니다");
+}
+
+function samePwFail() {
+    inputFail(
+        newInput,
+        "이전 비밀번호와 동일한 비밀번호로 변경할 수 없습니다."
+    );
+}
+
+function inputFail(inputDOM, msg) {
+    btnManager.disableBtn();
+    common.giveToastNoti(msg);
+    inputDOM.focus();
+}

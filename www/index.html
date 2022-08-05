@@ -55,10 +55,17 @@
                             <img src="./img/logo.png" class="logo" />
                         </div>
                         <div class="right">
-                            <img
-                                src="./img/icons/noti_gray_active.svg"
-                                class="icon noti_icon"
-                            />
+                            <div class="noti_icon_container">
+                                <div
+                                    id="noti_dot"
+                                    class="store_noti_dot invisible"
+                                ></div>
+                                <img
+                                    id="noti_icon_inactive"
+                                    src="./img/icons/noti_gray.svg"
+                                    class="icon noti_icon"
+                                />
+                            </div>
                             <img
                                 src="./img/icons/setting_gray.svg"
                                 class="icon setting_icon"
@@ -198,6 +205,10 @@
                     <ul class="modal_list">
                         <li class="modal_item manage_access">
                             접근권한 관리하기
+                            <div
+                                class="store_noti_dot"
+                                id="store_noti_dot_modal"
+                            ></div>
                         </li>
                         <li class="modal_item modify_info">
                             매장 정보 수정하기
@@ -213,13 +224,13 @@
             <div class="escape_screen invisible"></div>
 
             <script type="rv-template" id="storeCardTemplate">
-                <li class="store_card btn_i {{accessType}}" id={{id}} >
-                    <div class="store_card_bg" style="background-color : {{bgColor}}"></div>
+                <li class="store_card btn_i {{access_type}}" id={{id}} store_id={{store_id}} brand_code={{brand_code}}>
+                    <div class="store_card_bg" style="background-color : {{bg_color}}"></div>
                     <div class="btn_pressed"></div>
                     <div class="store_icon_container">
                         <img
                             class="store_icon"
-                            src="{{storeIconUrl}}"
+                            src="{{store_icon_url}}"
                         />
                     </div>
                     <div class="icon more_icon">
@@ -228,18 +239,13 @@
                     <div class="icon close_icon">
                         <img src="./img/icons/close.svg" />
                     </div>
-                    <div class="menu invisible">
-                        <div class="menu_item for_admin manage_access">접근권한 관리하기</div>
-                        <div class="menu_item for_admin modify_info">정보 수정하기</div>
-                        <div class="menu_item for_admin delete_store">삭제하기</div>
-                        <div class="menu_item for_staff lose_access">권한 포기하기</div>
-                    </div>
+                    <div class="store_noti_dot {{applicator_exists}}"></div>
 
                     <div class="store_tag">
                         <img src="./img/icons/admin.svg" />{{store_tag}}
                     </div>
 
-                    <div class="store_name">{{storeName}}</div>
+                    <div class="store_name">{{store_name}}</div>
                 </li>
             </script>
 

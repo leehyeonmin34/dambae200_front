@@ -1,5 +1,6 @@
 import * as common from "./common.js";
 import storeInfoEnum from "./storeBrand.js";
+import errorCode from "./errorCode.js";
 
 const storeNameInput = document.querySelector("input[type='text']");
 const bottomBtn = document.querySelector(".full_floating_btn");
@@ -12,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
 function basicInteraction() {
     common.initDialogInteraction();
     common.backButton();
-    // common.radioButtonInteraction();
 }
 
 function init() {
@@ -65,60 +65,51 @@ function inputInteraction() {
     });
 }
 
+function tryCreate() {
+    var hr = new XMLHttpRequest();
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            const responseBody = JSON.parse(hr.responseText);
+            if (hr.status == 200) {
+                postSuccess();
+            } else if (hr.status == 400) {
+                if (responseBody.errorCode == errorCode.STORE.DUPLICATE_STORE)
+                    duplicateStore();
+            }
+        }
+    };
+
+    const data = getFormData();
+    hr.open("POST", "http://localhost:8060/api/stores");
+    hr.setRequestHeader("Content-Type", "application/json");
+    hr.send(JSON.stringify(data));
+}
+
 function getFormData() {
     const checkedBrandCode = document.querySelector(".store_list input:checked")
         .value;
     return {
         name: storeNameInput.value,
-        brand_code: checkedBrandCode,
+        storeBrandCode: checkedBrandCode,
+        adminId: getUserId(),
     };
 }
 
-function tryCreate() {
-    if (!validateForm()) {
-        common.giveToastNoti("이미 있는 이름입니다");
-        btnManager.disableBtn();
-        storeNameInput.focus();
-    } else {
-        postRequest();
-        showCompletePage();
-    }
+function getUserId() {
+    return sessionStorage.getItem("userId");
+}
+
+function postSuccess() {
+    showCompletePage();
+}
+
+function duplicateStore() {
+    common.giveToastNoti("이미 있는 이름입니다");
+    btnManager.disableBtn();
+    storeNameInput.focus();
 }
 
 function showCompletePage() {
     const completePage = document.querySelector("#complete");
     completePage.classList.add("active");
-}
-
-function postRequest() {
-    console.log(`생성 되었습니다.`);
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         var storesJson = JSON.parse(hr.responseText).stores;
-    //         // initStoreManageUnit();
-    //     }
-    // };
-    //
-    // hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
-    // hr.send();
-}
-
-function validateForm() {
-    const data = getFormData();
-    // console.log(data);
-    // console.log(`validation 되었습니다.`);
-
-    return true;
-
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         var storesJson = JSON.parse(hr.responseText).stores;
-    //         // initStoreManageUnit();
-    //     }
-    // };
-    //
-    // hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
-    // hr.send();
 }

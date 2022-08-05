@@ -176,3 +176,18 @@ export function backButton() {
     const backBtn = document.querySelector(".header .left_icon");
     backBtn.addEventListener("click", () => window.history.back());
 }
+
+export function getUrlParams() {
+    const url = new URL(location.href);
+    const urlParams = url.searchParams;
+    return urlParams;
+}
+
+export function getUserId() {
+    return sessionStorage.getItem("userId");
+}
+
+export function hideAndUp(DOM) {
+    DOM.classList.add("hide_and_up");
+    // setTimeout(() => DOM.remove(), 2000);
+}

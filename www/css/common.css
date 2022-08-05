@@ -1,6 +1,8 @@
 /* COMMON */
 
 body {
+    width: 100vw;
+    height: 100vh;
     margin: 0;
     padding: 0;
     position: relative;
@@ -59,6 +61,7 @@ li {
 
 .top.main {
     background: #f5f9fc;
+    transition: 0.3s;
 }
 
 .top.main.scrolled {
@@ -111,7 +114,7 @@ li {
 }
 
 .main .header_1 {
-    margin: 0 8px 0 20px;
+    padding: 0 8px 0 20px;
 }
 
 .header_1 label {
@@ -664,10 +667,17 @@ input::placeholder {
     justify-content: left;
     height: 54px;
     font-size: 14px;
+    position: relative;
 }
 
 .modal .modal_item:active {
     background: rgba(155, 170, 183, 0.1);
+}
+
+#store_noti_dot_modal {
+    position: absolute;
+    left: 140px;
+    top: 25px;
 }
 
 .slide-in {
@@ -687,4 +697,45 @@ input::placeholder {
 
 .page_slide_in {
     animation: pushFromRight 0.3s ease forwards;
+}
+
+.slide_up_slightly {
+    animation: slide-up-slightly 1s cubic-bezier(0.16, 0.83, 0.41, 0.99);
+}
+
+@keyframes slide-up-slightly {
+    from {
+        transform: translateY(50px);
+    }
+    to {
+        transfrom: translateY(0);
+    }
+}
+
+.hide_and_up {
+    animation: hide-and-up 1s cubic-bezier(0.16, 0.83, 0.41, 0.99);
+    opacity: 0;
+    max-height: 0px;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+@keyframes hide-and-up {
+    from {
+        opacity: 1;
+        /* height: 231px; */
+        max-height: 1000px;
+    }
+    30% {
+        opacity: 0;
+        /* height: 231px; */
+        max-height: 1000px;
+        margin: 0;
+    }
+
+    to {
+        /* height: 0; */
+        max-height: 0px;
+        margin: 0;
+    }
 }

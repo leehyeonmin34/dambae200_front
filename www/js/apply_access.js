@@ -1,5 +1,6 @@
 import * as common from "./common.js";
 import storeInfoEnum from "./storeBrand.js";
+import errorCode from "./errorCode.js";
 
 const textInput = document.querySelector("input[type='text']");
 const bottomBtn = document.querySelector(".full_floating_btn");
@@ -11,30 +12,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function basicInteraction() {
     common.initDialogInteraction();
-
     common.backButton();
-
     // common.radioButtonInteraction();
 }
 
 function init() {
     inputInteraction();
-    bottomButtomInteraction();
 }
 
 function loadStoresByNameLike(name) {
-    mappingStores(mockStoresJson);
+    if (name == "") {
+        mappingStores({ stores: [], total: 0 });
+        // mappingStores(mockStoresJson);
+    } else {
+        var hr = new XMLHttpRequest();
+        hr.onreadystatechange = () => {
+            if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
+                const storesJson = JSON.parse(hr.responseText);
+                mappingStores(storesJson);
+                radioButtonInteraction();
+            }
+        };
+        const encodedInputValue = encodeURI(textInput.value);
 
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         var storesJson = JSON.parse(hr.responseText).stores;
-    //         // initStoreManageUnit();
-    //     }
-    // };
-    //
-    // hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
-    // hr.send();
+        hr.open(
+            "GET",
+            `http://localhost:8060/api/stores?name=${encodedInputValue}`
+        );
+        hr.send();
+    }
+}
+
+function getUserId() {
+    return sessionStorage.getItem("userId");
 }
 
 const mockStoresJson = {
@@ -42,34 +52,22 @@ const mockStoresJson = {
         {
             id: 1,
             name: "한국사랑점1",
-            brand: {
-                code: "SB01",
-                desc: "씨유",
-            },
+            brnadCode: "SB01",
         },
         {
             id: 2,
             name: "한국사랑점2",
-            brand: {
-                code: "SB02",
-                desc: "지에스25",
-            },
+            brnadCode: "SB02",
         },
         {
             id: 3,
             name: "한국사랑점3",
-            brand: {
-                code: "SB03",
-                desc: "이마트24",
-            },
+            brnadCode: "SB03",
         },
         {
             id: 4,
             name: "한국사랑점4",
-            brand: {
-                code: "SB04",
-                desc: "세븐일레븐",
-            },
+            brnadCode: "SB04",
         },
     ],
     total: 4,
@@ -86,10 +84,10 @@ function mappingStores(storesJson) {
         const template = common.getTemplate("#storeRadioButtonTemplate");
 
         for (var key in storesJson.stores) {
-            const { brand, name, id } = storesJson.stores[key];
+            const { brandCode, name, id } = storesJson.stores[key];
             const brandLogoPath = common.getEnumValueByCode(
                 storeInfoEnum,
-                brand.code
+                brandCode
             ).logo_path;
             const data = {
                 logo_path: brandLogoPath,
@@ -103,7 +101,13 @@ function mappingStores(storesJson) {
     }
 }
 
-function bottomButtomInteraction() {
+function radioButtonInteraction() {
+    common.addEventListenerToDOMbySelector(".form_radio_btn", "click", (e) => {
+        btnManager.enableBtn();
+    });
+}
+
+function completePageInteraction() {
     // 완료 버튼
     document
         .querySelector("#complete .full_floating_btn")
@@ -114,10 +118,11 @@ function bottomButtomInteraction() {
 }
 
 function applyToStore() {
-    const checkedStore = document.querySelector(
-        ".form_radio_btn input:checked"
-    );
-    applyRequest(checkedStore.id);
+    applyRequest(getCheckedStoreId(), getUserId());
+}
+
+function getCheckedStoreId() {
+    return document.querySelector(".form_radio_btn input:checked").id;
 }
 
 function inputInteraction() {
@@ -130,22 +135,43 @@ function inputInteraction() {
         .addEventListener("click", () => loadStoresByNameLike(textInput.value));
 }
 
-function applyRequest(storeId) {
-    console.log(`storeId ${storeId}에 신청되었습니다.`);
+function applyRequest(storeId, userId) {
+    var hr = new XMLHttpRequest();
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            if (hr.status == 200) applyRequestSuccess();
+            else {
+                const json = JSON.parse(hr.responseText);
+                if (json.errorCode == errorCode.ACCESS.DUPLICATED_ACCESS_APPLY)
+                    duplicateAccessApplyFail();
+                else applyRequestFailure();
+            }
+        }
+    };
+    const data = {
+        storeId,
+        userId,
+    };
+    hr.open("POST", "http://localhost:8060/api/accesses");
+    hr.setRequestHeader("Content-type", "application/json");
+    hr.send(JSON.stringify(data));
+}
+
+function applyRequestSuccess() {
+    completePageInteraction();
     showCompletePage();
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         var storesJson = JSON.parse(hr.responseText).stores;
-    //         // initStoreManageUnit();
-    //     }
-    // };
-    //
-    // hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
-    // hr.send();
 }
 
 function showCompletePage() {
     const completePage = document.querySelector("#complete");
     completePage.classList.add("active");
+}
+
+function duplicateAccessApplyFail() {
+    common.giveToastNoti("이미 접근 신청된 목록입니다");
+    btnManager.disableBtn();
+}
+
+function applyRequestFailure() {
+    common.giveToastNoti("알 수 없는 이유로 신청에 실패했습니다");
 }

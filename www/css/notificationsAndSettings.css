@@ -39,15 +39,23 @@
     display: block;
 }
 
+.noti_item .delete_icon {
+    width: 44px;
+    height: 44px;
+    position: absolute;
+    left: 20px;
+    bottom: 5px;
+}
+
 .noti_item .right {
-    padding: 16px 20px 16px 75px;
+    padding: 16px 20px 18px 75px;
     box-sizing: border-box;
     font-style: normal;
-    font-weight: 400;
 }
 
 .noti_item .right .title {
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: 600;
     line-height: 24px;
     color: #5b616b;
 }
@@ -55,8 +63,9 @@
 .noti_item .right .desc {
     margin-top: 6px;
     font-size: 14px;
+    font-weight: 400;
     line-height: 21px;
-    color: #9baab7;
+    color: #5b616b;
 }
 
 .noti_item .right .date {

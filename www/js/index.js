@@ -32,20 +32,36 @@ const storeManageDialog = document.querySelector("#store_manage_modal");
 const popup = document.querySelector("#popup");
 
 document.addEventListener("DOMContentLoaded", function () {
+    updateUserData(USER_ID.USER_2);
     basicInteraction();
+    // notificationDot();
     headerEventListner();
     initStoreUnit();
-    initialAddStoreUnit();
+    initAddStoreBtn();
 });
 
 function initStoreUnit() {
-    loadMyStores_mock();
-    storeEventListener();
+    // loadMyStores_mock();
+    loadMyStores();
+}
+
+function StoreUnitEventListeners() {
     initStoreManageUnit();
 }
 
 function basicInteraction() {
     common.initDialogInteraction();
+}
+
+const USER_ID = {
+    USER_1: 1,
+    USER_2: 7,
+};
+
+function updateUserData(userId) {
+    sessionStorage.setItem("userId", userId);
+    // sessionStorage.setItem("userNickname", user.nickname);
+    // sessionStorage.setItem("userEmail", user.email);
 }
 
 // HEADER
@@ -60,21 +76,20 @@ function headerEventListner() {
         }
     });
 
-    common.addEventListenerToDOMbySelector(
-        ".header .noti_icon",
-        "click",
-        (e) => {
+    // 알림 아이콘
+    document
+        .querySelector(".header .noti_icon")
+        .addEventListener("click", (e) => {
             location.href =
                 "http://127.0.0.1:5500/www/pages/notifications.html";
-        }
-    );
-    common.addEventListenerToDOMbySelector(
-        ".header .setting_icon",
-        "click",
-        (e) => {
+        });
+
+    // 설정 아이콘
+    document
+        .querySelector(".header .setting_icon")
+        .addEventListener("click", (e) => {
             location.href = "http://127.0.0.1:5500/www/pages/settings.html";
-        }
-    );
+        });
 }
 
 // STORE CARDS -- LOADING
@@ -82,17 +97,31 @@ function headerEventListner() {
 function loadMyStores() {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
-        if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-            var storesJson = JSON.parse(hr.responseText).stores;
-            mappingStoreData(stores);
-            // initStoreManageUnit();
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            if (hr.status == 200) {
+                const response = JSON.parse(hr.responseText);
+
+                // 매장 리스트
+                mappingStoreData(response.myStores);
+                StoreUnitEventListeners();
+
+                // 알림 빨간 점
+                const notiDot = document.querySelector("#noti_dot");
+                if (response.newNotification) common.showDOM(notiDot);
+                else common.hideDOM(notiDot);
+            } else {
+                common.giveToastNoti(
+                    "알 수 없는 이유로 데이터를 불러올 수 없습니다."
+                );
+            }
         }
     };
-    hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
+    hr.open(
+        "GET",
+        `http://localhost:8060/api/users/${common.getUserId()}/home`
+    );
     hr.send();
 }
-
-function storeEventListener() {}
 
 function initStoreManageUnit() {
     // // 매장관리 DIALOG
@@ -118,28 +147,33 @@ function initStoreManageDialog(storeDOM) {
     const closeBtn = storeManageDialog.querySelector(".close_icon");
     closeBtn.addEventListener("click", () => {
         common.closeDialog(storeManageDialog);
-        console.log(10);
     });
 
     // -- 접근권한 관리하기
+
+    // ---- 권한 요청 빨간 점 표출
+    const no_applicator = storeDOM
+        .querySelector(".store_noti_dot")
+        .classList.contains("invisible");
+    const redDot = storeManageDialog.querySelector("#store_noti_dot_modal");
+    if (no_applicator) common.hideDOM(redDot);
+    else common.showDOM(redDot);
+
+    // ---- 접근권한 관리하기 버튼
     storeManageDialog
         .querySelector(".manage_access")
-        .addEventListener(
-            "click",
-            () =>
-                (location.href =
-                    "http://127.0.0.1:5500/www/pages/manage_accesses.html")
-        );
+        .addEventListener("click", () => {
+            setCurrStoreData(storeDOM);
+            location.href = `http://127.0.0.1:5500/www/pages/manage_accesses.html`;
+        });
 
     // -- 매장 정보 수정하기
     storeManageDialog
         .querySelector(".modify_info")
-        .addEventListener(
-            "click",
-            () =>
-                (location.href =
-                    "http://127.0.0.1:5500/www/pages/modify_store_info.html")
-        );
+        .addEventListener("click", () => {
+            setCurrStoreData(storeDOM);
+            location.href = `http://127.0.0.1:5500/www/pages/modify_store_info.html`;
+        });
 
     // -- 삭제하기
     storeManageDialog
@@ -147,6 +181,15 @@ function initStoreManageDialog(storeDOM) {
         .addEventListener("click", (e) => {
             common.givePopup(popupEnum.DELETE_STORE, [storeDOM]);
         });
+}
+
+function setCurrStoreData(storeDOM) {
+    const storeId = storeDOM.getAttribute("store_id");
+    const storeName = storeDOM.querySelector(".store_name").innerText;
+    const brandCode = storeDOM.getAttribute("brand_code");
+    sessionStorage.setItem("currStoreId", storeId);
+    sessionStorage.setItem("currStoreName", storeName);
+    sessionStorage.setItem("currStoreBrandCode", brandCode);
 }
 
 function initStoreCloseButton() {
@@ -169,81 +212,60 @@ function initStoreCloseButton() {
 
 function loadMyStores_mock() {
     const storesJson = {
-        stores: [
+        accesses: [
             {
                 id: 1,
-                name: "서울사랑점1",
-                brand: {
-                    code: "SB01",
-                    desc: "씨유",
-                },
-                access: "AT04",
+                storeName: "서울사랑점1",
+                brandCode: "SB01",
+                accessTypeCode: "AT04",
             },
             {
                 id: 2,
-                name: "한국사랑점2",
-                brand: {
-                    code: "SB02",
-                    desc: "지에스25",
-                },
-                access: "AT03",
+                storeName: "한국사랑점2",
+                brandCode: "SB02",
+                accessTypeCode: "AT03",
             },
             {
                 id: 3,
-                name: "한국사랑점3",
-                brand: {
-                    code: "SB03",
-                    desc: "이마트24",
-                },
-                access: "AT03",
+                storeName: "한국사랑점3",
+                brandCode: "SB03",
+                accessTypeCode: "AT03",
             },
 
             {
                 id: 4,
-                name: "한국사랑점4",
-                brand: {
-                    code: "SB04",
-                    desc: "세븐일레븐",
-                },
-                access: "AT03",
+                storeName: "한국사랑점4",
+                brandCode: "SB04",
+                accessTypeCode: "AT03",
             },
             {
                 id: 5,
-                name: "한국사랑점5",
-                brand: {
-                    code: "SB05",
-                    desc: "미니스톱",
-                },
-                access: "AT03",
+                storeName: "한국사랑점5",
+                brandCode: "SB05",
+                accessTypeCode: "AT03",
             },
             {
                 id: 6,
-                name: "한국사랑점6",
-                brand: {
-                    code: "SB06",
-                    desc: "스토리웨이",
-                },
-                access: "AT02",
+                storeName: "한국사랑점6",
+                brandCode: "SB06",
+                accessTypeCode: "AT02",
             },
             {
                 id: 7,
-                name: "한국사랑점7",
-                brand: {
-                    code: "SB99",
-                    desc: "무명 브랜드",
-                },
-                access: "AT01",
+                storeName: "한국사랑점7",
+                brandCode: "SB07",
+                accessTypeCode: "AT01",
             },
         ],
-        total: 6,
+        total: 7,
     };
     mappingStoreData(storesJson.stores);
 }
 
-function mappingStoreData(stores) {
-    var storeCardSection = document.querySelector(".store_cards");
+function mappingStoreData(accessesJson) {
+    const storeCardSection = document.querySelector(".store_cards");
 
-    var storeCardTemplate = common.getTemplate("#storeCardTemplate");
+    const storeCardTemplate = common.getTemplate("#storeCardTemplate");
 
     // TODO
     // if (storesJson.total == 0){
@@ -251,73 +273,101 @@ function mappingStoreData(stores) {
 
     //     }
     // }
-    for (var key in stores) {
-        var { id, name, brand, access } = stores[key];
-        var storeInfo = common.getEnumValueByCode(storeInfoEnum, brand.code);
-        var { code, background, logo_path } = storeInfo;
-        var accessInfo = common.getEnumValueByCode(accessEnum, access);
-        var data = {
+    const accesses = accessesJson.accesses;
+    for (var key in accesses) {
+        const {
+            id,
+            storeName,
+            brandCode,
+            accessTypeCode,
+            storeId,
+            applicatorExists,
+        } = accesses[key];
+        const storeInfo = common.getEnumValueByCode(storeInfoEnum, brandCode);
+        const accessInfo = common.getEnumValueByCode(
+            accessEnum,
+            accessTypeCode
+        );
+        const { background, logo_path } = storeInfo;
+
+        const data = {
             id: id,
-            storeName: name,
-            storeBrand: code,
-            bgColor: background,
-            storeIconUrl: logo_path,
-            accessType: accessInfo.desc,
+            store_name: storeName,
+            brand_code: brandCode,
+            bg_color: background,
+            store_icon_url: logo_path,
+            access_type: accessInfo.desc,
             store_tag: accessInfo.store_tag,
+            store_id: storeId,
+            applicator_exists: applicatorExists || "invisible",
         };
+
         storeCardSection.innerHTML += storeCardTemplate(data);
     }
 }
-
-// function addBasicEventListenerToStoreMenu() {
-//     common.addEventListenerToDOMbySelector(".store_card .menu_item", "click", (e) => {
-//         common.hideDOM(e.target.closest(".menu"));
-//         common.setZ(escapeScreen, ESC_DOWN_Z);
-//     });
-// }
 
 function giveStorePopup(e, popupInfo) {
     var storeDOM = e.target.closest(".store_card");
     common.givePopup(popupInfo, [storeDOM]);
 }
 
-function deleteStoreByAccessId(id) {
-    console.log(`access id ${id} 에 해당하는 store has been deleted`);
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         json = JSON.parse(hr.responseText);
-    //         console.log(json);
-    //     }
-    // };
-    // hr.open("DELETE", `http://localhost:8060/api/stores?accessId=${id}`);
-    // hr.send();
+function deleteStoreRequest(storeDOM) {
+    const id = storeDOM.getAttribute("store_id");
+    var hr = new XMLHttpRequest();
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            if (hr.status == 200) {
+                common.hideAndUp(storeDOM);
+                common.closeDialog(storeManageDialog);
+                common.giveToastNoti("매장 1개를 삭제했습니다");
+            } else {
+                common.closeDialog(storeManageDialog);
+                common.giveToastNoti(
+                    "현재 알 수 없는 이유로 삭제할 수 없습니다"
+                );
+            }
+        }
+    };
+
+    hr.open("DELETE", `http://localhost:8060/api/stores/${id}`);
+    hr.send();
+}
+
+function deleteAccessRequest(storeDOM, successMsg) {
+    const id = storeDOM.getAttribute("id");
+    var hr = new XMLHttpRequest();
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            if (hr.status == 200) {
+                common.hideAndUp(storeDOM);
+                common.closeDialog(storeManageDialog);
+                common.giveToastNoti("매장 1개를 삭제했습니다");
+            } else {
+                common.closeDialog(storeManageDialog);
+                common.giveToastNoti(successMsg);
+            }
+        }
+    };
+
+    hr.open("DELETE", `http://localhost:8060/api/accesses/${id}`);
+    hr.send();
 }
 
 function removeDeniedStore(e) {
     var storeDOM = e.target.closest(".store_card");
-    var accessId = storeDOM.getAttribute("id");
-
-    deleteAccessById(accessId);
-    common.hideDOM(storeDOM);
-    common.giveToastNoti("1개의 매장을 목록에서 제거했습니다");
+    deleteAccessRequest(storeDOM, "1개의 매장을 목록에서 제거했습니다");
 }
 
-function deleteAccessById(id) {
-    console.log(`access id ${id} has been deleted`);
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         json = JSON.parse(hr.responseText);
-    //         console.log(json);
-    //     }
-    // };
-    // hr.open("DELETE", `http://localhost:8060/api/accesses/${id}`);
-    // hr.send();
+function withdrawApplication(DOM) {
+    deleteAccessRequest(DOM, "접근신청을 철회했습니다");
+}
+
+function loseAccess(DOM) {
+    deleteAccessRequest(DOM, "1개의 매장을 목록에서 제거했습니다");
 }
 
 // 매장 추가 SECTION
-function initialAddStoreUnit() {
+function initAddStoreBtn() {
     addEventListenerAddStoreButton();
     addEventListerStoreDialog();
 }
@@ -342,12 +392,9 @@ function addEventListerStoreDialog() {
 
     closeBtn.addEventListener("click", () => common.closeDialog(dialogScreen));
 
-    createStoreBtn.addEventListener(
-        "click",
-        () =>
-            (location.href =
-                "http://127.0.0.1:5500/www/pages/create_a_store.html")
-    );
+    createStoreBtn.addEventListener("click", () => {
+        location.href = "http://127.0.0.1:5500/www/pages/create_a_store.html";
+    });
     applyBtn.addEventListener(
         "click",
         () =>
@@ -366,11 +413,7 @@ const popupEnum = {
         popup_class: "delete_store",
         action_btn_event: function (params) {
             const [storeDOM] = params;
-            const accessId = storeDOM.getAttribute("id");
-            deleteStoreByAccessId(accessId);
-            common.hideDOM(storeDOM);
-            common.giveToastNoti("매장 1개를 삭제했습니다");
-            common.closeDialog(storeManageDialog);
+            deleteStoreRequest(storeDOM);
         },
     },
     LOSE_ACCESS: {
@@ -382,10 +425,7 @@ const popupEnum = {
         popup_class: "lose_access",
         action_btn_event: function (params) {
             const [storeDOM] = params;
-            const accessId = storeDOM.getAttribute("id");
-            deleteAccessById(accessId);
-            common.hideDOM(storeDOM);
-            common.giveToastNoti("1개의 매장을 목록에서 제거했습니다");
+            loseAccess(storeDOM);
         },
     },
     WITHDRAW_ACCESS: {
@@ -397,10 +437,7 @@ const popupEnum = {
         popup_class: "withdraw",
         action_btn_event: function (params) {
             const [storeDOM] = params;
-            const accessId = storeDOM.getAttribute("id");
-            deleteAccessById(accessId);
-            common.hideDOM(storeDOM);
-            common.giveToastNoti("1개의 매장을 목록에서 제거했습니다");
+            withdrawApplication(storeDOM);
         },
     },
 };

@@ -15,26 +15,28 @@ function basicInteraction() {
 
 function init() {
     loadStoreAccesses();
-    accessItemUnit();
 }
 
 function loadStoreAccesses() {
+    emptyAccessList();
+    var hr = new XMLHttpRequest();
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
+            var json = JSON.parse(hr.responseText);
+            mappingAccessData(json);
+            accessItemUnit();
+        }
+    };
+
+    const storeId = sessionStorage.getItem("currStoreId");
+    hr.open("GET", "http://localhost:8060/api/accesses?storeId=" + storeId);
+    hr.send();
+}
+
+function emptyAccessList() {
     document
         .querySelectorAll(".access_list")
         .forEach((list) => (list.innerText = ""));
-    console.log(document.querySelectorAll(".access_list"));
-    loadStoreAccesses_mock();
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         var accessesJson = JSON.parse(hr.responseText).accesses;
-    //         mappingStoreData(accesses);
-    //         // initStoreManageUnit();
-    //     }
-    // };
-    // TO DO
-    // hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
-    // hr.send();
 }
 
 function loadStoreAccesses_mock() {
@@ -90,15 +92,16 @@ function mappingAccessData(accessesJson) {
 
     var accesses = accessesJson.accesses;
     for (var key in accesses) {
-        var { id, accessType, userNickname } = accesses[key];
+        var { id, accessTypeCode, userNickname } = accesses[key];
         var data = {
             id: id,
             nickname: userNickname,
-            access_type: accessType.desc,
+            access_type: common.getEnumValueByCode(accessEnum, accessTypeCode)
+                .desc,
         };
-        if (accessType.code == accessEnum.ACCESSIBLE.code) {
+        if (accessTypeCode == accessEnum.ACCESSIBLE.code) {
             staffSection.innerHTML += accessItemTemplate(data);
-        } else if (accessType.code == accessEnum.WAITING.code) {
+        } else if (accessTypeCode == accessEnum.WAITING.code) {
             applicatorSection.innerHTML += accessItemTemplate(data);
         }
     }
@@ -156,11 +159,7 @@ const popupEnum = {
         action_btn_color: "green",
         popup_class: "hand_over_admin",
         action_btn_event: function (accessId) {
-            // TODO
             handOverAdmin(accessId);
-            common.giveToastNoti(
-                "권리자 권한이 양도되어 메인화면으로 이동합니다."
-            );
             // 메인화면으로 리다이렉트
             setTimeout(
                 () => (location.href = "http://127.0.0.1:5500/www"),
@@ -175,10 +174,7 @@ const popupEnum = {
         action_btn_color: "red",
         popup_class: "delete_access",
         action_btn_event: function (accessId) {
-            // TODO
             deleteAccess(accessId);
-            common.giveToastNoti("해당 사용자의 권한이 삭제되었습니다.");
-            init();
         },
     },
     APPROVE_APPLICATION: {
@@ -188,10 +184,7 @@ const popupEnum = {
         action_btn_color: "green",
         popup_class: "delete_access",
         action_btn_event: function (accessId) {
-            // TODO
             approveApplication(accessId);
-            common.giveToastNoti("해당 사용자의 신청이 승인되었습니다.");
-            init();
         },
     },
     DENY_APPLICATION: {
@@ -202,54 +195,66 @@ const popupEnum = {
         action_btn_color: "red",
         popup_class: "deny_application",
         action_btn_event: function (accessId) {
-            // TODO
             deleteAccess(accessId);
-            common.giveToastNoti("해당 사용자의 신청이 거절되었습니다.");
-            init();
         },
     },
 };
 
-// TO DO
 function handOverAdmin(accessId) {
-    console.log(`accessId : ${accessId} 가 새로운 관리자로 임명되었습니다`);
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         var storesJson = JSON.parse(hr.responseText).stores;
-    //         // initStoreManageUnit();
-    //     }
-    // };
-    //
-    // hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
-    // hr.send();
+    modifyAccessRequest(
+        accessId,
+        accessEnum.ADMIN,
+        "권리자 권한이 양도되어 메인화면으로 이동합니다."
+    );
 }
 
-// TO DO
 function approveApplication(accessId) {
-    console.log(`accessId : ${accessId}의 신청을 승인했습니다.`);
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         var storesJson = JSON.parse(hr.responseText).stores;
-    //         // initStoreManageUnit();
-    //     }
-    // };
-    //
-    // // hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
-    // hr.send();
+    modifyAccessRequest(
+        accessId,
+        accessEnum.ACCESSIBLE,
+        "접근 신청을 승인했습니다."
+    );
 }
-// TO DO
+
 function deleteAccess(accessId) {
-    console.log(`accessId : ${accessId}를 삭제했습니다.`);
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         var storesJson = JSON.parse(hr.responseText).stores;
-    //         // initStoreManageUnit();
-    //     }
-    // };
-    //
-    // hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
-    // hr.send();
+    modifyAccessRequest(
+        accessId,
+        accessEnum.INACCESSIBLE,
+        "접근 권한을 철회했습니다"
+    );
+}
+
+function modifyAccessRequest(accessId, accessType, successMsg) {
+    var hr = new XMLHttpRequest();
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            if (hr.status == 200) {
+                init();
+                common.giveToastNoti(successMsg);
+
+                // 관리자 권한 양도라면, 메인으로 리다이렉션 되기 전까지
+                // 모든 버튼 비활성화
+                if (accessType == accessEnum.ADMIN) {
+                    disableInteraction();
+                }
+            } else {
+                init();
+                common.giveToastNoti(
+                    "알 수 없는 이유로 요청을 처리할 수 없습니다"
+                );
+            }
+        }
+    };
+
+    hr.open(
+        "PUT",
+        `http://localhost:8060/api/accesses/${accessId}/byadmin?accessTypeCode=${accessType.code}`
+    );
+    hr.send();
+}
+
+function disableInteraction() {
+    const surface = document.createElement("div");
+    document.querySelector("body").appendChild(surface);
+    surface.classList.add("surface");
 }

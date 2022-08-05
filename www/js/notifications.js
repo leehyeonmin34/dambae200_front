@@ -1,4 +1,6 @@
 import * as common from "./common.js";
+var pageNum = -1;
+const loadMoreBtn = document.querySelector(".load_more_btn");
 
 document.addEventListener("DOMContentLoaded", function () {
     basicInteraction();
@@ -6,50 +8,90 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function basicInteraction() {
-    common.initDialogInteraction();
     common.backButton();
 }
 
 function init() {
-    var currPage = 0;
+    loadMoreBtnInteraction();
     loadMoreNotifications();
 }
 
 function loadMoreNotifications() {
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-    //         var accessesJson = JSON.parse(hr.responseText).accesses;
-    //         mappingStoreData(accesses);
-    //         // initStoreManageUnit();
-    //     }
-    // };
-    // TO DO
-    // hr.open("GET", "http://localhost:8060/api/stores/findByUserId?userId=" + 1);
-    // hr.send();
-    mappingNotifications(mockNotifications);
+    pageNum += 1;
+    var hr = new XMLHttpRequest();
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            if (hr.status == 200) {
+                var response = JSON.parse(hr.responseText);
+                console.log(response);
+
+                if (response.last) hideLoadMoreBtn();
+
+                mappingNotifications(response);
+                enableDeleteBtn();
+            } else {
+                common.giveToastNoti("알림을 불러올 수 없습니다.");
+            }
+        }
+    };
+    hr.open(
+        "GET",
+        `http://localhost:8060/api/notifications?userId=${common.getUserId()}&page=${pageNum}`
+    );
+    hr.send();
 }
 
-function mappingNotifications(json) {
-    if (json.total == 0) {
+function mappingNotifications(response) {
+    if (response.totalElements == 0) {
         showEmptyImage();
     } else {
         const section = document.querySelector(".noti_list");
         const template = common.getTemplate("#notification_template");
-        const notifications = json.notifications;
+        const notifications = response.content;
+        const unread = [];
         for (var key in notifications) {
-            const { title, desc, createdAt, isRead } = notifications[key];
+            const { title, content, createdAt, isRead, id } = notifications[
+                key
+            ];
             const data = {
                 title,
-                desc,
+                desc: content,
                 date: createdAt,
                 new: isRead || "visible",
+                id: id,
             };
             section.innerHTML += template(data);
+            if (!isRead) unread.push(id);
         }
+        // console.log(unread);
+        markAsRead(unread);
     }
 }
 function showEmptyImage() {}
+
+function enableDeleteBtn() {
+    common.addEventListenerToDOMbySelector(".delete_icon", "click", deleteNoti);
+}
+
+function deleteNoti(e) {
+    const notiDOM = e.target.closest(".noti_item");
+    const id = notiDOM.id;
+    console.log(id);
+    var hr = new XMLHttpRequest();
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            if (hr.status == 200) {
+                hideNoti(notiDOM);
+            } else {
+                common.giveToastNoti(
+                    "알 수 없는 이유로 알림을 삭제할 수 없습니다."
+                );
+            }
+        }
+    };
+    hr.open("DELETE", `http://localhost:8060/api/notifications/${id}`);
+    hr.send();
+}
 
 const mockNotifications = {
     notifications: [
@@ -96,3 +138,29 @@ const mockNotifications = {
     ],
     total: 5,
 };
+
+function hideNoti(notiDOM) {
+    notiDOM.classList.add("hide_and_up");
+}
+
+function loadMoreBtnInteraction() {
+    loadMoreBtn.addEventListener("click", loadMoreNotifications);
+}
+
+function hideLoadMoreBtn() {
+    loadMoreBtn.removeEventListener("click", loadMoreNotifications);
+    loadMoreBtn.classList.add("dialog_off");
+}
+
+function markAsRead(unread) {
+    if (unread.length != 0) {
+        const data = {
+            idList: unread,
+        };
+
+        var hr = new XMLHttpRequest();
+        hr.open("PUT", `http://localhost:8060/api/notifications/read`);
+        hr.setRequestHeader("Content-Type", "application/json");
+        hr.send(JSON.stringify(data));
+    }
+}
