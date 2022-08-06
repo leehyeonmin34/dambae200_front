@@ -177,6 +177,14 @@ export function backButton() {
     backBtn.addEventListener("click", () => window.history.back());
 }
 
+export function backAndRefreshButton() {
+    const backBtn = document.querySelector(".header .left_icon");
+    backBtn.addEventListener(
+        "click",
+        () => (location.href = document.referrer)
+    );
+}
+
 export function getUrlParams() {
     const url = new URL(location.href);
     const urlParams = url.searchParams;

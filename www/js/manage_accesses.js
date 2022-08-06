@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function basicInteraction() {
     common.initDialogInteraction();
-    common.backButton();
+    common.backAndRefreshButton();
 }
 
 function init() {

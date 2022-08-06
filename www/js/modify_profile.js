@@ -10,14 +10,31 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function init() {
-    mapMyData();
+    loadAndMapMyData();
     inputInteraction();
     common.backButton();
 }
 
-function mapMyData() {
-    const nickname = sessionStorage.getItem("userNickname");
-    const email = sessionStorage.getItem("userEmail");
+function loadAndMapMyData() {
+    var hr = new XMLHttpRequest();
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            const responseBody = JSON.parse(hr.responseText);
+            if (hr.status == 200) {
+                mapMyData(responseBody);
+            } else
+                common.giveToastNoti(
+                    "알 수 없는 이유로 데이터를 가져올 수 없습니다"
+                );
+        }
+    };
+
+    hr.open("GET", `http://localhost:8060/api/users/${common.getUserId()}`);
+    hr.send();
+}
+
+function mapMyData(response) {
+    const { nickname, email } = response;
     nicknameInput.value = nickname;
     document.querySelector(".email").innerText = email;
 }

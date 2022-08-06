@@ -32,7 +32,8 @@ const storeManageDialog = document.querySelector("#store_manage_modal");
 const popup = document.querySelector("#popup");
 
 document.addEventListener("DOMContentLoaded", function () {
-    updateUserData(USER_ID.USER_2);
+    updateUserData(USER_ID.USER_1);
+
     basicInteraction();
     // notificationDot();
     headerEventListner();

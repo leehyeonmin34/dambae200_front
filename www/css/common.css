@@ -674,12 +674,6 @@ input::placeholder {
     background: rgba(155, 170, 183, 0.1);
 }
 
-#store_noti_dot_modal {
-    position: absolute;
-    left: 140px;
-    top: 25px;
-}
-
 .slide-in {
     animation: change 0.5s ease forwards;
 }

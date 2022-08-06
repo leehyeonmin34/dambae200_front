@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function basicInteraction() {
     common.initDialogInteraction();
     inputInteraction();
-    common.backButton();
+    common.backAndRefreshButton();
     customBackInteraction();
 
     // common.radioButtonInteraction();

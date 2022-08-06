@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function basicInteraction() {
-    common.backButton();
+    common.backAndRefreshButton();
 }
 
 function init() {
@@ -75,8 +75,8 @@ function enableDeleteBtn() {
 
 function deleteNoti(e) {
     const notiDOM = e.target.closest(".noti_item");
+    console.log(e.target, notiDOM);
     const id = notiDOM.id;
-    console.log(id);
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
