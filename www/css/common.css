@@ -59,6 +59,10 @@ li {
     background: white;
 }
 
+[src="/www/img/ios/top_black.png"] {
+    width: 375px;
+}
+
 .top.main {
     background: #f5f9fc;
     transition: 0.3s;
@@ -243,6 +247,31 @@ input:focus {
 
 input::placeholder {
     color: #9baab7;
+}
+
+.full_btn {
+    background: #2d313e;
+    width: 100%;
+    border-radius: 6px;
+    color: #f4f8fc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 60px;
+}
+
+.full_btn.disable {
+    background: #ebf0f8;
+    color: #9baab7;
+}
+
+.full_btn.small {
+    height: 48px;
+}
+
+.full_btn.primary {
+    background-color: #30cf8c;
 }
 
 .full_floating_btn_container {
@@ -458,7 +487,7 @@ input::placeholder {
 }
 
 .btn_pressed:active {
-    background-color: rgba(155, 170, 183, 0.1);
+    background-color: rgba(155, 170, 183, 0.15);
 }
 
 .primary .btn_pressed {

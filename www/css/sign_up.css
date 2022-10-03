@@ -1,0 +1,54 @@
+@import "./common.css";
+@import "./complete.css";
+
+.header_1 label {
+    display: flex;
+    align-items: center;
+}
+
+.header_1 label img {
+    margin-right: 4px;
+}
+
+input {
+    height: 48px;
+    width: 100%;
+}
+
+.normal_btn {
+    position: relative;
+}
+
+.field {
+    display: flex;
+}
+
+.normal_btn {
+    width: 100px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 22px;
+
+    color: #5b616b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-left: 10px;
+    border: 1px solid #2d313e;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.nickname {
+    margin-top: 10px;
+}
+
+label[for="pw_confirm"] {
+    margin-top: 10px;
+}
+
+.pw {
+    margin-top: 60px;
+    margin-bottom: 20px;
+}

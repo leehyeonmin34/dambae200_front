@@ -1,0 +1,124 @@
+@import "common.css";
+
+body {
+    position: relative;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+.content_containers {
+    display: flex;
+    transition: 0.3s;
+}
+
+.content_container {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    /* height: 100vh; */
+    /* background-color: red; */
+}
+.container .content_container .content {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container .content_container .content img {
+    width: 335px;
+    margin-bottom: 65px;
+}
+
+.container .title {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 150%;
+    text-align: center;
+    color: #353a3f;
+    margin-bottom: 15px;
+}
+
+.container .desc {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 170%;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.indicators {
+    display: flex;
+    position: absolute;
+    top: 375px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.indicator {
+    width: 6px;
+    height: 2px;
+    left: 212px;
+    top: 483px;
+    background: #cfd4d9;
+    border-radius: 1px;
+    margin-right: 4px;
+}
+
+.indicator.active {
+    width: 20px;
+    background: #20c997;
+}
+
+.bottom_section {
+    padding: 0 20px;
+    box-sizing: border-box;
+    width: 100%;
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bottom_section .prev {
+    width: 95px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 0.3s;
+    opacity: 0;
+}
+
+.bottom_section .prev.show {
+    opacity: 1;
+    /* transition: 0.3s; */
+}
+
+.onboarding_btn {
+    width: 95px;
+    height: 48px;
+    border-radius: 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.bottom_section img {
+    width: 116px;
+    /* height: 62px; */
+    transform: translate(-10px, -6px);
+}
