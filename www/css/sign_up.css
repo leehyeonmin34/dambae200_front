@@ -40,6 +40,21 @@ input {
     box-sizing: border-box;
 }
 
+.normal_btn.disabled {
+    border-width: 0px;
+    border-color: #9baab7;
+    background-color: #ebf0f8;
+    color: #9baab7;
+}
+
+.normal_btn .text:after {
+    content: "중복 확인";
+}
+
+.normal_btn.disabled .text:after {
+    content: "확인 완료";
+}
+
 .nickname {
     margin-top: 10px;
 }

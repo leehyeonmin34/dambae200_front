@@ -25,7 +25,10 @@ function loadStoreAccesses() {
             var json = JSON.parse(hr.responseText);
             mappingAccessData(json);
             accessItemUnit();
+        } else {
+            common.giveToastNoti("알 수 없는 이유로 불러올 수 없습니다");
         }
+        showEmpty();
     };
 
     const storeId = sessionStorage.getItem("currStoreId");
@@ -239,10 +242,9 @@ function modifyAccessRequest(accessId, accessType, successMsg) {
                 }
             } else {
                 init();
-                common.giveToastNoti(
-                    "알 수 없는 이유로 요청을 처리할 수 없습니다"
-                );
+                common.giveToastNoti("알 수 없는 이유로 불러올 수 없습니다");
             }
+            showEmpty();
         }
     };
 
@@ -257,4 +259,22 @@ function disableInteraction() {
     const surface = document.createElement("div");
     document.querySelector("body").appendChild(surface);
     surface.classList.add("surface");
+}
+
+function showEmpty() {
+    const staffSection = document.querySelector(".access_list_section.staffs");
+    const applicatorSection = document.querySelector(
+        ".access_list_section.applicators"
+    );
+
+    if (staffSection.querySelector(ul).innerText == "") {
+        common.showDOMbySelector(".empty_staff");
+    } else {
+        common.hideDOMbySelector(".empty_staff");
+    }
+    if (applicatorSection.querySelector(ul).innerText == "") {
+        common.showDOMbySelector(".empty_applicators");
+    } else {
+        common.hideDOMbySelector(".empty_applicators");
+    }
 }

@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/www/css/login.css" />
-        <title>Onboarding</title>
+        <title>Login</title>
     </head>
     <body>
         <div class="top">
@@ -14,22 +14,24 @@
             <img src="/www/img/logo.png" alt="logo" />
             <img src="/www/img/icons/login_icon.png" alt="login_icon" />
             <div id="welcome">안녕하세요 !</div>
-            <a src="/www/pages/forgot_password.html">비밀번호 찾기</a>
+            <a href="/www/pages/login/forgot_password.html">비밀번호 찾기</a>
         </div>
         <div class="form">
             <input type="text" placeholder="이메일" name="email" />
-            <input type="text" placeholder="비밀번호" name="pw" />
-            <div class="full_btn small">
+            <input type="password" placeholder="비밀번호" name="pw" />
+            <div class="full_btn small" id="login_btn">
                 <div class="btn_pressed"></div>
                 로그인
             </div>
-            <div class="full_btn primary small">
+            <div class="full_btn primary small" id="sign_up_btn">
                 <div class="btn_pressed"></div>
                 회원가입
             </div>
         </div>
+        <div id="toast">{{message}}</div>
 
-        <script type="module" src="/www/js/login.js"></script>
+        <script type="module" src="/www/js/login/login.js"></script>
         <script type="module" src="/www/js/common.js"></script>
+        <script type="module" src="/www/js/errorCode.js"></script>
     </body>
 </html>

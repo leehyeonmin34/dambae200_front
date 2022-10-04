@@ -55,3 +55,8 @@
     width: 100vw;
     /* background-color: rgba(0, 0, 0, 0); */
 }
+
+.empty {
+    height: 60px;
+    color: #9baab7;
+}

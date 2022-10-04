@@ -106,14 +106,15 @@ function loadMyStores() {
                 mappingStoreData(response.myStores);
                 StoreUnitEventListeners();
 
+                // 리로드 버튼 제거
+                common.hideDOMbySelector(".realod_btn_container");
+
                 // 알림 빨간 점
                 const notiDot = document.querySelector("#noti_dot");
                 if (response.newNotification) common.showDOM(notiDot);
                 else common.hideDOM(notiDot);
             } else {
-                common.giveToastNoti(
-                    "알 수 없는 이유로 데이터를 불러올 수 없습니다."
-                );
+                loadFail();
             }
         }
     };
@@ -122,6 +123,19 @@ function loadMyStores() {
         `http://localhost:8060/api/users/${common.getUserId()}/home`
     );
     hr.send();
+}
+
+function loadFail() {
+    const addStoreBtn = document.querySelector(".add_store_container");
+    const reloadBtn = document.querySelector(".realod_btn_container");
+
+    common.hideDOM(addStoreBtn);
+    common.showDOM(reloadBtn);
+    reloadBtn.addEventListener("click", loadMyStores);
+
+    common.giveToastNoti(
+        "알 수 없는 이유로 데이터를 불러올 수 없습니다. 인터넷 연결을 확인해주세요."
+    );
 }
 
 function initStoreManageUnit() {

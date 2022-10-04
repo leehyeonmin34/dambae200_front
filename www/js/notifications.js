@@ -30,7 +30,11 @@ function loadMoreNotifications() {
                 mappingNotifications(response);
                 enableDeleteBtn();
             } else {
-                common.giveToastNoti("알림을 불러올 수 없습니다.");
+                common.showDOMbySelector(".empty_noti");
+                common.hideDOMbySelector(".load_more_btn");
+                common.giveToastNoti(
+                    "알수 없는 이유로 불러올 수 없습니다. 인터넷 연결을 확인해주세요."
+                );
             }
         }
     };

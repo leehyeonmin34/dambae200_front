@@ -261,7 +261,7 @@ input::placeholder {
     height: 60px;
 }
 
-.full_btn.disable {
+.full_btn.disabled {
     background: #ebf0f8;
     color: #9baab7;
 }

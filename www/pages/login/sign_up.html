@@ -31,9 +31,9 @@
                         placeholder="비밀번호 찾기에 사용됩니다"
                         name="email"
                     />
-                    <div class="normal_btn">
+                    <div class="normal_btn" id="email_valid_btn">
                         <div class="btn_pressed"></div>
-                        중복 확인
+                        <div class="text"></div>
                     </div>
                 </div>
             </div>
@@ -45,9 +45,9 @@
                         placeholder="자유롭게 입력 가능합니다"
                         name="nickname"
                     />
-                    <div class="normal_btn">
+                    <div class="normal_btn" id="nickname_valid_btn">
                         <div class="btn_pressed"></div>
-                        중복 확인
+                        <div class="text"></div>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
             <div class="full_floating_btn_container">
                 <div id="sendBtn" class="full_floating_btn disabled">
                     <div class="btn_pressed"></div>
-                    변경하기
+                    제출하기
                 </div>
             </div>
 
@@ -99,7 +99,7 @@
         </div>
 
         <sciprt type="module" src="/www/js/common.js"></sciprt>
-        <script type="module" src="/www/js/change_password.js"></script>
+        <script type="module" src="/www/js/login/sign_up.js"></script>
         <script type="module" src="/www/js/errorCode.js"></script>
     </body>
 </html>
