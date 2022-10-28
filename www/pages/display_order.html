@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/cigaretteList.css" />
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="top">
+        <img src="/img/ios/top_black.png">
+        <div class="header">
+            <div class="header_1">
+                <div class="main_header">
+                    <img class="icon left_icon" src="/img/icons/arrow-left 1.svg">
+                    <div class="order_main">
+                        <input type="radio" id="display_order" name="show" checked />
+                        <input type="radio" id="computerized_order" name="show" />
+                        <div class="order">
+                            <label for="display_order" class="display">진열순서</label>
+                            <label for="computerized_order" class="computerized">전산순서</label>
+                        </div>
+                    </div>
+                    <img class="icon edit_icon" src="/img/icons/edit.svg">
+                    <img class="icon search_icon" src="/img/icons/search.svg">
+                </div>
+                <div class="search_header invisible">
+                    <img src="/img/icons/close.svg" class="icon close_icon" />
+                    <div class="search_input">
+                        <input type="text" name="searchName" placeholder="담배이름을 검색하세요" class="main_search_input" />
+                        <img src="/img/icons/search.svg" class="search_icon" />
+                    </div>
+                </div>
+                <div class="display_order_movement_search_header invisible">
+                    <div class="display_order_movement_top">
+                        <img class="icon left_icon" src="/img/icons/arrow-left 1.svg">
+                        <label>진열 순서 이동</label>
+                    </div>
+                    <div class="movement_search">
+                        <input type="text" name="searchName" placeholder="담배이름을 검색하세요" class="movement_search_input" />
+                        <img src="/img/icons/search.svg" class="search_icon" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="display_order_page">
+        <div class="page_contents_with_header1">
+            <div class="middle">
+                <div class="tip">
+                    <div class="tip_btn btn">
+                        <div class="btn_pressed"></div>
+                        <div class="glitter">
+                            <img src="/img/icons/glitter.png">
+                            <div class="letter"> 담배 검수 하는 법!</div>
+                        </div>
+                        <img class="right_small" src="/img/icons/right_small.svg">
+                    </div>
+                </div>
+            </div>
+            <div class="cigarette_list_section margin">
+                <ul class="cigarette_list">
+                    <!--CIGARETTE-->
+                    <li class="cigarette_on_list" id={{id}} officialName={{officialName}}
+                        customizedName={{customizedName}} count={{count}}>
+                        <div class="cigarette_left">
+                            <div class="checkbox_btn invisible">
+                                <input class="checkbox_btn_style" type="checkbox" name="checkedCigarette" id="chk_top1"
+                                    value="{{id}}" />
+                                <label for="chk_top1" class="checkbox_btn_lable"></label>
+                            </div>
+                            <div class="cigarette_icon_container">
+                                <img src="/img/cigarette_icon/메비우스_스카이블루.svg" alt="">
+                            </div>
+                            <div class="cigarette_name_container">
+                                <div class="official_name">
+                                    메비우스 스카이블루
+                                </div>
+                                <div class="customized_name">
+                                    스카이블루
+                                </div>
+                            </div>
+                        </div>
+                        <div class="count_container">
+                            <input type="number" placeholder="5" name="conut" />
+                            개
+                        </div>
+                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                    </li>
+                    <li class="cigarette_on_list" id={{id}} officialName={{officialName}}
+                        customizedName={{customizedName}} count={{count}}>
+                        <div class="cigarette_left">
+                            <div class="checkbox_btn invisible">
+                                <input class="checkbox_btn_style" type="checkbox" name="checkedCigarette" id="chk_top2"
+                                    value="{{id}}" />
+                                <label for="chk_top2" class="checkbox_btn_lable"></label>
+                            </div>
+                            <div class="cigarette_icon_container">
+                                <img src="/img/cigarette_icon/에쎄_수.svg" alt="">
+                            </div>
+                            <div class="cigarette_name_container">
+                                <div class="official_name">
+                                    에쎄 수
+                                </div>
+                                <div class="customized_name">
+                                    에쎄 수
+                                </div>
+                            </div>
+                        </div>
+                        <div class="count_container">
+                            <input type="number" placeholder="4" name="conut" />
+                            개
+                        </div>
+                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                    </li>
+                    <li class="cigarette_on_list" id={{id}} officialName={{officialName}}
+                        customizedName={{customizedName}} count={{count}}>
+                        <div class="cigarette_left">
+                            <div class="checkbox_btn invisible">
+                                <input class="checkbox_btn_style" type="checkbox" name="checkedCigarette" id="chk_top3"
+                                    value="{{id}}" />
+                                <label for="chk_top3" class="checkbox_btn_lable"></label>
+                            </div>
+                            <div class="cigarette_icon_container">
+                                <img src="/img/cigarette_icon/믹스그린_트로피컬믹스 3MG.svg" alt="">
+                            </div>
+                            <div class="cigarette_name_container">
+                                <div class="official_name">
+                                    메비우스 LBS 트로피컬그린 3MG
+                                </div>
+                                <div class="customized_name">
+                                    트로피컬그린 3MG
+                                </div>
+                            </div>
+                        </div>
+                        <div class="count_container">
+                            <input type="number" placeholder="0" name="conut" />
+                            개
+                        </div>
+                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                    </li>
+                    <li class="cigarette_on_list" id={{id}} officialName={{officialName}}
+                        customizedName={{customizedName}} count={{count}}>
+                        <div class="cigarette_left">
+                            <div class="checkbox_btn invisible">
+                                <input class="checkbox_btn_style" type="checkbox" name="checkedCigarette" id="chk_top4"
+                                    value="{{id}}" />
+                                <label for="chk_top4" class="checkbox_btn_lable"></label>
+                            </div>
+                            <div class="cigarette_icon_container">
+                                <img src="/img/cigarette_icon/믹스그린_트로피컬믹스 3MG.svg" alt="">
+                            </div>
+                            <div class="cigarette_name_container">
+                                <div class="official_name">
+                                    메비우스 LBS
+                                </div>
+                                <div class="customized_name">
+                                    트로피컬그린
+                                </div>
+                            </div>
+                        </div>
+                        <div class="count_container">
+                            <input type="number" placeholder="0" name="conut" />
+                            개
+                        </div>
+                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                    </li>
+                </ul>
+                <ul class="cigarette_list_include_name invisible">
+
+                </ul>
+                <ul class="cigarette_list_not_include_name invisible">
+
+                </ul>
+                <ul class="movement_cigarette_list invisible">
+                    <li class="cigarette_on_list">
+                        <div class="movement_cigarette_radio_btn">
+                            <input type="radio" name="movementCigarette" id="{{id}} selected_cigarette"
+                                value="{{id}}" />
+                            <label for="{{id}}">
+                                <div class="cigarette_icon_container">
+                                    이미지
+                                </div>
+                                <div class="cigarette_name_container">
+                                    <div class="official_name">
+                                        공식이름
+                                    </div>
+                                    <div class="customized_name">
+                                        간편이름
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </li>
+                    <li class="cigarette_on_list">
+                        <div class="movement_cigarette_radio_btn">
+                            <input type="radio" name="movementCigarette" id="{{id}} selected_cigarette"
+                                value="{{id}}" />
+                            <label for="{{id}}">
+                                <div class="cigarette_icon_container">
+                                    이미지
+                                </div>
+                                <div class="cigarette_name_container">
+                                    <div class="official_name">
+                                        공식이름
+                                    </div>
+                                    <div class="customized_name">
+                                        간편이름
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="full_floating_btn_container">
+            <div id="sendBtn" class="full_floating_btn send_btn_container">
+                <div class="btn_pressed computerized_sort_btn"></div>
+                전산 순으로 정렬
+            </div>
+            <div class="edit_bottom_btn_container invisible">
+                <div id="moveBtn" class="move_btn_container">
+                    <div id="selected_cigarette_count"></div>
+                    개의 담배이동
+                    <img class="toss_icon" src="/img/icons/toss.svg">
+                </div>
+                <div id="plusBtn" class="plus_btn_container">
+                    +
+                </div>
+            </div>
+            <div id="movementBottomBtn" class="full_floating_btn movement_btn_container invisible">
+                <div class="btn_pressed movement_btn"></div>
+                해당 담배 뒤로 이동
+                <img class="toss_icon" src="/img/icons/toss.svg">
+            </div>
+        </div>
+        <div class="dialog dialog_dialog add_cigarette_dialog_screen dialog_off">
+            <div class="escape"></div>
+            <div class="dialog_container add_cigarette_dialog">
+                <img src="/img/icons/close.svg" class="icon close_icon" />
+                <div class="add_cigarette_body">
+                    <div class="cigarette_img_container">
+                    </div>
+                    <div class="add_cigarette_search_official_name">
+                        <label class="input_label" for="cigarette_search_official_name">담배 이름</label>
+                        <div class="official_name_search_input">
+                            <input type="text" name="officialName" placeholder="담배이름을 입력해주세요"
+                                class="official_name_input" />
+                            <img src="/img/icons/search.svg" class="search_icon" />
+                            <div class="cigartte_dropdown_lists invisible">
+                                <div class="cigarette_dropdown_content">
+                                    <div class="cigarette_icon_container">
+                                        이미지
+                                    </div>
+                                    <div class="official_name">
+                                        공식이름
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add_cigarette_input_customized_name">
+                        <label for="input_customized_name" class="input_label">간편 이름</label>
+                        <div class="customized_name_box">
+                            간편이름
+                        </div>
+                    </div>
+                    <div class="add_cigarette_bottom_btn_container">
+                        <div id="deleteBtn" class="delete_btn_container">
+                            삭제
+                        </div>
+                        <div id="saveBtn" class="save_btn_container">
+                            저장
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="computerized_order_page" class="invisible">
+        <div class="page_contents_with_header1">
+            <div class="cigarette_list_section">
+                <ul class="cigarette_lists_computerized">
+                    <li class="cigarette_on_list_computerized">
+                        <div class="cigarette_left">
+                            <div class="cigarette_icon_container">
+                                <img src="/img/cigarette_icon/에쎄_수.svg" alt="">
+                            </div>
+                            <div class="cigarette_name_container">
+                                <div class="official_name">
+                                    에쎄 수
+                                </div>
+                                <div class="customized_name">
+                                    에쎄 수
+                                </div>
+                            </div>
+                        </div>
+                        <div class="count_container">
+                            4
+                        </div>
+                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                    </li>
+                    <li class="cigarette_on_list_computerized">
+                        <div class="cigarette_left">
+                            <div class="cigarette_icon_container">
+                                <img src="/img/cigarette_icon/믹스그린_트로피컬믹스 3MG.svg" alt="">
+                            </div>
+                            <div class="cigarette_name_container">
+                                <div class="official_name">
+                                    메비우스 LBS 트로피컬그린 3MG
+                                </div>
+                                <div class="customized_name">
+                                    LBS 트로피컬그린 3MG
+                                </div>
+                            </div>
+                        </div>
+                        <div class="count_container">
+                            7
+                        </div>
+                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                    </li>
+                    <li class="cigarette_on_list_computerized">
+                        <div class="cigarette_left">
+                            <div class="cigarette_icon_container">
+                                <img src="/img/cigarette_icon/메비우스_스카이블루.svg" alt="">
+                            </div>
+                            <div class="cigarette_name_container">
+                                <div class="official_name">
+                                    메비우스 스카이블루
+                                </div>
+                                <div class="customized_name">
+                                    메비우스 스카이블루
+                                </div>
+                            </div>
+                        </div>
+                        <div class="count_container">
+                            5
+                        </div>
+                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">{{message}}</div>
+
+    <div class="bg_1"></div>
+
+    <!--진열순서 리스트-->
+    <script type="rv-template" id="cigaretteListTemplate">
+        <li class="cigarette_on_list" id={{id}}>
+            <div class="cigarette_left">
+                <div class="checkbox_btn invisible">
+                    <input class="checkbox_btn_style" type="checkbox" name="checkedCigarette" id="chk_top"
+                        value="{{id}}" />
+                    <label for="chk_top"></label>
+                </div>
+                <div class="cigarette_icon_container">
+                    이미지
+                </div>
+                <div class="cigarette_name_container">
+                    <div class="official_name">
+                        {{official_name}}
+                    </div>
+                    <div class="customized_name">
+                        {{customized_name}}
+                    </div>
+                </div>
+            </div>
+            <div class="count_container">
+                <input type="number" placeholder="{{conut}}" name="conut" />
+                개
+            </div>
+            <img class="icon drag_icon invisible" src="/img/icons/drag_handle.svg">
+        </li>
+    </script>
+
+    <!--담배이동 검색 리스트-->
+    <script type="rv-template" id="movementCigaretteRadioButtonTemplate">
+        <li class="cigarette_on_list">
+            <div class="movement_cigarette_radio_btn">
+                <input type="radio" name="movementCigarette" id="{{id}}" value="{{id}}" />
+                <label for="{{id}}">
+                    <div class="cigarette_icon_container">
+                        이미지
+                    </div>
+                    <div class="cigarette_name_container">
+                        <div class="official_name">
+                            {{officialName}}
+                        </div>
+                        <div class="customized_name">
+                            {{customizedName}}
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </li>
+    </script>
+
+    <!--담배 드랍다운 리스트-->
+    <script type="rv-template" id="dropdownCigatretteTemplate">
+        <div class="cigarette_dropdown_content">
+            <div class="cigarette_icon_container">
+                이미지
+            </div>
+            <div class="official_name">
+                {{officialName}}
+            </div>
+        </div>
+    </script>
+
+
+    <!--전산순서리스트-->
+    <script type="rv-template" id="computerizedOrderTemplate">
+        <li class="cigarette_on_list_computerized" id={{id}}>
+            <div class="cigarette_left">
+                <div class="cigarette_icon_container">
+                    이미지
+                </div>
+                <div class="cigarette_name_container">
+                    <div class="official_name">
+                        {{official_name}}
+                    </div>
+                    <div class="customized_name">
+                        {{customized_name}}
+                    </div>
+                </div>
+            </div>
+            <div class="count_container">
+                {{count}}
+            </div>
+            <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+        </li>
+    </script>
+
+    <script type="module" src="/js/common.js"></script>
+    <script type="module" src="/js/display_order.js"></script>
+
+</body>
+
+</html>
