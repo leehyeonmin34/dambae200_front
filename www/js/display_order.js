@@ -30,13 +30,7 @@ const movementNameInput = document.querySelector(".movement_search_input");
 const movementBtn = document.querySelector(".movement_btn_container");
 //담배추가 dialog에서 공식이름
 const officialNameInput = document.querySelector(".official_name_input");
-//담배추가 dialog에서 전산 상 이름
-const computerizedNameInput = document.querySelector(".computerized_name_input");
-//담배추가 dialog에서 간편 이름
-const customizedNameInput = document.querySelector(".customized_name_input");
 
-//섹션추가 input
-const addSectionNameInput = document.querySelector(".add_section_name_input")
 
 document.addEventListener("DOMContentLoaded", function () {
     updateCigarettListData(CIGARETTELIST_ID.CIGARETTELIST_1);
@@ -141,6 +135,8 @@ function editButtonHandler(e) {
             dragIcon[i].classList.toggle("invisible");
         }
 
+        initDragButtonComuterizedOrder();
+
 
     } else {
         //진열순서 페이지가 선택
@@ -177,47 +173,140 @@ function editButtonHandler(e) {
         document.querySelector(".toss_icon").classList.add("inactive");
 
         initAddCigaretteBtn();
-        initDragButton();
+        initDragButtonDisplayOrder();
         manageCheckboxButton();
     }
 }
 
-
-function initDragButton() {
-    const draggables = document.querySelectorAll(".draggable");
-    //ciagretteListSection
+//드래그앤드롭 전산순서
+function initDragButtonComuterizedOrder() {
+    const draggables = document.querySelectorAll(".cigarette_on_list_computerized.draggable");
+    const container = document.querySelector(".cigarette_lists_computerized");
 
     draggables.forEach(el => {
         el.addEventListener("dragstart", () => {
-            el.closest(".cigarette_on_list").classList.add("dragging");
+            el.classList.add("dragging");
         });
 
         el.addEventListener("dragend", () => {
-            el.closest(".cigarette_on_list").classList.remove("dragging");
+            el.classList.remove("dragging");
         });
     });
 
     function getDragAfterElement(container, y) {
-        const draggableElements = [...container.querySelectorAll(".cigarette_on_list:not(.dragging)")];
+        const draggableElements = [...container.querySelectorAll(".cigarette_on_list_computerized.draggable:not(dragging)")];
 
         return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect();
-            const offset = y - box.top - (box.height / 2);
+            const offset = y - box.top - box.height / 2
             if (offset < 0 && offset > closest.offset) {
                 return { offset: offset, element: child }
             } else {
                 return closest
             }
         }, { offset: Number.NEGATIVE_INFINITY }).element
-    }
+    };
 
-    ciagretteListSection.addEventListener("dragover", (e) => {
+    container.addEventListener("dragover", e => {
         e.preventDefault()
-        const afterElement = getDragAfterElement(ciagretteListSection, e.clientY);
+        const afterElement = getDragAfterElement(container, e.clientY);
         const draggable = document.querySelector(".dragging");
-        ciagretteListSection.insertBefore(draggable, afterElement);
+        container.insertBefore(draggable, afterElement)
+        sessionStorage.setItem("currAfterElementCigaretteId", afterElement.id);
+        sessionStorage.setItem("currDraggableCigaretteId", draggable.id);
+        tryDragAndDropComuterizedOrder()
     });
 }
+
+//드래그앤드롭 진열순서
+function initDragButtonDisplayOrder() {
+    const draggables = document.querySelectorAll(".cigarette_on_list.draggable");
+    const container = document.querySelector(".cigarette_list");
+
+    draggables.forEach(el => {
+        el.addEventListener("dragstart", () => {
+            el.classList.add("dragging");
+        });
+
+        el.addEventListener("dragend", () => {
+            el.classList.remove("dragging");
+        });
+    });
+
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll(".cigarette_on_list.draggable:not(dragging)")];
+
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child }
+            } else {
+                return closest
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element
+    };
+
+    container.addEventListener("dragover", e => {
+        e.preventDefault()
+        const afterElement = getDragAfterElement(container, e.clientY);
+        const draggable = document.querySelector(".dragging");
+        container.insertBefore(draggable, afterElement)
+        sessionStorage.setItem("currAfterElementCigaretteId", afterElement.id);
+        sessionStorage.setItem("currDraggableCigaretteId", draggable.id);
+        tryDragAndDropDisplayOrder()
+
+    });
+}
+
+function tryDragAndDropDisplayOrder() {
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            if (hr.status == 200) {
+                const cigarettesJson = JSON.parse(hr.responseText);
+            } else {
+                //common.giveToastNoti("알 수 없는 이유로 데이터를 업데이트 할수 없습니다.");
+            }
+        }
+    };
+
+    const data = getDragAndDropData();
+    hr.open(
+        "PUT",
+        'https://localhost:8060/api/cigaretteOnLists/${id}/draganddrop_display'
+    );
+    hr.setRequestHeader("Content-Type", "application/json");
+    hr.send(JSON.stringify(data));
+}
+
+function tryDragAndDropComuterizedOrder() {
+    hr.onreadystatechange = () => {
+        if (hr.readyState == XMLHttpRequest.DONE) {
+            if (hr.status == 200) {
+                const cigarettesJson = JSON.parse(hr.responseText);
+            } else {
+                //common.giveToastNoti("알 수 없는 이유로 데이터를 업데이트 할수 없습니다.");
+            }
+        }
+    };
+
+    const data = getDragAndDropData();
+    hr.open(
+        "PUT",
+        'https://localhost:8060/api/cigaretteOnLists/${id}/draganddrop_computerized'
+    );
+    hr.setRequestHeader("Content-Type", "application/json");
+    hr.send(JSON.stringify(data));
+}
+
+function getDragAndDropData() {
+    return {
+        cigaretteListId: sessionStorage.getItem("cigaretteListId"),
+        afterElementId: sessionStorage.getItem("currAfterElementCigaretteId"),
+        draggableId: sessionStorage.getItem("currDraggableCigaretteId"),
+    };
+}
+
 
 /*
 window.onload = function () {
@@ -407,28 +496,36 @@ function inputCigaretteOfficialNameInteraction() {
         .addEventListener("click", () => {
             //드랍박스 보이게 하기
             cigaretteDropdownSection.classList.remove("invisible");
-            //드랍박스 안에 담배들 로드, 매핑
-            loadCigaretteByOfficialNameLike2(officialNameInput.value);
-            //드롭박스 선택한값 
             cigaretteDropBoxInteraction();
+            //드랍박스 안에 담배들 로드, 매핑
+            findCigaretteByOfficialNameLike(officialNameInput.value);
         });
 }
 
 function cigaretteDropBoxInteraction() {
     var cigaretteDropBoxList = document.querySelectorAll(".cigarette_dropdown_content");
     for (var i = 0; i < cigaretteDropBoxList.length; i++) {
-        var cigarette = cigaretteDropBoxList[i];
-        document.querySelector(".cigartte_dropdown_lists").classList.add("invisible");
-        cigarette.addEventListener("click", onClickCigarette);
+        //var cigarette = cigaretteDropBoxList[i];
+        //cigarette.addEventListener("click", onClickCigarette);
+        cigaretteDropBoxList[i].addEventListener("click", onClickCigarette);
     }
 }
 
 function onClickCigarette(e) {
+    document.querySelector(".cigartte_dropdown_lists").classList.add("invisible");
+
     const selectedCigaretteDom = e.target.closest(".cigarette_dropdown_content");
-    //선택한 담배 아이디 저장/ 세션에 저장
+    //선택한 담배 아이디, 간편이름 저장/ 세션에 저장
     sessionStorage.setItem("currSelectedCigaretteId", selectedCigaretteDom.id);
-    //인풋내용 바꾸기
-    const inputContent = document.querySelector(".official_name_input");
+    sessionStorage.setItem("currCustomizedName", selectedCigaretteDom.simple_name);
+    //간편이름 추가
+    const simpleName = selectedCigaretteDom.simple_name;
+    const customizedNameInput = document.getElementById("customized_name_input");
+    customizedNameInput.value = simpleName;
+    customizedNameInput.addEventListener("keyup", () => {
+        common.updateInputValue();
+        sessionStorage.setItem("currCustomizedName", customizedNameInput.value);
+    });
 }
 
 function manageAddCigaretteBottomButton() {
@@ -473,9 +570,7 @@ function getSaveData() {
     return {
         cigaretteListId: sessionStorage.getItem("cigaretteListId"),
         cigaretteId: sessionStorage.getItem("currSelectedCigaretteId"),
-        sectionId: sessionStorage.getItem("currSelectedSectionId"),
-        computerizedName: computerizedNameInput.value,
-        customizedName: customizedNameInput.value,
+        customizedName: sessionStorage.getItem("currCustomizedName"),
     };
 }
 
@@ -512,9 +607,14 @@ function cigaretteSearchInteraction() {
         }
     );
 
-    //입력하는것 저장
-    searchInput.addEventListener("keyup", common.updateInputValue);
 
+    //입력할때
+    //searchInput.addEventListener("keyup", common.updateInputValue);
+    searchInput.addEventListener("keyup", () => {
+        filter();
+    });
+
+    /*
     //검색버튼 눌렀을때 찾아오기.
     common.addEventListenerToDOMbySelector(
         ".search_header .search_icon",
@@ -530,7 +630,21 @@ function cigaretteSearchInteraction() {
             }
         }
     );
+    */
+}
 
+function filter() {
+    var search = searchInput.value.toLowerCase();
+    var listInner = document.querySelectorAll(".cigarette_on_list");
+
+    for (let i = 0; i < listInner.length; i++) {
+        if (listInner[i].querySelector(".official_name").innerHTML.toLowerCase().includes(search)) {
+            listInner[i].classList.remove("invisible");
+        }
+        else {
+            listInner[i].classList.add("invisible");
+        }
+    }
 }
 
 function loadCigarette() {
@@ -550,7 +664,7 @@ function loadCigarette() {
     const id = sessionStorage.getItem("cigaretteListId");
     hr.open(
         "GET",
-        'http://localhost:8060/api/cigaretteLists/${id}/display_order'
+        'http://localhost:8060/api/cigaretteOnLists/${id}/display_order'
     );
     hr.send();
 }
@@ -609,6 +723,7 @@ function mappingCigarettes(cigarettesJson) {
     }
 }
 
+/*
 function loadCigaretteByOfficialNameLike(name) {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
@@ -687,14 +802,18 @@ function mappingIncludeNameCigarettes(cigarettesJson, name) {
 
     }
 }
+*/
 
-function loadCigaretteByOfficialNameLike2(name) {
+
+function findCigaretteByOfficialNameLike(name) {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
             if (hr.status == 200) {
                 const cigarettesJson = JSON.parse(hr.responseText);
                 mappingDropBoxCigarettes(cigarettesJson);
+                //드롭박스 선택한값 
+                cigaretteDropBoxInteraction();
             } else {
                 //common.giveToastNoti("알 수 없는 이유로 데이터를 불러올 수 없습니다.");
 
@@ -712,7 +831,7 @@ function loadCigaretteByOfficialNameLike2(name) {
 
 
 function mappingDropBoxCigarettes(cigarettesJson) {
-    cigaretteListDropdownSection = document.querySelector(".cigartte_dropdown_lists");
+    const cigaretteListDropdownSection = document.querySelector(".cigartte_dropdown_lists");
     const cigaretteTemplate = common.getTemplate("#dropdownCigatretteTemplate");
 
     const cigarettes = cigarettesJson.cigarettes;
@@ -720,12 +839,13 @@ function mappingDropBoxCigarettes(cigarettesJson) {
         const {
             id,
             officialName,
-            customizedName,
+            simpleName,
         } = cigarettes[key];
 
         const data = {
             id: id,
-            officialName: officialName,
+            official_name: officialName,
+            simple_name: simpleName,
         };
 
         cigaretteListDropdownSection.innerHTML += cigaretteTemplate(data);
@@ -830,7 +950,6 @@ function loadCIgaretteByComputerizedOrder() {
             if (hr.status == 200) {
                 const cigarettesJson = JSON.parse(hr.responseText);
                 mappingCigarettesByComputerizedOrder(cigarettesJson);
-                cigaretteListEventListeners();
             } else {
                 //common.giveToastNoti("알 수 없는 이유로 데이터를 불러올 수 없습니다.");
             }
@@ -840,7 +959,7 @@ function loadCIgaretteByComputerizedOrder() {
     const id = sessionStorage.getItem("cigaretteListId");
     hr.open(
         "GET",
-        'http://localhost:8060/api/cigaretteLists/${id}/computerized_order'
+        'http://localhost:8060/api/cigaretteOnLists/${id}/computerized_order'
     );
     hr.send();
 }

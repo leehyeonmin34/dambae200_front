@@ -63,8 +63,8 @@
             <div class="cigarette_list_section margin">
                 <ul class="cigarette_list">
                     <!--CIGARETTE-->
-                    <li class="cigarette_on_list" id={{id}} officialName={{officialName}}
-                        customizedName={{customizedName}} count={{count}}>
+                    <li class="cigarette_on_list draggable" id={{id}} officialName={{officialName}}
+                        customizedName={{customizedName}} count={{count}} draggable="true">
                         <div class="cigarette_left">
                             <div class="checkbox_btn invisible">
                                 <input class="checkbox_btn_style" type="checkbox" name="checkedCigarette" id="chk_top1"
@@ -87,10 +87,10 @@
                             <input type="number" placeholder="5" name="conut" />
                             개
                         </div>
-                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                        <img class="icon drag_icon invisible" src="/img/icons/drag_handle.svg">
                     </li>
-                    <li class="cigarette_on_list" id={{id}} officialName={{officialName}}
-                        customizedName={{customizedName}} count={{count}}>
+                    <li class="cigarette_on_list draggable" id={{id}} officialName={{officialName}}
+                        customizedName={{customizedName}} count={{count}} draggable="true">
                         <div class="cigarette_left">
                             <div class="checkbox_btn invisible">
                                 <input class="checkbox_btn_style" type="checkbox" name="checkedCigarette" id="chk_top2"
@@ -113,10 +113,10 @@
                             <input type="number" placeholder="4" name="conut" />
                             개
                         </div>
-                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                        <img class="icon drag_icon invisible" src="/img/icons/drag_handle.svg">
                     </li>
-                    <li class="cigarette_on_list" id={{id}} officialName={{officialName}}
-                        customizedName={{customizedName}} count={{count}}>
+                    <li class="cigarette_on_list draggable" id={{id}} officialName={{officialName}}
+                        customizedName={{customizedName}} count={{count}} draggable="true">
                         <div class="cigarette_left">
                             <div class="checkbox_btn invisible">
                                 <input class="checkbox_btn_style" type="checkbox" name="checkedCigarette" id="chk_top3"
@@ -139,10 +139,10 @@
                             <input type="number" placeholder="0" name="conut" />
                             개
                         </div>
-                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                        <img class="icon drag_icon invisible" src="/img/icons/drag_handle.svg">
                     </li>
-                    <li class="cigarette_on_list" id={{id}} officialName={{officialName}}
-                        customizedName={{customizedName}} count={{count}}>
+                    <li class="cigarette_on_list draggable" id={{id}} officialName={{officialName}}
+                        customizedName={{customizedName}} count={{count}} draggable="true">
                         <div class="cigarette_left">
                             <div class="checkbox_btn invisible">
                                 <input class="checkbox_btn_style" type="checkbox" name="checkedCigarette" id="chk_top4"
@@ -165,17 +165,11 @@
                             <input type="number" placeholder="0" name="conut" />
                             개
                         </div>
-                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                        <img class="icon drag_icon invisible" src="/img/icons/drag_handle.svg">
                     </li>
                 </ul>
-                <ul class="cigarette_list_include_name invisible">
-
-                </ul>
-                <ul class="cigarette_list_not_include_name invisible">
-
-                </ul>
                 <ul class="movement_cigarette_list invisible">
-                    <li class="cigarette_on_list">
+                    <li class="movement_cigarette_on_list">
                         <div class="movement_cigarette_radio_btn">
                             <input type="radio" name="movementCigarette" id="{{id}} selected_cigarette"
                                 value="{{id}}" />
@@ -194,7 +188,7 @@
                             </label>
                         </div>
                     </li>
-                    <li class="cigarette_on_list">
+                    <li class="movement_cigarette_on_list">
                         <div class="movement_cigarette_radio_btn">
                             <input type="radio" name="movementCigarette" id="{{id}} selected_cigarette"
                                 value="{{id}}" />
@@ -251,11 +245,11 @@
                                 class="official_name_input" />
                             <img src="/img/icons/search.svg" class="search_icon" />
                             <div class="cigartte_dropdown_lists invisible">
-                                <div class="cigarette_dropdown_content">
+                                <div class="cigarette_dropdown_content" id={{id}} simple_name={{simple_name}}>
                                     <div class="cigarette_icon_container">
                                         이미지
                                     </div>
-                                    <div class="official_name">
+                                    <div class="official_name" id="add_cigarette_offical_name">
                                         공식이름
                                     </div>
                                 </div>
@@ -264,9 +258,7 @@
                     </div>
                     <div class="add_cigarette_input_customized_name">
                         <label for="input_customized_name" class="input_label">간편 이름</label>
-                        <div class="customized_name_box">
-                            간편이름
-                        </div>
+                        <input type="text" name="customizedName" id="customized_name_input">
                     </div>
                     <div class="add_cigarette_bottom_btn_container">
                         <div id="deleteBtn" class="delete_btn_container">
@@ -284,7 +276,7 @@
         <div class="page_contents_with_header1">
             <div class="cigarette_list_section">
                 <ul class="cigarette_lists_computerized">
-                    <li class="cigarette_on_list_computerized">
+                    <li class="cigarette_on_list_computerized draggable" draggable="true">
                         <div class="cigarette_left">
                             <div class="cigarette_icon_container">
                                 <img src="/img/cigarette_icon/에쎄_수.svg" alt="">
@@ -301,9 +293,9 @@
                         <div class="count_container">
                             4
                         </div>
-                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                        <img class="icon drag_icon invisible" src="/img/icons/drag_handle.svg">
                     </li>
-                    <li class="cigarette_on_list_computerized">
+                    <li class="cigarette_on_list_computerized draggable" draggable="true">
                         <div class="cigarette_left">
                             <div class="cigarette_icon_container">
                                 <img src="/img/cigarette_icon/믹스그린_트로피컬믹스 3MG.svg" alt="">
@@ -320,9 +312,9 @@
                         <div class="count_container">
                             7
                         </div>
-                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                        <img class="icon drag_icon invisible draggable" src="/img/icons/drag_handle.svg">
                     </li>
-                    <li class="cigarette_on_list_computerized">
+                    <li class="cigarette_on_list_computerized draggable" draggable="true">
                         <div class="cigarette_left">
                             <div class="cigarette_icon_container">
                                 <img src="/img/cigarette_icon/메비우스_스카이블루.svg" alt="">
@@ -339,7 +331,7 @@
                         <div class="count_container">
                             5
                         </div>
-                        <img class="icon drag_icon draggable invisible" src="/img/icons/drag_handle.svg">
+                        <img class="icon drag_icon invisible draggable" src="/img/icons/drag_handle.svg">
                     </li>
                 </ul>
             </div>
@@ -403,12 +395,12 @@
 
     <!--담배 드랍다운 리스트-->
     <script type="rv-template" id="dropdownCigatretteTemplate">
-        <div class="cigarette_dropdown_content">
+        <div class="cigarette_dropdown_content" id={{id}} simple_name={{simple_name}}>
             <div class="cigarette_icon_container">
                 이미지
             </div>
             <div class="official_name">
-                {{officialName}}
+                {{official_name}}
             </div>
         </div>
     </script>

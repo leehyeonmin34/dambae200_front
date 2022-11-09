@@ -103,7 +103,9 @@
     position: relative;
 }
 
-.cigarette_on_list {
+.cigarette_on_list,
+.movement_cigarette_on_list,
+.cigarette_on_list_computerized {
     width: 100%;
     height: 80px;
     background-color: #fff;
