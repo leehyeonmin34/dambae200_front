@@ -4,15 +4,15 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
-        <link rel="stylesheet" href="/www/css/manage_store.css" />
+        <link rel="stylesheet" href="../css/manage_store.css" />
     </head>
     <body>
         <div class="top">
-            <img src="/www/img/ios/top_black.png" />
+            <!-- <img src="../img/ios/top_black.png" /> -->
             <div class="header">
                 <div class="header_1">
                     <img
-                        src="/www/img/icons/arrow-left 1.svg"
+                        src="../img/icons/arrow-left 1.svg"
                         class="icon left_icon"
                     />
                     <label> 목록 정보 수정하기 </label>
@@ -63,25 +63,25 @@
                 <label for="{{brand_code}}">
                     <img
                         class="radio_btn_icon active"
-                        src="/www/img/icons/radio_active.svg"
+                        src="../img/icons/radio_active.svg"
                     />
                     <img
                         class="radio_btn_icon inactive"
-                        src="/www/img/icons/radio_inactive.svg"
+                        src="../img/icons/radio_inactive.svg"
                     />
                     <img
                         class="store_icon"
-                        src={{logo_path}}
+                        src="../{{logo_path}}"
                     />
                     {{brand_name}}
                 </label>
             </div>
         </script>
 
-        <script type="module" src="/www/js/modify_store_info.js"></script>
-        <script type="module" src="/www/js/common.js"></script>
-        <script type="module" src="/www/js/storeBrand.js"></script>
-        <script type="module" src="/www/js/errorCode.js"></script>
+        <script type="module" src="../js/modify_store_info.js"></script>
+        <script type="module" src="../js/common.js"></script>
+        <script type="module" src="../js/storeBrand.js"></script>
+        <script type="module" src="../js/errorCode.js"></script>
 
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"

@@ -6,6 +6,20 @@
         Apache Cordova Team
     </author>
     <content src="index.html" />
+    <splash src="www/img/splash.png" />
+    
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+    <allow-intent href="app://*/*" />
+
+    <allow-navigation href="*"/>
+    <allow-navigation href="http://*/*"/>
+    <allow-navigation href="https://*/*" />
+    <allow-intent href="app://*/*" />
+
+    <preference name="scheme" value="app" /> 
+    <preference name="hostname" value="localhost" />    
+
+
+    <access origin="*" />
 </widget>

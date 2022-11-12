@@ -1,5 +1,5 @@
-import * as common from "/www/js/common.js";
-import errorCode from "/www/js/errorCode.js";
+import * as common from "./common.js";
+import errorCode from "./errorCode.js";
 
 const sendBtnDOM = document.querySelector("#sendBtn");
 
@@ -69,6 +69,6 @@ function showCompletePage() {
     // 완료 버튼
     const completeBtn = document.querySelector("#complete .full_floating_btn");
     completeBtn.addEventListener("click", (e) => {
-        location.href = "http://127.0.0.1:5500/www/pages/login/login.html";
+        location.href = "login.html";
     });
 }

@@ -1,6 +1,13 @@
 import * as common from "./common.js";
 var pageNum = -1;
 const loadMoreBtn = document.querySelector(".load_more_btn");
+const notiList = document.querySelector(".noti_list");
+
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+    StatusBar.overlaysWebView(false);
+    StatusBar.backgroundColorByName("red");
+}
 
 document.addEventListener("DOMContentLoaded", function () {
     basicInteraction();
@@ -8,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function basicInteraction() {
-    common.backAndRefreshButton();
+    common.enableBackBtnTo("../index.html");
 }
 
 function init() {
@@ -25,13 +32,11 @@ function loadMoreNotifications() {
                 var response = JSON.parse(hr.responseText);
                 console.log(response);
 
-                if (response.last) hideLoadMoreBtn();
-
                 mappingNotifications(response);
                 enableDeleteBtn();
             } else {
-                common.showDOMbySelector(".empty_noti");
-                common.hideDOMbySelector(".load_more_btn");
+                hideEmptyImage();
+                hideLoadMoreBtn();
                 common.giveToastNoti(
                     "알수 없는 이유로 불러올 수 없습니다. 인터넷 연결을 확인해주세요."
                 );
@@ -42,14 +47,18 @@ function loadMoreNotifications() {
         "GET",
         `http://localhost:8060/api/notifications?userId=${common.getUserId()}&page=${pageNum}`
     );
+    hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
 }
 
 function mappingNotifications(response) {
-    if (response.totalElements == 0) {
+    if (response.last) hideLoadMoreBtn();
+    else showLoadMoreBtn();
+
+    if (response.content.length == 0) {
         showEmptyImage();
     } else {
-        const section = document.querySelector(".noti_list");
+        hideEmptyImage();
         const template = common.getTemplate("#notification_template");
         const notifications = response.content;
         const unread = [];
@@ -64,14 +73,30 @@ function mappingNotifications(response) {
                 new: isRead || "visible",
                 id: id,
             };
-            section.innerHTML += template(data);
+            notiList.innerHTML += template(data);
             if (!isRead) unread.push(id);
         }
-        // console.log(unread);
         markAsRead(unread);
     }
 }
-function showEmptyImage() {}
+function showEmptyImage() {
+    console.log(10);
+    common.showDOMbySelector(".empty_noti");
+}
+
+function hideEmptyImage() {
+    common.hideDOMbySelector(".empty_noti");
+}
+
+function showEmptyImageIfEmpty() {
+    console.log(notiList.children.length);
+    if (
+        notiList.children.length == 1 &&
+        loadMoreBtn.classList.contains("dialog_off")
+    ) {
+        showEmptyImage();
+    } else hideEmptyImage();
+}
 
 function enableDeleteBtn() {
     common.addEventListenerToDOMbySelector(".delete_icon", "click", deleteNoti);
@@ -86,6 +111,9 @@ function deleteNoti(e) {
         if (hr.readyState == XMLHttpRequest.DONE) {
             if (hr.status == 200) {
                 hideNoti(notiDOM);
+                showEmptyImageIfEmpty();
+            } else if (hr.status == 401) {
+                common.redirectToLogin();
             } else {
                 common.giveToastNoti(
                     "알 수 없는 이유로 알림을 삭제할 수 없습니다."
@@ -94,6 +122,7 @@ function deleteNoti(e) {
         }
     };
     hr.open("DELETE", `http://localhost:8060/api/notifications/${id}`);
+    hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
 }
 
@@ -145,15 +174,23 @@ const mockNotifications = {
 
 function hideNoti(notiDOM) {
     notiDOM.classList.add("hide_and_up");
+    setTimeout(() => {
+        notiList.removeChild(notiDOM);
+    }, 1100);
 }
 
 function loadMoreBtnInteraction() {
     loadMoreBtn.addEventListener("click", loadMoreNotifications);
 }
 
+function showLoadMoreBtn() {
+    loadMoreBtn.addEventListener("click", loadMoreNotifications);
+    common.showDOM(loadMoreBtn);
+}
+
 function hideLoadMoreBtn() {
     loadMoreBtn.removeEventListener("click", loadMoreNotifications);
-    loadMoreBtn.classList.add("dialog_off");
+    common.hideDOM(loadMoreBtn);
 }
 
 function markAsRead(unread) {
@@ -165,6 +202,7 @@ function markAsRead(unread) {
         var hr = new XMLHttpRequest();
         hr.open("PUT", `http://localhost:8060/api/notifications/read`);
         hr.setRequestHeader("Content-Type", "application/json");
+        hr.setRequestHeader("Authorization", common.getAccessToken());
         hr.send(JSON.stringify(data));
     }
 }

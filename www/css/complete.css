@@ -1,4 +1,4 @@
-@import "/www/css/common.css";
+@import "common.css";
 
 #complete {
     position: relative;
@@ -25,7 +25,6 @@
     margin-top: 100px;
     margin-left: 20px;
 
-    font-family: "Noto Sans CJK KR";
     font-style: normal;
     font-weight: 700;
     font-size: 20px;
@@ -44,7 +43,6 @@
     margin-top: 10px;
     margin-left: 20px;
 
-    font-family: "Noto Sans CJK KR";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

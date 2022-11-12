@@ -27,10 +27,18 @@ function loadStoresByNameLike(name) {
     } else {
         var hr = new XMLHttpRequest();
         hr.onreadystatechange = () => {
-            if (hr.readyState == XMLHttpRequest.DONE && hr.status == 200) {
-                const storesJson = JSON.parse(hr.responseText);
-                mappingStores(storesJson);
-                radioButtonInteraction();
+            if (hr.readyState == XMLHttpRequest.DONE) {
+                if (hr.status == 200) {
+                    const storesJson = JSON.parse(hr.responseText);
+                    mappingStores(storesJson);
+                    radioButtonInteraction();
+                } else if (hr.status == 401) {
+                    common.redirectToLogin();
+                } else {
+                    common.giveToastNoti(
+                        "알 수 없는 이유로 검색할 수 없습니다."
+                    );
+                }
             }
         };
         const encodedInputValue = encodeURI(textInput.value);
@@ -39,12 +47,13 @@ function loadStoresByNameLike(name) {
             "GET",
             `http://localhost:8060/api/stores?name=${encodedInputValue}`
         );
+        hr.setRequestHeader("Authorization", common.getAccessToken());
         hr.send();
     }
 }
 
 function getUserId() {
-    return sessionStorage.getItem("userId");
+    return common.getUserId();
 }
 
 const mockStoresJson = {
@@ -111,10 +120,7 @@ function completePageInteraction() {
     // 완료 버튼
     document
         .querySelector("#complete .full_floating_btn")
-        .addEventListener(
-            "click",
-            (e) => (location.href = "http://127.0.0.1:5500/www")
-        );
+        .addEventListener("click", (e) => (location.href = "../index.html"));
 }
 
 function applyToStore() {
@@ -140,7 +146,9 @@ function applyRequest(storeId, userId) {
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
             if (hr.status == 200) applyRequestSuccess();
-            else {
+            else if (hr.status == 401) {
+                common.redirectToLogin();
+            } else {
                 const json = JSON.parse(hr.responseText);
                 if (json.errorCode == errorCode.ACCESS.DUPLICATED_ACCESS_APPLY)
                     duplicateAccessApplyFail();
@@ -152,8 +160,10 @@ function applyRequest(storeId, userId) {
         storeId,
         userId,
     };
+    console.log(data);
     hr.open("POST", "http://localhost:8060/api/accesses");
     hr.setRequestHeader("Content-type", "application/json");
+    hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send(JSON.stringify(data));
 }
 

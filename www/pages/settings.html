@@ -2,42 +2,67 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/www/css/notificationsAndSettings.css" />
+        <link rel="stylesheet" href="../css/notificationsAndSettings.css" />
         <title>Document</title>
     </head>
     <body>
         <div class="top">
-            <img src="/www/img/ios/top_black.png" />
+            <!-- <img src="../img/ios/top_black.png" /> -->
             <div class="header">
                 <div class="header_1">
                     <img
-                        src="/www/img/icons/arrow-left 1.svg"
+                        src="../img/icons/arrow-left 1.svg"
                         class="icon left_icon"
                     />
                 </div>
             </div>
         </div>
-        <div class="page_contents_with_header1">
+        <div class="page_contents_with_header2">
             <div class="page_title_section">
-                <img class="page_icon" src="/www/img/icons/setting_gray.svg" />
+                <img class="page_icon" src="../img/icons/setting_gray.svg" />
 
                 <div class="page_title">설정</div>
             </div>
             <div class="btn_list slide_up_slightly">
                 <div class="btn_item" id="profileBtn">
                     <div class="btn_pressed"></div>
-                    <img src="/www/img/icons/settings_profile.svg" />
+                    <img src="../img/icons/settings_profile.svg" />
                     프로필
                 </div>
                 <div class="btn_item" id="passwordBtn">
                     <div class="btn_pressed"></div>
-                    <img src="/www/img/icons/settings_password.svg" />
+                    <img src="../img/icons/settings_password.svg" />
                     비밀번호
                 </div>
             </div>
+            <div id="logout">
+                <div class="btn_pressed"></div>
+                로그아웃
+            </div>
         </div>
-        <script type="module" src="/www/js/settings.js"></script>
-        <script type="module" src="/www/js/common.js"></script>
+        <div id="popup" class="dialog popup_screen dialog_off">
+            <div class="escape"></div>
+            <div class="dialog_container popup_container">
+                <div class="title">접근 신청을 철회하시겠어요?</div>
+                <div class="desc">
+                    해당 담배 목록에 대한 열람/편집 권한을 포기하고 목록에서
+                    지우게 됩니다.
+                </div>
+                <div class="popup_bottom">
+                    <div class="top_border"></div>
+                    <div class="buttons">
+                        <div class="btn cancel_btn">취소</div>
+                        <div class="btn_divider"></div>
+                        <div class="btn action_btn">철회</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg_1"></div>
+        <div id="toast">{{message}}</div>
+        <script type="module" src="../js/settings.js"></script>
+        <script type="module" src="../js/common.js"></script>
     </body>
 </html>

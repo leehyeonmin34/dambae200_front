@@ -3,18 +3,18 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/www/css/login.css" />
+        <link rel="stylesheet" href="../css/login.css" />
         <title>Login</title>
     </head>
     <body>
         <div class="top">
-            <img src="/www/img/ios/top_black.png" />
+            <!-- <img src="../img/ios/top_black.png" /> -->
         </div>
         <div class="section_top">
-            <img src="/www/img/logo.png" alt="logo" />
-            <img src="/www/img/icons/login_icon.png" alt="login_icon" />
+            <img src="../img/logo.png" alt="logo" />
+            <img src="../img/icons/login_icon.png" alt="login_icon" />
             <div id="welcome">안녕하세요 !</div>
-            <a href="/www/pages/login/forgot_password.html">비밀번호 찾기</a>
+            <a href="./forgot_password.html">비밀번호 찾기</a>
         </div>
         <div class="form">
             <input type="text" placeholder="이메일" name="email" />
@@ -30,8 +30,8 @@
         </div>
         <div id="toast">{{message}}</div>
 
-        <script type="module" src="/www/js/login/login.js"></script>
-        <script type="module" src="/www/js/common.js"></script>
-        <script type="module" src="/www/js/errorCode.js"></script>
+        <script type="module" src="../js/login.js"></script>
+        <script type="module" src="../js/common.js"></script>
+        <script type="module" src="../js/errorCode.js"></script>
     </body>
 </html>

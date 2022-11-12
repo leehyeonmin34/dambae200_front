@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function basicInteraction() {
     common.initDialogInteraction();
     inputInteraction();
-    common.backAndRefreshButton();
+    common.enableBackBtnTo("../index.html");
     customBackInteraction();
 
     // common.radioButtonInteraction();
@@ -98,6 +98,15 @@ function tryModify() {
             } else if (hr.status == 400) {
                 if (responseBody.errorCode == errorCode.STORE.DUPLICATE_STORE)
                     duplicateStore();
+                else {
+                    common.giveToastNoti(
+                        "알 수 없는 이유로 수정할 수 없습니다."
+                    );
+                }
+            } else if (hr.status == 401) {
+                common.redirectToLogin();
+            } else {
+                common.giveToastNoti("알 수 없는 이유로 수정할 수 없습니다.");
             }
         }
     };
@@ -106,6 +115,7 @@ function tryModify() {
     const storeId = getStoreId();
     hr.open("PUT", `http://localhost:8060/api/stores/${storeId}`);
     hr.setRequestHeader("Content-Type", "application/json");
+    hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send(JSON.stringify(data));
 }
 

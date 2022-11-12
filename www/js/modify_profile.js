@@ -22,6 +22,8 @@ function loadAndMapMyData() {
             const responseBody = JSON.parse(hr.responseText);
             if (hr.status == 200) {
                 mapMyData(responseBody);
+            } else if (hr.status == 401) {
+                common.redirectToLogin();
             } else
                 common.giveToastNoti(
                     "알 수 없는 이유로 데이터를 가져올 수 없습니다"
@@ -30,6 +32,7 @@ function loadAndMapMyData() {
     };
 
     hr.open("GET", `http://localhost:8060/api/users/${common.getUserId()}`);
+    hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
 }
 
@@ -81,6 +84,8 @@ function trySend() {
                     common.giveToastNoti(
                         "알 수 없는 이유로 수정할 수 없습니다"
                     );
+            } else if (hr.status == 401) {
+                common.redirectToLogin();
             } else common.giveToastNoti("알 수 없는 이유로 수정할 수 없습니다");
         }
     };
@@ -88,6 +93,7 @@ function trySend() {
     const data = getData();
     hr.open("PUT", `http://localhost:8060/api/users/${common.getUserId()}`);
     hr.setRequestHeader("Content-Type", "application/json");
+    hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send(JSON.stringify(data));
 }
 

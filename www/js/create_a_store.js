@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function basicInteraction() {
     common.initDialogInteraction();
-    common.backButton();
+    common.enableBackBtnTo("../index.html");
 }
 
 function init() {
@@ -53,7 +53,7 @@ function completePageInteraction() {
     // 완료 버튼
     const completeBtn = document.querySelector("#complete .full_floating_btn");
     completeBtn.addEventListener("click", (e) => {
-        location.href = "http://127.0.0.1:5500/www";
+        location.href = "../index.html";
     });
 }
 
@@ -75,13 +75,21 @@ function tryCreate() {
             } else if (hr.status == 400) {
                 if (responseBody.errorCode == errorCode.STORE.DUPLICATE_STORE)
                     duplicateStore();
-            }
+                else
+                    common.giveToastNoti(
+                        "알 수 없는 이유로 생성할 수 없습니다."
+                    );
+            } else if (hr.status == 401) {
+                common.redirectToLogin();
+            } else
+                common.giveToastNoti("알 수 없는 이유로 생성할 수 없습니다.");
         }
     };
 
     const data = getFormData();
     hr.open("POST", "http://localhost:8060/api/stores");
     hr.setRequestHeader("Content-Type", "application/json");
+    hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send(JSON.stringify(data));
 }
 
@@ -91,12 +99,8 @@ function getFormData() {
     return {
         name: storeNameInput.value,
         storeBrandCode: checkedBrandCode,
-        adminId: getUserId(),
+        adminId: common.getUserId(),
     };
-}
-
-function getUserId() {
-    return sessionStorage.getItem("userId");
 }
 
 function postSuccess() {

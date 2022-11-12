@@ -38,21 +38,20 @@
             name="viewport"
             content="initial-scale=1, width=device-width, viewport-fit=cover"
         />
-        <!-- <meta name="color-scheme" content="light dark" /> -->
         <link rel="stylesheet" href="css/index.css" />
 
         <title>DAMBAE200</title>
     </head>
     <body id="index_page">
-        <div class="bg_1"></div>
+        <!-- <div class="bg_1"></div> -->
         <div class="body_container">
             <div class="top main">
-                <img src="img/ios/top_black.png" />
+                <!-- <img src="/img/ios/top_black.png" /> -->
 
                 <div class="header">
                     <div class="header_1">
                         <div class="left">
-                            <img src="./img/logo.png" class="logo" />
+                            <img src="img/logo.png" class="logo" />
                         </div>
                         <div class="right">
                             <div class="noti_icon_container">
@@ -62,12 +61,12 @@
                                 ></div>
                                 <img
                                     id="noti_icon_inactive"
-                                    src="./img/icons/noti_gray.svg"
+                                    src="img/icons/noti_gray.svg"
                                     class="icon noti_icon"
                                 />
                             </div>
                             <img
-                                src="./img/icons/setting_gray.svg"
+                                src="img/icons/setting_gray.svg"
                                 class="icon setting_icon"
                             />
                         </div>
@@ -81,30 +80,28 @@
                 </div>
                 <div class="tips_wrapper">
                     <div class="margin tips">
-                        <a href="pages/tips/tip1.html">
+                        <a href="pages/cigarette.html">
                             <div class="tip">
                                 <div class="title">
                                     담배200으로<br />담배 세는 법
                                 </div>
-                                <img
-                                    src="./img/tips/thumbnails/cigarette.png"
-                                />
+                                <img src="img/tips/thumbnails/cigarette.png" />
                             </div>
                         </a>
-                        <a href="pages/tips/tip2.html">
+                        <a href="pages/ruler.html">
                             <div class="tip">
                                 <div class="title">
                                     순식간에 담배 세는<br />'자' 만들기
                                 </div>
-                                <img src="./img/tips/thumbnails/ruler.png" />
+                                <img src="img/tips/thumbnails/ruler.png" />
                             </div>
                         </a>
-                        <a href="pages/tips/tip3.html">
+                        <a href="pages/charge.html">
                             <div class="tip">
                                 <div class="title">
                                     빠르게 상품충전<br />하는 방법 !
                                 </div>
-                                <img src="./img/tips/thumbnails/beverage.png" />
+                                <img src="img/tips/thumbnails/beverage.png" />
                             </div>
                         </a>
                     </div>
@@ -118,7 +115,7 @@
                     <!-- STORE CARDS -->
                 </ul>
 
-                <div class="add_store_container">
+                <div class="add_store_container invisible">
                     <div class="btn_pressed"></div>
                     <div class="add_store_button">
                         <object
@@ -128,7 +125,7 @@
                         <div>매장 추가하기</div>
                     </div>
                 </div>
-                <div class="realod_btn_container">
+                <div class="realod_btn_container invisible">
                     <div class="reload_btn">
                         <div class="btn_pressed"></div>
                         <img src="img/icons/reload.png" />
@@ -242,25 +239,25 @@
                         />
                     </div>
                     <div class="icon more_icon">
-                        <img src="./img/icons/more.svg" />
+                        <img src="/img/icons/more.svg" />
                     </div>
                     <div class="icon close_icon">
-                        <img src="./img/icons/close.svg" />
+                        <img src="/img/icons/close.svg" />
                     </div>
                     <div class="store_noti_dot {{applicator_exists}}"></div>
 
                     <div class="store_tag">
-                        <img src="./img/icons/admin.svg" />{{store_tag}}
+                        <img src="/img/icons/admin.svg" />{{store_tag}}
                     </div>
 
                     <div class="store_name">{{store_name}}</div>
                 </li>
             </script>
 
-            <script type="module" src="js/index.js"></script>
-            <script type="module" src="js/common.js"></script>
-            <script type="module" src="js/storeBrand.js"></script>
-            <script type="module" src="js/accessType.js"></script>
+            <script type="module" src="./js/index.js"></script>
+            <script type="module" src="./js/common.js"></script>
+            <script type="module" src="./js/storeBrand.js"></script>
+            <script type="module" src="./js/accessType.js"></script>
 
             <script
                 src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"

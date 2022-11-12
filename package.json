@@ -17,5 +17,23 @@
         "url": "https://github.com/leehyeonmin34/dambae200_front/issues"
     },
     "homepage": "https://github.com/leehyeonmin34/dambae200_front#readme",
-    "type": "module"
+    "type": "commonjs",
+    "devDependencies": {
+        "@globules-io/cordova-plugin-ios-xhr": "github:globules-io/cordova-plugin-ios-xhr",
+        "cordova-android": "^10.1.2",
+        "cordova-ios": "^6.2.0",
+        "cordova-plugin-advanced-http": "^3.3.1",
+        "cordova-plugin-file": "^7.0.0"
+    },
+    "cordova": {
+        "platforms": [
+            "android"
+        ],
+        "plugins": {
+            "@globules-io/cordova-plugin-ios-xhr": {},
+            "cordova-plugin-advanced-http": {
+                "ANDROIDBLACKLISTSECURESOCKETPROTOCOLS": "SSLv3,TLSv1"
+            }
+        }
+    }
 }
