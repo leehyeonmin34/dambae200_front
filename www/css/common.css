@@ -2,12 +2,12 @@
 
 body {
     width: 100vw;
-    height: 100vh;
+    max-height: 100vh;
     margin: 0;
     padding: 0;
     position: relative;
     color: #5b616b;
-    font-family: "Noto Sans CJK KR";
+    font-family: sans-serif;
 }
 
 a {
@@ -50,11 +50,19 @@ li {
 .top {
     display: flex;
     flex-direction: column;
-    top: 0;
+
     width: 100%;
     position: absolute;
     position: fixed;
     z-index: 100;
+    top: 0;
+    transform: translateY(-100px);
+    padding-top: 100px;
+    overflow: visible;
+
+    /* top: -100px; */
+    /* padding-top: 40px; */
+    /* box-sizing: border-box; */
     /* transition: 0.3s; */
     background: white;
 }
@@ -63,12 +71,13 @@ li {
     width: 375px;
 }
 
-.top.main {
+.main {
     background: #f5f9fc;
-    transition: 0.3s;
+    margin-top: 40px;
+    /* transition: 1s; */
 }
 
-.top.main.scrolled {
+.main.scrolled {
     background: white;
     transition: 0.3s;
 }
@@ -104,7 +113,6 @@ li {
     padding: 0 8px;
     box-sizing: border-box;
 
-    font-family: "Noto Sans CJK KR";
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -204,7 +212,6 @@ input {
     padding: 0 8px;
     box-sizing: border-box;
 
-    font-family: "Noto Sans CJK KR";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -289,7 +296,7 @@ input::placeholder {
 
     display: flex;
     flex-direction: column-reverse;
-    padding-bottom: 10px;
+    padding-bottom: 30px;
     /* position: absolute; */
 }
 
@@ -315,11 +322,11 @@ input::placeholder {
 }
 
 .page_contents_with_header1 {
-    margin-top: 105px;
+    margin-top: 60px;
 }
 
 .page_contents_with_header2 {
-    margin-top: 155px;
+    margin-top: 110px;
 }
 
 .section_devider_with_title {
@@ -332,7 +339,6 @@ input::placeholder {
     box-sizing: border-box;
     /* justify-content: center; */
 
-    font-family: "Noto Sans CJK KR";
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -386,7 +392,7 @@ input::placeholder {
 
 .popup_container .desc {
     margin: 6px 16px 18px;
-    font-family: "Noto Sans CJK KR";
+
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -421,7 +427,6 @@ input::placeholder {
 }
 
 .popup_container .cancel_btn {
-    font-family: "Noto Sans CJK KR";
     font-style: normal;
     font-family: No;
     font-weight: 500;
@@ -444,7 +449,6 @@ input::placeholder {
 }
 
 .popup_screen .action_btn {
-    font-family: "Noto Sans CJK KR";
     font-style: normal;
     font-weight: 600;
     font-size: 17px;
@@ -505,7 +509,7 @@ input::placeholder {
     padding: 4px 0;
     box-sizing: border-box;
     width: 178px;
-    font-family: "Noto Sans CJK KR";
+
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -574,9 +578,6 @@ input::placeholder {
     z-index: 8000;
 }
 
-.dialog_dialog.dialog_off {
-}
-
 /* .escape_screen .esc_dark { */
 /* background-color: rgba(0, 0, 0, 0.2); */
 /* } */
@@ -587,7 +588,7 @@ input::placeholder {
     margin: 0 20px;
     min-height: 60px;
     padding: 0 20px;
-    font-family: "Noto Sans CJK KR";
+
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -628,7 +629,7 @@ input::placeholder {
     display: none !important;
     /* z-index: -9999; */
     /* opacity: 0; */
-    /* transition: 0.3s; */
+    /* transition: 0s !important; */
 }
 
 .dialog {

@@ -3,42 +3,49 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- <meta
+            name="viewport"
+            content="initial-scale=1, width=device-width, viewport-fit=cover"
+        /> -->
         <title>Document</title>
-        <link rel="stylesheet" href="/www/css/notificationsAndSettings.css" />
+
+        <link rel="stylesheet" href="../css/notificationsAndSettings.css" />
     </head>
     <body>
         <div class="top">
-            <img src="/www/img/ios/top_black.png" />
+            <!-- <img src="../img/ios/top_black.png" /> -->
             <div class="header">
                 <div class="header_1">
                     <img
-                        src="/www/img/icons/arrow-left 1.svg"
+                        src="../img/icons/arrow-left 1.svg"
                         class="icon left_icon"
                     />
                 </div>
             </div>
         </div>
-        <div class="page_contents_with_header1">
+        <div class="page_contents_with_header2">
             <div class="page_title_section">
-                <img class="page_icon" src="/www/img/icons/noti_gray.svg" />
+                <img class="page_icon" src="../img/icons/noti_gray.svg" />
 
                 <div class="page_title">알림</div>
             </div>
             <div class="noti_list slide_up_slightly">
                 <!-- NOTIFICATIONS -->
             </div>
-            <div class="load_more_btn">
+            <div class="load_more_btn invisible">
                 <div class="btn_pressed"></div>
-                <img src="/www/img/icons/small_down_arrow.svg" /> 더 불러오기
+                <img src="../img/icons/small_down_arrow.svg" /> 더 불러오기
             </div>
             <div class="empty_noti">알림이 없습니다</div>
+            <div id="bottom_space"></div>
         </div>
         <div id="toast">{{message}}</div>
+        <div class="bg_header_1"></div>
 
         <script type="rv-template" id="notification_template">
             <div class="noti_item" id={{id}}>
                 <div class="new {{new}}"></div>
-                <img src="/www/img/icons/close_gray.svg" class="icon delete_icon" />
+                <img src="../img/icons/close_gray.svg" class="icon delete_icon" />
                 <div class="right">
                     <div class="title">{{title}}</div>
                     <div class="desc">{{desc}}</div>
@@ -47,9 +54,10 @@
                 <div class="full_border bottom"></div>
             </div>
         </script>
+        <div class="bg1"></div>
 
-        <script type="module" src="/www/js/notifications.js"></script>
-        <script type="module" src="/www/js/common.js"></script>
+        <script type="module" src="../js/notifications.js"></script>
+        <script type="module" src="../js/common.js"></script>
 
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"

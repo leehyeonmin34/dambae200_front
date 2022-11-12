@@ -37,7 +37,7 @@ function goPrev() {
 
 function goNext() {
     if (page == last_page) {
-        location.href = "http://127.0.0.1:5500/www/pages/login/login.html";
+        location.href = "login.html";
     }
 
     if (page == 0) {

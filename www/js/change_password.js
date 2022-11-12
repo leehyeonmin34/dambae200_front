@@ -53,7 +53,11 @@ function sendRequest() {
                     common.giveToastNoti(
                         "알 수 없는 이유로 수정할 수 없습니다"
                     );
-            } else common.giveToastNoti("알 수 없는 이유로 수정할 수 없습니다");
+            } else if (hr.status == 401) {
+                common.redirectToLogin();
+            } else {
+                common.giveToastNoti("알 수 없는 이유로 수정할 수 없습니다");
+            }
         }
     };
 
@@ -63,6 +67,7 @@ function sendRequest() {
         `http://localhost:8060/api/users/${common.getUserId()}/change_pw`
     );
     hr.setRequestHeader("Content-Type", "application/json");
+    hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send(JSON.stringify(data));
 }
 

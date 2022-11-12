@@ -62,7 +62,6 @@ export function giveToastNoti(message) {
     // toastDOM.setAttribute("style", "bottom: 70px");
     setTimeout(() => {
         toastDOM.classList.remove("toast_up");
-        console.log("down");
     }, 3000);
 }
 
@@ -147,11 +146,11 @@ export function ButtonManager(btnDOM, action) {
     this.btnDOM = btnDOM;
     this.action = action;
 
-    this.enableBtn = function () {
+    this.enableBtn = () => {
         enableBtn(this.btnDOM, this.action);
     };
 
-    this.disableBtn = function () {
+    this.disableBtn = () => {
         disableBtn(this.btnDOM, this.action);
     };
 }
@@ -174,7 +173,12 @@ export function getTemplate(selector) {
 
 export function backButton() {
     const backBtn = document.querySelector(".header .left_icon");
-    backBtn.addEventListener("click", () => window.history.back());
+    backBtn.addEventListener("click", () => window.history.go(-1));
+}
+
+export function enableBackBtnTo(url) {
+    const backBtn = document.querySelector(".header .left_icon");
+    backBtn.addEventListener("click", () => (location.href = url));
 }
 
 export function backAndRefreshButton() {
@@ -192,10 +196,25 @@ export function getUrlParams() {
 }
 
 export function getUserId() {
-    return sessionStorage.getItem("userId");
+    return localStorage.getItem("userId");
+}
+
+export function getAccessToken() {
+    return localStorage.getItem("userAccessToken");
+}
+
+export function createRequestBodyWithToken(data) {
+    return {
+        accessToken: getAccessToken(),
+        requestDto: data,
+    };
 }
 
 export function hideAndUp(DOM) {
     DOM.classList.add("hide_and_up");
     // setTimeout(() => DOM.remove(), 2000);
+}
+
+export function redirectToLogin() {
+    location.href = "login.html";
 }

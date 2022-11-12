@@ -1,4 +1,9 @@
-@import "./common.css";
+@import "common.css";
+
+.page_contents_with_header1 {
+    background-color: white;
+    height: 100%;
+}
 
 .page_title_section {
     display: flex;
@@ -82,7 +87,6 @@
 
 .load_more_btn {
     height: 80px;
-    margin-bottom: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -96,6 +100,7 @@
 
 .empty_noti {
     position: absolute;
+    z-index: 1;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -123,4 +128,30 @@
 .btn_list .btn_item img {
     margin-left: 6px;
     margin-right: 20px;
+}
+
+body {
+    height: 100vh;
+}
+
+#logout {
+    position: absolute;
+    bottom: 150px;
+    left: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+    color: #9baab7;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#bottom_space {
+    height: 200px;
+}
+
+body {
+    background-color: white;
 }

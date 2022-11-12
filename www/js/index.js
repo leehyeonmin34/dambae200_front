@@ -1,6 +1,7 @@
 import * as common from "./common.js";
 import accessEnum from "./accessType.js";
 import storeInfoEnum from "./storeBrand.js";
+// import StatusBar from "cordova-plugin-statusbar";
 
 // import { createRequire } from "module";
 // const require = createRequire(import.meta.url);
@@ -28,11 +29,20 @@ import storeInfoEnum from "./storeBrand.js";
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 // document.addEventListener("deviceready", onDeviceReady, false);
 
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+    document.querySelector("body").innerHTML("hi!!!!!!!");
+    StatusBar.overlaysWebView(false);
+    StatusBar.backgroundColorByName("red");
+}
+
 const storeManageDialog = document.querySelector("#store_manage_modal");
 const popup = document.querySelector("#popup");
+const addStoreBtn = document.querySelector(".add_store_container");
+const reloadBtn = document.querySelector(".realod_btn_container");
 
 document.addEventListener("DOMContentLoaded", function () {
-    updateUserData(USER_ID.USER_1);
+    // updateUserData(sessionStorage.getItem("userId"));
 
     basicInteraction();
     // notificationDot();
@@ -81,15 +91,14 @@ function headerEventListner() {
     document
         .querySelector(".header .noti_icon")
         .addEventListener("click", (e) => {
-            location.href =
-                "http://127.0.0.1:5500/www/pages/notifications.html";
+            location.href = "pages/notifications.html";
         });
 
     // 설정 아이콘
     document
         .querySelector(".header .setting_icon")
         .addEventListener("click", (e) => {
-            location.href = "http://127.0.0.1:5500/www/pages/settings.html";
+            location.href = "pages/settings.html";
         });
 }
 
@@ -99,7 +108,9 @@ function loadMyStores() {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
-            if (hr.status == 200) {
+            if (hr.status == 401) {
+                redirectToLogin();
+            } else if (hr.status == 200) {
                 const response = JSON.parse(hr.responseText);
 
                 // 매장 리스트
@@ -107,7 +118,11 @@ function loadMyStores() {
                 StoreUnitEventListeners();
 
                 // 리로드 버튼 제거
-                common.hideDOMbySelector(".realod_btn_container");
+                common.hideDOM(reloadBtn);
+                common.showDOM(addStoreBtn);
+                if (response.myStores.total == 0)
+                    addStoreBtn.classList.add("large");
+                else addStoreBtn.classList.remove("large");
 
                 // 알림 빨간 점
                 const notiDot = document.querySelector("#noti_dot");
@@ -118,17 +133,19 @@ function loadMyStores() {
             }
         }
     };
+    const requestBody = common.createRequestBodyWithToken(null);
+    console.log(requestBody);
     hr.open(
         "GET",
         `http://localhost:8060/api/users/${common.getUserId()}/home`
     );
+    hr.setRequestHeader("Content-Type", "application/json");
+    hr.setRequestHeader("Authorization", common.getAccessToken());
+
     hr.send();
 }
 
 function loadFail() {
-    const addStoreBtn = document.querySelector(".add_store_container");
-    const reloadBtn = document.querySelector(".realod_btn_container");
-
     common.hideDOM(addStoreBtn);
     common.showDOM(reloadBtn);
     reloadBtn.addEventListener("click", loadMyStores);
@@ -179,7 +196,7 @@ function initStoreManageDialog(storeDOM) {
         .querySelector(".manage_access")
         .addEventListener("click", () => {
             setCurrStoreData(storeDOM);
-            location.href = `http://127.0.0.1:5500/www/pages/manage_accesses.html`;
+            location.href = `pages/manage_accesses.html`;
         });
 
     // -- 매장 정보 수정하기
@@ -187,7 +204,7 @@ function initStoreManageDialog(storeDOM) {
         .querySelector(".modify_info")
         .addEventListener("click", () => {
             setCurrStoreData(storeDOM);
-            location.href = `http://127.0.0.1:5500/www/pages/modify_store_info.html`;
+            location.href = `pages/modify_store_info.html`;
         });
 
     // -- 삭제하기
@@ -331,7 +348,9 @@ function deleteStoreRequest(storeDOM) {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
-            if (hr.status == 200) {
+            if (hr.status == 401) {
+                redirectToLogin();
+            } else if (hr.status == 200) {
                 common.hideAndUp(storeDOM);
                 common.closeDialog(storeManageDialog);
                 common.giveToastNoti("매장 1개를 삭제했습니다");
@@ -345,6 +364,7 @@ function deleteStoreRequest(storeDOM) {
     };
 
     hr.open("DELETE", `http://localhost:8060/api/stores/${id}`);
+    hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
 }
 
@@ -353,7 +373,9 @@ function deleteAccessRequest(storeDOM, successMsg) {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
-            if (hr.status == 200) {
+            if (hr.status == 401) {
+                redirectToLogin();
+            } else if (hr.status == 200) {
                 common.hideAndUp(storeDOM);
                 common.closeDialog(storeManageDialog);
                 common.giveToastNoti("매장 1개를 삭제했습니다");
@@ -365,6 +387,7 @@ function deleteAccessRequest(storeDOM, successMsg) {
     };
 
     hr.open("DELETE", `http://localhost:8060/api/accesses/${id}`);
+    hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
 }
 
@@ -379,6 +402,10 @@ function withdrawApplication(DOM) {
 
 function loseAccess(DOM) {
     deleteAccessRequest(DOM, "1개의 매장을 목록에서 제거했습니다");
+}
+
+function redirectToLogin() {
+    location.href = "./pages/login.html";
 }
 
 // 매장 추가 SECTION
@@ -408,19 +435,17 @@ function addEventListerStoreDialog() {
     closeBtn.addEventListener("click", () => common.closeDialog(dialogScreen));
 
     createStoreBtn.addEventListener("click", () => {
-        location.href = "http://127.0.0.1:5500/www/pages/create_a_store.html";
+        location.href = "pages/create_a_store.html";
     });
     applyBtn.addEventListener(
         "click",
-        () =>
-            (location.href =
-                "http://127.0.0.1:5500/www/pages/apply_for_store.html")
+        () => (location.href = "pages/apply_for_store.html")
     );
 }
 
 const popupEnum = {
     DELETE_STORE: {
-        title: "담배 목록을 영구적으로<br />삭제하시겠습니까?",
+        title: "담배 목록을 영구적으로\n삭제하시겠습니까?",
         desc:
             "해당 담배 목록을 영원히 삭제하고, 기존 접근 권한자들 또한 접근이 불가합니다. 정렬정보와 기존 권한자들의 권한을 유지하려면, 관리자 권한 인계가 선행되어야합니다. 그래도 삭제하시겠습니까?",
         action_btn_label: "삭제",
