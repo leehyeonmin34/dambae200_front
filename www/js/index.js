@@ -471,7 +471,7 @@ const popupEnum = {
     WITHDRAW_ACCESS: {
         title: "접근 신청을 철회하시겠어요?",
         desc:
-            "해당 담배 목록에 대한 열람/편집 권한을 포기하고 목록에서 지우게 됩니다.",
+            "해당 담배 목록에 대한 열람/편집 권한을\n포기하고 목록에서 지우게 됩니다.",
         action_btn_label: "삭제",
         action_btn_color: "red",
         popup_class: "withdraw",
