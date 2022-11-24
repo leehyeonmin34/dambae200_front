@@ -27,4 +27,7 @@ export default {
         CANNOT_FIND_ACCESS_SITUATION_TYPE: "A003",
         DUPLICATED_ACCESS_APPLY: "A004",
     },
+    CIGARETTE_ON_LIST: {
+        DUPLICATE_CIGARETTE_ON_LIST: "CGL001",
+    },
 };

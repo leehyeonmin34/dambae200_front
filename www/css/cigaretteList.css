@@ -1,0 +1,812 @@
+@import "./common.css";
+
+.order_main {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.order_main input {
+    display: none;
+}
+
+#display_order:checked ~ .order label:nth-child(1),
+#computerized_order:checked ~ .order label:nth-child(2) {
+    font-weight: bold;
+    color: #2d313e;
+}
+
+.main_header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main_header label {
+    all: unset;
+}
+
+.main_header label.display {
+    margin-right: 20px;
+}
+
+#tab_indicator {
+    width: 14px;
+    height: 3px;
+    background-color: #30cf8c;
+    border-radius: 3px;
+    bottom: -6px;
+    position: absolute;
+    transform: translateX(-40px);
+    /* left: 20px; */
+    transition: 0.3s;
+}
+
+#computerized_order:checked ~ #tab_indicator {
+    transition: 0.3s;
+    transform: translateX(40px);
+}
+
+.order_main {
+    /* margin: 0 auto; */
+    /* max-width: 100%; */
+}
+
+.order {
+    /* width: 70%; */
+    /* height: 36px; */
+
+    font-size: 16px;
+    font-weight: 500;
+    color: #ced7e4;
+}
+
+.header_right {
+    display: flex;
+    align-items: center;
+}
+
+.edit_icon {
+    height: 36px;
+    width: 36px;
+    /* height: 100%; */
+}
+
+.edit_icon_img {
+    padding: 12px;
+    transform: translate(-6px, -6px);
+    /* all: unset; */
+    /* width: 24px; */
+    /* height: 24px; */
+}
+
+.active_green {
+    border-radius: 10px;
+    background-color: rgba(48, 207, 140, 0.2);
+    filter: opacity(1) invert(57%) sepia(99%) saturate(311%) hue-rotate(103deg)
+        brightness(98%) contrast(91%);
+}
+
+.middle {
+    width: 100%;
+    background: #fff;
+    position: relative;
+}
+
+.tip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.tip .btn {
+    width: 100%;
+    height: 80px;
+    margin: 20px 20px 10px;
+    padding: 0 10px 0 20px;
+    box-sizing: border-box;
+    background-color: #f4f8fc;
+    border-radius: 10px;
+    overflow: hidden;
+
+    display: flex;
+    position: relative;
+    /* flex-direction: column; */
+    justify-content: space-between;
+    align-items: center;
+
+    /* align-items: flex-end; */
+}
+
+.tip_btn.disabled {
+    opacity: 0.5;
+}
+
+.tip_btn .letter {
+    font-weight: 500;
+    /* font-size: 16px; */
+}
+
+.tip_btn .letter_detail {
+    color: #9baab7;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.tip_btn .right_small {
+    margin-right: 10px;
+    width: 36px;
+}
+
+.cigarette_list {
+    padding-bottom: 160px;
+}
+
+.cigarette_list.edit {
+    padding-bottom: 160px;
+    /* height: 150px; */
+}
+
+.cigarette_list.edit .bottom_empty {
+    /* height: 140px; */
+}
+
+.cigarette_on_list,
+.movement_cigarette_on_list,
+.cigarette_on_list_computerized {
+    width: 100%;
+    padding: 0 0 0 0;
+    box-sizing: border-box;
+    height: 80px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    border-bottom: 1px solid #ebf0f8;
+    position: relative;
+    /* transition: 0.3s; */
+}
+
+.empty,
+.loading {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 150%;
+
+    text-align: center;
+    color: #ced7e4;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.empty_icon {
+    width: 60px;
+    margin-bottom: 20px;
+}
+
+.empty .arrow_to_edit {
+    width: 38px;
+    position: fixed;
+    right: 60px;
+    top: 70px;
+    /* z-index: ; */
+}
+
+.sortable_placeholder {
+    background-color: #f4f8fc;
+}
+
+.dragging {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.cigarette_left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    position: relative;
+    margin-left: 20px;
+    transition: 0.3s;
+}
+
+.cigarette_list.edit .cigarette_left {
+    margin-left: 50px;
+    transition: 0.3s;
+}
+
+.checkbox_btn {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    position: absolute;
+    left: 8px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.cigarette_list.edit .checkbox_btn {
+    opacity: 1;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox_btn input[type="checkbox"] + label {
+    width: 48px;
+    height: 48px;
+    position: absolute;
+}
+
+.checkbox_icon {
+    position: absolute;
+}
+
+.checkbox_btn input[type="checkbox"] + label .active,
+.checkbox_btn input[type="checkbox"]:checked + label .inactive {
+    opacity: 0;
+}
+
+.checkbox_btn input[type="checkbox"]:checked + label .active,
+.checkbox_btn input[type="checkbox"] + label .inactive {
+    opacity: 1;
+}
+
+.cigar_img_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 100%;
+}
+
+/* 가로 담배 */
+.cigar_img {
+    width: 44px;
+    border: 1px solid #ebf0f8;
+    /* height: 30px; */
+}
+
+/* 세로 담배 */
+.cigar_img.vertical {
+    width: 30px;
+    height: auto;
+}
+
+#computerized_order_page .cigar_img_container {
+    width: 30px;
+    height: 100%;
+}
+
+#computerized_order_page .cigar_img_container img.vertical {
+    width: 22px;
+}
+
+#computerized_order_page .cigar_img_container img {
+    width: 29px;
+}
+
+.cigarette_name_container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    margin-left: 60px;
+    line-height: 1.5rem;
+}
+
+.official_name {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.24px;
+    color: #9baab7;
+    padding-left: 1px;
+}
+
+.customized_name {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.24px;
+    color: #5b616b;
+}
+
+#computerized_order_page .cigarette_name_container {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    line-height: 1.2rem;
+    position: relative;
+    margin-left: 10px;
+}
+
+#computerized_order_page .official_name {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: -0.24px;
+    color: #9baab7;
+    padding-left: 1px;
+}
+
+#computerized_order_page .computerized_name {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.24px;
+    color: #5b616b;
+}
+
+#computerized_order_page .customized_name {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.24px;
+    color: #5b616b;
+}
+
+#computerized_order_page .count_container {
+    margin-right: 0px;
+    padding: 0;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    border-left: 1px solid #ebf0f8;
+    font-weight: 500;
+    font-size: 20px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    color: #5b616b;
+}
+
+.cigarette_on_list_computerized {
+    width: 100%;
+    height: 50px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ebf0f8;
+}
+
+.search_header {
+    display: flex;
+    height: 60px;
+    width: 100%;
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px 0 8px;
+    box-sizing: border-box;
+}
+
+.search_header .search_input {
+    display: flex;
+    flex: 1;
+    position: relative;
+}
+
+.search_header .search_input .search_icon {
+    position: absolute;
+    right: 12px;
+    top: 6px;
+}
+
+/* #movement_page {
+    z-index: 1000;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    overflow: scroll;
+    position: absolute;
+    transform: translateY(100%);
+    background-color: white;
+    position: fixed;
+    transition: 0.3s;
+}
+
+#movement_page.active {
+    transform: translateY(0);
+    transition: 0.3s;
+} */
+
+.count_container input,
+.count_container2 input {
+    width: 48px;
+    height: 48px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 400;
+}
+
+/* 드래그 핸들 - 일반 모드에만 보여짐 */
+.count_container {
+    display: flex;
+    padding-right: 20px;
+    align-items: center;
+    position: absoulte;
+    right: 0;
+    transition: 0.3s;
+}
+
+.computerized_cigarette_lists_section {
+    margin-bottom: 100px;
+}
+
+.computerized_cigarette_lists_section .divider {
+    width: 100%;
+    height: 10px;
+    background: #ebf0f8;
+}
+
+.cigarette_list.edit .count_container,
+.computerized_cigarette_lists_section.edit .count_container {
+    transform: translateX(100%);
+    transition: 0.3s;
+}
+
+/* 드래그 핸들 - edit 모드에만 보여짐 */
+.cigarette_list .drag_icon,
+.computerized_cigarette_lists_section .drag_icon {
+    position: absolute;
+    right: 0;
+    transform: translateX(100%);
+    transition: 0.3s;
+}
+
+.cigarette_list.edit .drag_icon,
+.computerized_cigarette_lists_section.edit .drag_icon {
+    transform: translateX(0%);
+    transition: 0.3s;
+}
+
+.count_container {
+}
+
+.count_container input {
+    margin-right: 6px;
+    padding: 0px;
+}
+
+.count_container,
+.count_container2 {
+    font-size: 14px;
+    color: #9baab7;
+}
+
+.sort_btn_container {
+    padding: 0 20px 40px;
+    box-sizing: border-box;
+    width: 100%;
+    /* margin: 0 20px 40px; */
+    position: absolute;
+    bottom: 0;
+}
+
+.sort_btn {
+    width: 100%;
+    /* font-size: 20px; */
+}
+
+.edit_bottom_btn_container {
+    display: flex;
+    width: 100%;
+    z-index: 10;
+}
+
+.edit_bottom_btns {
+    display: flex;
+    margin: 0 20px;
+}
+
+.move_btn_container {
+    flex: 1;
+
+    /* width: 80%; */
+    /* width: 100%; */
+    margin-right: 20px;
+    height: 60px;
+    font-size: 16px;
+    background-color: #2d313e;
+    border-radius: 6px;
+    color: #f4f8fc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* .move_btn_container.inactive {
+    color: #9baab7;
+    background-color: #ebf0f8;
+} */
+
+.toss_icon {
+    position: absolute;
+    right: 10px;
+}
+
+.btn.disabled .icon.active,
+.btn .icon.inactive {
+    display: none;
+}
+
+.btn .icon.active,
+.btn.disabled .icon.inactive {
+    display: block;
+}
+
+#movement_page {
+    padding: 110px 0 200px;
+    box-sizing: border-box;
+}
+
+.movement_cigarette_list .cigarette_left {
+    margin-left: 0;
+}
+
+.plus_btn_container {
+    width: 60px;
+    height: 60px;
+    color: #2d313e;
+    background-color: #30cf8c;
+    border-radius: 6px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.plus_btn_container.disabled {
+    color: #5b616b;
+    background-color: #ebf0f8;
+}
+
+.plus_btn_container.disabled .active,
+.plus_btn_container .inactive {
+    display: none;
+}
+
+.plus_btn_container.disabled .inactive,
+.plus_btn_container .active {
+    display: block;
+}
+
+.add_cigarette_dialog {
+    background-color: white;
+    width: 335px;
+    /* height: 478px; */
+    border-radius: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    position: fixed;
+}
+
+.add_cigarette_dialog .close_icon {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+}
+
+.add_cigarette_dialog .add_cigarette_body {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+}
+
+.add_cigarette_dialog .cigarette_large_img_container {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    /* background-color: #ebf0f8; */
+    margin: 20px auto 20px;
+    /* box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); */
+}
+
+.add_cigarette_dialog .cigarette_large_img_container img {
+    width: 150px;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ebf0f8;
+}
+
+.add_cigarette_dialog .cigarette_large_img_container img.vertical {
+    width: 96px;
+    /* height: 144px; */
+}
+
+.add_cigarette_dialog_screen .search_icon {
+    position: absolute;
+    right: 12px;
+    display: none;
+}
+
+.add_cigarette_dialog_screen.add .search_icon {
+    display: block;
+    /* position: absolute; */
+    /* right: 12px; */
+}
+
+.add_cigarette_search_official_name {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.add_cigarette_dialog_screen .official_name_search_input {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.add_cigarette_dialog_screen .official_name_search_input input {
+    color: #9baab7;
+}
+
+.add_cigarette_dialog_screen.add .official_name_search_input input {
+    color: #5b616b;
+}
+
+.cigarette_dropdown_list_container {
+    position: absolute;
+    top: 54px;
+    padding: 5px 0;
+    box-sizing: border-box;
+
+    width: 100%;
+    z-index: 999;
+    background-color: #fff;
+    overflow: scroll !important;
+    display: block;
+    min-height: 60px;
+    max-height: 230px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.cigarette_dropdown_list_container .dropdown_empty {
+    color: #9baab7;
+    position: absolute;
+    /* top: 0; */
+    /* z-index: 998; */
+    padding: 8px 14px;
+    height: 50px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.cigartte_dropdown_list {
+}
+
+.cigarette_dropdown_content {
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    padding: 8px 14px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 50px;
+    position: relative;
+    background-color: white;
+}
+
+.cigarette_dropdown_content:hover {
+    background-color: #f1f1f1;
+}
+
+.cigarette_dropdown_content .cigar_img_container {
+    width: 30px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    position: relative;
+}
+
+.cigarette_dropdown_content .cigar_img_container img {
+    width: 100%;
+    border: 0.5px solid #ced7e4;
+    position: absolute;
+}
+
+.cigarette_dropdown_content .cigar_img_container.vertical img {
+    width: 22px;
+    /* height: 50px; */
+}
+
+.cigarette_dropdown_content .official_name {
+    font-size: 14px;
+    color: #5b616b;
+}
+
+.add_cigarette_input_computerized_name {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.add_cigarette_body .add_cigarette_input_customized_name {
+    width: 100%;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.add_cigarette_body input {
+    /* font-size: 14px; */
+    color: #2d313e;
+    height: 48px;
+}
+
+.add_cigarette_dialog input {
+    height: 48px;
+    color: #2d313e;
+}
+
+/* .add_cigarette_body select {
+    border-radius: 6px;
+    height: 40px;
+    background-color: #ebf0f8;
+} */
+
+.add_cigarette_bottom_btn_container {
+    margin-top: 60px;
+    /* height: 48px; */
+    flex: 1;
+    font-weight: 700;
+    font-size: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add_cigarette_bottom_btn_container .btn {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+}
+
+.add_cigarette_dialog_screen .delete_btn_container {
+    position: relative;
+    margin-right: 16px;
+    border: 1px solid #2d313e;
+    color: #2d313e;
+    border-radius: 6px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* display: block; */
+}
+
+.add_cigarette_dialog_screen.add .delete_btn_container {
+    display: none;
+}
+
+/* .add_cigarette_bottom_btn_container .save_btn_container {
+    position: relative;
+    background-color: #2d313e;
+    color: #f4f8fc;
+} */

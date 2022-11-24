@@ -47,6 +47,12 @@ export function addEventListenerToDOMbySelector(selector, event, handler) {
         .forEach((item) => item.addEventListener(event, handler));
 }
 
+export function removeEventListenerToDOMbySelector(selector, event, handler) {
+    var DOM = document
+        .querySelectorAll(selector)
+        .forEach((item) => item.removeEventListener(event, handler));
+}
+
 export function getEnumValueByCode(enumObject, code) {
     var foundKey = Object.keys(enumObject)
         .filter((key) => enumObject[key].code == code)
@@ -76,9 +82,21 @@ export function givePopup(popupInfo, params) {
         .classList.add(popupInfo.action_btn_color);
 
     // popup 이벤트리스너 추가
-    popup
-        .querySelector(".action_btn")
-        .addEventListener("click", () => popupInfo.action_btn_event(params));
+    const actionBtn = popup.querySelector(".action_btn");
+    actionBtn.addEventListener("click", eventHandler, false);
+
+    function eventHandler(e) {
+        popupInfo.action_btn_event(params);
+    }
+
+    // 팝업 취소, 액션버튼
+
+    popup.querySelectorAll(".cancel_btn, .action_btn").forEach((btn) =>
+        btn.addEventListener("click", () => {
+            closeDialog(popup), false;
+            actionBtn.removeEventListener("click", eventHandler);
+        })
+    );
 
     // SHOW
     openDialog(popup);
@@ -89,19 +107,11 @@ export function initDialogInteraction() {
     // 다이얼로그 외부 영역
     document.querySelectorAll(".dialog").forEach((dialog) => {
         dialog
-            .querySelector(".escape")
-            .addEventListener("click", () => closeDialog(dialog));
-    });
-
-    // 팝업 취소, 액션버튼
-    const popup = document.querySelector("#popup");
-    if (popup != null) {
-        popup
-            .querySelectorAll(".cancel_btn, .action_btn")
-            .forEach((btn) =>
-                btn.addEventListener("click", () => closeDialog(popup))
+            .querySelectorAll(".escape, .close_icon")
+            .forEach((DOM) =>
+                DOM.addEventListener("click", () => closeDialog(dialog), false)
             );
-    }
+    });
 }
 
 // export function radioButtonInteraction() {
@@ -217,4 +227,10 @@ export function hideAndUp(DOM) {
 
 export function redirectToLogin() {
     location.href = "login.html";
+}
+
+export function stopFunc(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
 }

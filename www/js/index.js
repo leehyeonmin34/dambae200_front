@@ -58,6 +58,7 @@ function initStoreUnit() {
 
 function StoreUnitEventListeners() {
     initStoreManageUnit();
+    initStoreEnter();
 }
 
 function basicInteraction() {
@@ -153,6 +154,20 @@ function loadFail() {
     common.giveToastNoti(
         "알 수 없는 이유로 데이터를 불러올 수 없습니다. 인터넷 연결을 확인해주세요."
     );
+}
+
+function initStoreEnter() {
+    common.addEventListenerToDOMbySelector(
+        ".store_card .btn_pressed",
+        "click",
+        enterStore
+    );
+}
+
+function enterStore(e) {
+    const storeId = e.target.closest(".store_card").getAttribute("store_id");
+    sessionStorage.setItem("storeId", storeId);
+    location.href = "./pages/display_order.html";
 }
 
 function initStoreManageUnit() {
@@ -314,6 +329,7 @@ function mappingStoreData(accessesJson) {
             accessTypeCode,
             storeId,
             applicatorExists,
+            cigaretteList,
         } = accesses[key];
         const storeInfo = common.getEnumValueByCode(storeInfoEnum, brandCode);
         const accessInfo = common.getEnumValueByCode(
@@ -332,6 +348,7 @@ function mappingStoreData(accessesJson) {
             store_tag: accessInfo.store_tag,
             store_id: storeId,
             applicator_exists: applicatorExists || "invisible",
+            cigarette_list_id: cigaretteList,
         };
 
         storeCardSection.innerHTML += storeCardTemplate(data);

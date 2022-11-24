@@ -43,7 +43,7 @@ function inputInteraction() {
     nicknameInput.addEventListener("keyup", (e) => {
         common.updateInputValue(e);
         if (nicknameValidDOM.classList.contains("disabled"))
-            emailValidBtn.enableBtn();
+            nicknameValidBtn.enableBtn();
     });
 
     emailValidBtn.enableBtn();
@@ -61,8 +61,7 @@ function checkEmpty() {
 
 function trySend() {
     if (validateForm()) {
-        showCompletePage();
-        // sendRequest();
+        sendRequest();
     }
 }
 
@@ -98,12 +97,7 @@ function validateEmail() {
     if (!reg.test(emailInput.value)) {
         inputFail(emailInput, "이메일 형식에 맞게 입력해주세요");
         emailValidBtn.enableBtn();
-    } else if (emailDuplicate()) {
-        inputFail(emailInput, "중복된 이메일입니다");
-        emailValidBtn.enableBtn();
-    } else {
-        emailValidBtn.disableBtn();
-    }
+    } else inputDuplicate("email", emailInput, "exists_by_email");
 }
 
 function enableValidBtn(btnDOM) {}
@@ -112,28 +106,40 @@ function validateNickname() {
     if (nicknameInput.value == "") {
         inputFail(nicknameInput, "닉네임을 입력해주세요");
         nicknameValidBtn.enableBtn();
-    } else if (nicknameDuplicate()) {
-        inputFail(nicknameInput, "중복된 닉네임입니다.");
-        nicknameValidBtn.enableBtn();
-    } else {
-        nicknameValidBtn.disableBtn();
-    }
+    } else inputDuplicate("nickname", nicknameInput, "exists_by_nickname");
 }
 
 function emailDuplicate() {
-    return false;
-    // inputDuplicate("email", emailInput, "exists_by_nickname");
+    // return false;
+    return;
 }
 
 function nicknameDuplicate() {
-    return false;
-    // inputDuplicate("nickname", nicknameInput, "exists_by_nickname");
+    // return false;
+    return inputDuplicate("nickname", nicknameInput, "exists_by_nickname");
 }
 
 function inputDuplicate(field, inputDOM, api) {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
+            const response = hr.responseText;
+            if (field == "nickname") {
+                if (response == "false") nicknameValidBtn.disableBtn();
+                else {
+                    console.log(response);
+                    nicknameValidBtn.enableBtn();
+                    inputFail(nicknameInput, "중복된 닉네임입니다.");
+                }
+            } else if (field == "email") {
+                if (response == "false") emailValidBtn.disableBtn();
+                else {
+                    emailValidBtn.enableBtn();
+                    inputFail(emailInput, "중복된 이메일입니다.");
+                }
+            } else {
+                common.giveToastNoti("알 수 없는 이유로 확인할 수 없습니다.");
+            }
             const responseBody = JSON.parse(hr.responseText);
             if (hr.status == 200) {
                 return responseBody;
@@ -157,7 +163,7 @@ function validateForm() {
     if (!emailValidDOM.classList.contains("disabled")) {
         inputFail(emailInput, "이메일 중복확인을 해주세요");
     } else if (!nicknameValidDOM.classList.contains("disabled")) {
-        inputFail(emailInput, "닉네임 중복확인을 해주세요");
+        inputFail(nicknameInput, "닉네임 중복확인을 해주세요");
     } else if (pwInput.value != pwConfirmInput.value) {
         confirmPwFail();
         return false;
