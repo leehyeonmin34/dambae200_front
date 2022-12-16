@@ -23,7 +23,7 @@ function loadStoreAccesses() {
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
             if (hr.status == 200) {
-                var json = JSON.parse(hr.responseText);
+                var json = JSON.parse(hr.responseText).data;
                 mappingAccessData(json);
                 accessItemUnit();
             } else if (hr.status == 401) {

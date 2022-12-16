@@ -19,7 +19,7 @@ function loadAndMapMyData() {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
-            const responseBody = JSON.parse(hr.responseText);
+            const responseBody = JSON.parse(hr.responseText).data;
             if (hr.status == 200) {
                 mapMyData(responseBody);
             } else if (hr.status == 401) {
@@ -76,7 +76,7 @@ function trySend() {
                 modifySuccess();
             } else if (hr.status == 400) {
                 if (
-                    responseBody.errorCode ==
+                    responseBody.errorResponse.errorCode ==
                     errorCode.USER.NICKNAME_DUPLICATION
                 )
                     duplicateNickname();

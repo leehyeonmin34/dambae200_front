@@ -7,12 +7,20 @@ export function closeDialog(dialogDOM) {
     dialogDOM.classList.add("dialog_off");
 }
 
+export function dialogIsOn(dialogDOM) {
+    return !dialogDOM.classList.contains("dialog_off");
+}
+
 export function showDOM(DOM) {
     DOM.classList.remove("invisible");
 }
 
 export function hideDOM(DOM) {
     DOM.classList.add("invisible");
+}
+
+export function DOMIsVisible(DOM) {
+    return !DOM.classList.contains("invisible");
 }
 
 export function showDOMbySelector(selector) {
@@ -42,9 +50,10 @@ export function escapeScreenUp() {
 }
 
 export function addEventListenerToDOMbySelector(selector, event, handler) {
-    var DOM = document
-        .querySelectorAll(selector)
-        .forEach((item) => item.addEventListener(event, handler));
+    var DOM = document.querySelectorAll(selector).forEach((item) => {
+        item.removeEventListener(event, handler);
+        item.addEventListener(event, handler);
+    });
 }
 
 export function removeEventListenerToDOMbySelector(selector, event, handler) {
@@ -227,6 +236,10 @@ export function hideAndUp(DOM) {
 
 export function redirectToLogin() {
     location.href = "login.html";
+}
+
+export function redirectToHome() {
+    location.href = "index.html";
 }
 
 export function stopFunc(e) {

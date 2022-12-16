@@ -1,5 +1,6 @@
 import * as common from "./common.js";
 import * as displayOrder from "./display_order.js";
+import * as reorder from "./reorder_sortable.js";
 
 // 일반 모드 헤더
 const mainHeader = document.querySelector(".main_header");
@@ -40,10 +41,7 @@ const execMovementBtnContainer = document.querySelector(
     "#movement_page .full_floating_btn_container"
 );
 const execMovementBtnDOM = document.querySelector("#execMovementBtn");
-const execMovementBtn = new common.ButtonManager(
-    execMovementBtnDOM,
-    execMovement
-);
+const execMovementBtn = new common.ButtonManager(execMovementBtnDOM, tryMove);
 
 export function loadMovementCigarette() {
     mappingMovementCigarettes(getDisplayCigarettesInfo());
@@ -136,7 +134,7 @@ function movementCigaretteEventListeners() {
     );
 }
 
-function execMovement() {
+function tryMove() {
     const selectedInputs = displayOrderPage.querySelectorAll(
         "input[type='checkbox']:checked"
     );
@@ -148,11 +146,30 @@ function execMovement() {
 
     const criterionDOM = getCeterionDomOnDisplayOrderPage();
 
-    selectedElements.sort();
+    selectedElements.sort(
+        (a, b) =>
+            parseInt(b.getAttribute("display_order")) -
+            parseInt(a.getAttribute("display_order"))
+    );
     for (const item of selectedElements) {
+        const insertBeforeCigarId = criterionDOM.nextElementSibling.getAttribute(
+            "id"
+        );
+        const movedCigarId = item.getAttribute("id");
+        reorder.trySendReorderInfo(
+            "display",
+            0,
+            0,
+            insertBeforeCigarId,
+            movedCigarId
+        );
         insertAfter(criterionDOM, item);
     }
 
+    execMovementSuccess();
+}
+
+function execMovementSuccess() {
     closeMovementPage();
     uncheckAll();
     displayOrder.initializeSelection();

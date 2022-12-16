@@ -18,6 +18,9 @@ export function enableDragAndDrop() {
         scrollSpeed: 5,
         containment: ".page_contents_with_header1",
         placeholder: "sortable_placeholder",
+
+        start: sortableStart,
+        update: (event, ui) => sortableUpdate(event, ui, "display"),
     });
 
     // 전산 순서 드래그앤 드랍
@@ -36,63 +39,184 @@ export function enableDragAndDrop() {
         scrollSpeed: 10,
         containment: ".computerized_cigarette_lists_section",
         placeholder: "sortable_placeholder",
+
+        start: sortableStart,
+        update: (event, ui) => sortableUpdate(event, ui, "computational"),
     });
 }
 
-export function trySendReorderInfo() {
-    var hr = new XMLHttpRequest();
-    hr.onreadystatechange = () => {
-        if (hr.readyState == XMLHttpRequest.DONE) {
-            const json = JSON.parse(hr.responseText);
-            if (hr.status == 200) {
-                sendReorderInfoSuccess();
-            } else {
-                // 에러 처리
-                // if (json.errorCode == errorCode.)
-
-                common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
-            }
-        }
-    };
-
-    const data = getReorderInfoData();
-
-    hr.open("PUT", "http://localhost:8060/api/cigarette_on_lists/reorder");
-    hr.setRequestHeader("Content-Type", "application/json");
-    hr.setRequestHeader("Authorization", common.getAccessToken());
-    hr.send(JSON.stringify(data));
+function sortableStart(event, ui) {
+    var start_pos = ui.item.index();
+    ui.item.data("start_pos", start_pos);
 }
 
-function sendReorderInfoSuccess() {
-    // 일단은 DOM의 순서정보 attribute는 수정하지 않음 (굳이 안해도 될 것 같기도 해서)
+function sortableUpdate(event, ui, type) {
+    const item = ui.item;
+    const fromIdx = item.data("start_pos");
+    const toIdx = item.index();
+    // console.log(item.next());
+    // console.log(item.next()[0]);
+    const insertBeforeCigarId = item.next()[0].getAttribute("id");
+    const movedCigarId = item[0].getAttribute("id");
+    console.log("UPDATE");
+    console.log(insertBeforeCigarId, movedCigarId);
+    console.log("from ", ui.item.data("start_pos"), " to ", ui.item.index());
+    trySendReorderInfo(type, fromIdx, toIdx, insertBeforeCigarId, movedCigarId);
 
-    // 디바이더 전부 삭제 후 다시 달아줌
-    displayOrder.computerizedCigaretteListSection
-        .querySelectorAll(".divider")
-        .forEach((item) => item.remove());
+    // console.log($(".cigarette_list").sortable("toArray"));
+}
 
-    const compItems = document.querySelectorAll(
-        ".cigarette_on_list_computerized"
+export function trySendReorderInfo(
+    type,
+    fromIdx,
+    toIdx,
+    insertBeforeCigarId,
+    movedCigarId
+) {
+    const data = getReorderInfoData(
+        type,
+        fromIdx,
+        toIdx,
+        insertBeforeCigarId,
+        movedCigarId
     );
 
-    for (const i in compItems) {
-        const curr = compItems[i];
+    displayOrder.stomp.send(
+        "/pub/store/reorder",
+        displayOrder.getStompHeader(),
+        JSON.stringify(data)
+    );
+    // var hr = new XMLHttpRequest();
+    // hr.onreadystatechange = () => {
+    //     if (hr.readyState == XMLHttpRequest.DONE) {
+    //         const json = JSON.parse(hr.responseText);
+    //         if (hr.status == 200) {
+    //             sendReorderInfoSuccess();
+    //         } else {
+    //             // 에러 처리
+    //             // if (json.errorCode == errorCode.)
 
-        if (parseInt(i) % 5 == 0 && i != 0) {
-            const dividerDOM = document.createElement("div");
-            dividerDOM.classList.add("divider");
-            displayOrder.computerizedCigaretteListSection.insertBefore(
-                dividerDOM,
-                curr
+    //             common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
+    //         }
+    //     }
+    // };
+
+    // const data = getReorderInfoData();
+
+    // hr.open("PUT", "http://localhost:8060/api/cigarette_on_lists/reorder");
+    // hr.setRequestHeader("Content-Type", "application/json");
+    // hr.setRequestHeader("Authorization", common.getAccessToken());
+    // hr.send(JSON.stringify(data));
+}
+
+export function reorderMessageHandler(message) {
+    console.log("received!!!");
+    console.log(message);
+    const body = JSON.parse(message.body);
+    console.log(body);
+
+    if (body.status == 200) {
+        sendReorderInfoSuccess(body.data);
+    } else if (hr.status == 401) {
+        common.redirectToLogin();
+    } else {
+        common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
+    }
+}
+
+function sendReorderInfoSuccess(data) {
+    // 일단은 DOM의 순서정보 attribute는 수정하지 않음 (굳이 안해도 될 것 같기도 해서)
+
+    const { requestUserId, content } = data;
+    // 다른 사용자의 화면에서도 새 순서 적용
+    if (requestUserId != common.getUserId()) {
+        if (content.orderTypeCode == "display") {
+            applyNewOrder(
+                displayOrder.cigaretteListSection,
+                ".cigarette_on_list",
+                content
+            );
+        } else {
+            applyNewOrder(
+                displayOrder.computerizedCigaretteListSection,
+                ".cigarette_on_list_computerized",
+                content
             );
         }
     }
 
-    displayOrder.toggleEditMode();
+    // 전산순 리스트의 디바이더 전부 삭제 후 다시 달아줌
+    if (content.orderTypeCode == "computational") {
+        displayOrder.computerizedCigaretteListSection
+            .querySelectorAll(".divider")
+            .forEach((item) => item.remove());
+
+        const compItems = document.querySelectorAll(
+            ".cigarette_on_list_computerized"
+        );
+
+        for (const i in compItems) {
+            const curr = compItems[i];
+
+            if (parseInt(i) % 5 == 0 && i != 0) {
+                const dividerDOM = document.createElement("div");
+                dividerDOM.classList.add("divider");
+                displayOrder.computerizedCigaretteListSection.insertBefore(
+                    dividerDOM,
+                    curr
+                );
+            }
+        }
+    }
+
+    // displayOrder.toggleEditMode();
 }
 
-function getReorderInfoData() {
-    return mergeOrderData(getDisplayOrderData(), getComputerizedOrderData());
+function applyNewOrder(section, selector, data) {
+    const {
+        storeId,
+        requestUserId,
+        orderInfos,
+        orderTypeCode,
+        fromIdx,
+        toIdx,
+        insertBeforeCigarId,
+        movedCigarId,
+    } = data;
+    console.log(movedCigarId);
+    console.log(insertBeforeCigarId);
+
+    const movedItem = displayOrder.findCurrCigarDOM(selector, movedCigarId);
+    const insertBeforeCigarItem = displayOrder.findCurrCigarDOM(
+        selector,
+        insertBeforeCigarId
+    );
+    section.insertBefore(movedItem, insertBeforeCigarItem);
+}
+
+function getReorderInfoData(
+    orderTypeCode,
+    fromIdx,
+    toIdx,
+    insertBeforeCigarId,
+    movedCigarId
+) {
+    return {
+        requestUserId: common.getUserId(),
+        responseChannel: displayOrder.channel.REORDER(),
+        content: {
+            storeId: displayOrder.getStoreId(),
+            orderInfos: mergeOrderData(
+                getDisplayOrderData(),
+                getComputerizedOrderData()
+            ),
+            orderTypeCode,
+            fromIdx,
+            toIdx,
+            insertBeforeCigarId,
+            movedCigarId,
+        },
+    };
 }
 
 function mergeOrderData(l1, l2) {

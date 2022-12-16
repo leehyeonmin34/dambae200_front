@@ -39,12 +39,12 @@ function sendRequest() {
             console.log(hr);
             const responseBody = JSON.parse(hr.responseText);
             if (hr.status == 200) {
-                requestSuccess(responseBody);
+                requestSuccess(responseBody.data);
             } else if (hr.status == 400) {
                 if (
-                    responseBody.errorCode ==
+                    responseBody.errorResponse.errorCode ==
                         errorCode.USER.LOGIN_INFO_NOT_MATCHED ||
-                    responseBody.errorCode ==
+                    responseBody.errorResponse.errorCode ==
                         errorCode.COMMON.INVALID_INPUT_VALUE
                 )
                     loginInfoNotMatchedFail();

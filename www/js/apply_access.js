@@ -29,7 +29,7 @@ function loadStoresByNameLike(name) {
         hr.onreadystatechange = () => {
             if (hr.readyState == XMLHttpRequest.DONE) {
                 if (hr.status == 200) {
-                    const storesJson = JSON.parse(hr.responseText);
+                    const storesJson = JSON.parse(hr.responseText).data;
                     mappingStores(storesJson);
                     radioButtonInteraction();
                 } else if (hr.status == 401) {
@@ -150,7 +150,10 @@ function applyRequest(storeId, userId) {
                 common.redirectToLogin();
             } else {
                 const json = JSON.parse(hr.responseText);
-                if (json.errorCode == errorCode.ACCESS.DUPLICATED_ACCESS_APPLY)
+                if (
+                    json.errorResponse.errorCode ==
+                    errorCode.ACCESS.DUPLICATED_ACCESS_APPLY
+                )
                     duplicateAccessApplyFail();
                 else applyRequestFailure();
             }

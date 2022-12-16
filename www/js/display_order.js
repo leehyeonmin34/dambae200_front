@@ -154,6 +154,9 @@ export const computerizedCigaretteListSection = document.querySelector(
     ".computerized_cigarette_lists_section"
 );
 
+// socket
+export var stomp;
+
 ///////////////////
 // 이벤트 리스너 정의
 ///////////////////
@@ -171,6 +174,9 @@ document.addEventListener("DOMContentLoaded", function () {
     loadAllCigarettes();
     cigaretteDropdownInteraction();
     common.initDialogInteraction();
+
+    // 소켓 활성화
+    enableSocket();
 });
 
 function basicInteraction() {
@@ -186,6 +192,10 @@ const STORE_ID = {
 
 function updateCigaretteListData(storeId) {
     sessionStorage.setItem("storeId", storeId);
+}
+
+export function getStoreId() {
+    return sessionStorage.getItem("storeId");
 }
 
 //////////////////////////////
@@ -204,8 +214,21 @@ function loadCigarette() {
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
             if (hr.status == 200) {
-                const cigarettesJson = JSON.parse(hr.responseText);
+                const cigarettesJson = JSON.parse(hr.responseText).data;
                 loadCigaretteSuccess(cigarettesJson);
+            } else if (hr.status == 401) {
+                common.redirectToLogin();
+            } else if (hr.status == 400) {
+                if (
+                    responseBody.errorResponse.errorCode ==
+                    errorCode.ACCESS.ACCESS_NOT_ALLOWED
+                ) {
+                    common.redirectToHome();
+                } else {
+                    common.giveToastNoti(
+                        "알 수 없는 이유로 담배 목록을 불러올 수 없습니다."
+                    );
+                }
             } else {
                 common.giveToastNoti(
                     "알 수 없는 이유로 담배 목록을 불러올 수 없습니다."
@@ -217,8 +240,9 @@ function loadCigarette() {
     const id = sessionStorage.getItem("storeId");
     hr.open(
         "GET",
-        `http://localhost:8060/api/cigarette_on_lists/${id}/display_order`
+        `http://localhost:8060/api/cigarette_on_lists/${id}/display_order?requestUserId=${common.getUserId()}`
     );
+
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
 }
@@ -227,6 +251,7 @@ function loadCigaretteSuccess(json) {
     mappingCigarettes(json);
     hideLoading();
     showEmptyIfEmpty();
+    removeCigaretteListEventListeners();
     cigaretteListEventListeners();
 }
 
@@ -260,123 +285,6 @@ function showEmptyIfEmpty() {
         common.showDOM(tipBtnDOM);
     }
 }
-
-export const mockCigarettesJson = {
-    cigaretteOnLists: [
-        {
-            id: 1,
-            official_name: "히츠 터코이즈 셀렉션",
-            customized_name: "히츠 터코이즈",
-            count: null,
-            vertical: false,
-            file_path_large: "cigar_img/large_4x/cigar_1.jpg",
-            file_path_medium: "cigar_img/medium_4x/cigar_1.jpg",
-            display_order: 1,
-            computerized_order: 10,
-        },
-        {
-            id: 2,
-            official_name: "하모니(라크) 1MG",
-            customized_name: "하모니(라크)",
-            count: null,
-            vertical: true,
-            file_path_large: "cigar_img/large_4x/cigar_2.jpg",
-            file_path_medium: "cigar_img/medium_4x/cigar_2.jpg",
-            display_order: 2,
-            computerized_order: 9,
-        },
-        {
-            id: 3,
-            official_name: "팔리아먼트 수퍼슬림 원 1MG",
-            customized_name: "팔라 수퍼슬림 원",
-            count: null,
-            vertical: true,
-            file_path_large: "cigar_img/large_4x/cigar_3.jpg",
-            file_path_medium: "cigar_img/medium_4x/cigar_3.jpg",
-            display_order: 3,
-            computerized_order: 8,
-        },
-        {
-            id: 4,
-            official_name: "말보로 아이스 블라스트 1MG",
-            customized_name: "아이스 블라스트 1",
-            count: null,
-            vertical: true,
-            file_path_large: "cigar_img/large_4x/cigar_4.jpg",
-            file_path_medium: "cigar_img/medium_4x/cigar_4.jpg",
-            display_order: 4,
-            computerized_order: 7,
-        },
-        {
-            id: 5,
-            official_name: "버지니아 슬림 원 1MG",
-            customized_name: "버지니아 슬림 원",
-            count: null,
-            vertical: true,
-            file_path_large: "cigar_img/large_4x/cigar_5.jpg",
-            file_path_medium: "cigar_img/medium_4x/cigar_5.jpg",
-            display_order: 5,
-            computerized_order: 6,
-        },
-        {
-            id: 6,
-            official_name: "팔리아먼트 하이브리드 1MG",
-            customized_name: "팔라 하이브리드 1",
-            count: null,
-            vertical: true,
-            file_path_large: "cigar_img/large_4x/cigar_6.jpg",
-            file_path_medium: "cigar_img/medium_4x/cigar_6.jpg",
-            display_order: 6,
-            computerized_order: 5,
-        },
-        {
-            id: 7,
-            official_name: "말보로 블랙 후레시",
-            customized_name: "블랙 후레시",
-            count: null,
-            vertical: true,
-            file_path_large: "cigar_img/large_4x/cigar_7.jpg",
-            file_path_medium: "cigar_img/medium_4x/cigar_7.jpg",
-            display_order: 7,
-            computerized_order: 4,
-        },
-        {
-            id: 8,
-            official_name: "말보로 실버",
-            customized_name: "말보로 실버",
-            count: null,
-            vertical: true,
-            file_path_large: "cigar_img/large_4x/cigar_8.jpg",
-            file_path_medium: "cigar_img/medium_4x/cigar_8.jpg",
-            display_order: 8,
-            computerized_order: 3,
-        },
-
-        {
-            id: 9,
-            official_name: "버지니아 슬림 골드 5",
-            customized_name: "버지니아 골드",
-            count: null,
-            vertical: true,
-            file_path_large: "cigar_img/large_4x/cigar_9.jpg",
-            file_path_medium: "cigar_img/medium_4x/cigar_9.jpg",
-            display_order: 9,
-            computerized_order: 2,
-        },
-        {
-            id: 10,
-            official_name: "버지니아 슬림 블루 3",
-            customized_name: "버지니아 블루",
-            count: null,
-            vertical: true,
-            file_path_large: "cigar_img/large_4x/cigar_10.jpg",
-            file_path_medium: "cigar_img/medium_4x/cigar_10.jpg",
-            display_order: 10,
-            computerized_order: 1,
-        },
-    ],
-    total: 10,
-};
 
 function mappingCigarettes(cigarettesJson) {
     const cigaretteOnLists = cigarettesJson.cigaretteOnLists;
@@ -495,8 +403,9 @@ function activeSearchMode() {
 var cnt = 0;
 
 function editButtonHandler(e) {
-    if (currMode == Mode.EDIT) reorder.trySendReorderInfo();
-    else toggleEditMode();
+    // if (currMode == Mode.EDIT) reorder.trySendReorderInfo();
+    // else toggleEditMode();
+    toggleEditMode();
 }
 
 export function toggleEditMode() {
@@ -535,32 +444,72 @@ const initializationPopupInfo = {
 };
 
 function tryInitializeCount() {
-    var hr = new XMLHttpRequest();
-    hr.onreadystatechange = () => {
-        if (hr.readyState == XMLHttpRequest.DONE) {
-            const json = JSON.parse(hr.responseText);
-            if (hr.status == 200) {
-                initializeCountSuccess();
-            } else {
-                // 에러 처리
-                // if (json.errorCode == errorCode.)
-
-                common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
-            }
-        }
+    const data = {
+        requestUserId: common.getUserId(),
+        responseChannel: channel.INITIALIZE_COUNT(),
+        content: {
+            storeId: getStoreId(),
+        },
     };
 
-    const storeId = sessionStorage.getItem("storeId");
-    hr.open(
-        "PUT",
-        `http://localhost:8060/api/cigarette_on_lists/initialize_count?store_id=${storeId}`
+    stomp.send(
+        "/pub/store/initialize_count",
+        getStompHeader(),
+        JSON.stringify(data)
     );
-    hr.setRequestHeader("Content-Type", "application/json");
-    hr.setRequestHeader("Authorization", common.getAccessToken());
-    hr.send();
+
+    // var hr = new XMLHttpRequest();
+    // hr.onreadystatechange = () => {
+    //     if (hr.readyState == XMLHttpRequest.DONE) {
+    //         const json = JSON.parse(hr.responseText);
+    //         if (hr.status == 200) {
+    //             initializeCountSuccess();
+    //         } else {
+    //             // 에러 처리
+    //             // if (json.errorCode == errorCode.)
+
+    //             common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
+    //         }
+    //     }
+    // };
+
+    // const storeId = sessionStorage.getItem("storeId");
+    // hr.open(
+    //     "PUT",
+    //     `http://localhost:8060/api/cigarette_on_lists/initialize_count?store_id=${storeId}&requestUserId=${common.getUserId()}`
+    // );
+    // hr.setRequestHeader("Content-Type", "application/json");
+    // hr.setRequestHeader("Authorization", common.getAccessToken());
+    // hr.send();
 }
 
-function initializeCountSuccess() {
+function initializeCountMessageHandler(message) {
+    console.log("received!!!");
+    console.log(message);
+    const body = JSON.parse(message.body);
+    console.log(body);
+
+    if (body.status == 200) {
+        initializeCountSuccess(body);
+    } else if (body.status == 401) {
+        common.redirectToLogin();
+    } else if (hr.status == 400) {
+        if (
+            (hr.status == responseBody.errorResponse.errorCode) ==
+            errorCode.ACCESS.ACCESS_NOT_ALLOWED
+        ) {
+            common.redirectToHome();
+        } else {
+            common.giveToastNoti(
+                "알 수 없는 이유로 담배 목록을 불러올 수 없습니다."
+            );
+        }
+    } else {
+        common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
+    }
+}
+
+function initializeCountSuccess(body) {
     const countInputs = document.querySelectorAll(".count_container input");
 
     for (const input of countInputs) {
@@ -568,7 +517,9 @@ function initializeCountSuccess() {
         input.setAttribute("value", "");
     }
 
-    common.giveToastNoti("입력된 갯수를 모두 지웠습니다");
+    if (body.data.requestUserId == common.getUserId())
+        common.giveToastNoti("입력된 갯수를 모두 지웠습니다");
+    else common.giveToastNoti("다른 사용자에 의해 갯수가 초기화되었습니다");
 }
 
 function showByModeAndOrder() {
@@ -715,9 +666,22 @@ function loadAllCigarettes() {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
-            const json = JSON.parse(hr.responseText);
+            const json = JSON.parse(hr.responseText).data;
             if (hr.status == 200) {
                 mappingDropdownCigarettes(json);
+            } else if (hr.status == 401) {
+                common.redirectToLogin();
+            } else if (hr.status == 400) {
+                if (
+                    responseBody.errorResponse.errorCode ==
+                    errorCode.ACCESS.ACCESS_NOT_ALLOWED
+                ) {
+                    common.redirectToHome();
+                } else {
+                    common.giveToastNoti(
+                        "알 수 없는 이유로 담배 목록을 불러올 수 없습니다."
+                    );
+                }
             } else {
                 // 에러 처리
                 // if (json.errorCode == errorCode.)
@@ -727,58 +691,13 @@ function loadAllCigarettes() {
         }
     };
 
-    hr.open("GET", "http://localhost:8060/api/cigarettes/all");
+    hr.open(
+        "GET",
+        `http://localhost:8060/api/cigarettes/all?requestUserId=${common.getUserId()}`
+    );
     hr.setRequestHeader("Content-Type", "application/json");
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
-}
-
-function loadMockNewCigarettes() {
-    return {
-        cigarettes: [
-            {
-                official_name: "말보로 하이브리드 5MG",
-                customized_name: "말보로 하이브리드 5MG",
-                file_path_large: "cigar_img/large_4x/cigar_199.jpg",
-                file_path_medium: "cigar_img/medium_4x/cigar_199.jpg",
-                vertical: true,
-                id: 199,
-            },
-            {
-                official_name: "히츠 유젠",
-                customized_name: "히츠 유젠",
-                file_path_large: "cigar_img/large_4x/cigar_198.jpg",
-                file_path_medium: "cigar_img/medium_4x/cigar_198.jpg",
-                vertical: false,
-                id: 198,
-            },
-            {
-                official_name: "히츠 퍼플 웨이브",
-                customized_name: "히츠 퍼플",
-                file_path_large: "cigar_img/large_4x/cigar_197.jpg",
-                file_path_medium: "cigar_img/medium_4x/cigar_197.jpg",
-                vertical: false,
-                id: 197,
-            },
-            {
-                official_name: "히츠 썸머 브리즈",
-                customized_name: "히츠 썸머 브리즈",
-                file_path_large: "cigar_img/large_4x/cigar_196.jpg",
-                file_path_medium: "cigar_img/medium_4x/cigar_196.jpg",
-                vertical: false,
-                id: 196,
-            },
-            {
-                official_name: "말보로 화이트 후레시",
-                customized_name: "말보로 화이트 후레시",
-                file_path_large: "cigar_img/large_4x/cigar_195.jpg",
-                file_path_medium: "cigar_img/medium_4x/cigar_195.jpg",
-                vertical: true,
-                id: 195,
-            },
-        ],
-        total: 5,
-    };
 }
 
 function cigaretteDropdownInteraction() {
@@ -878,36 +797,43 @@ function isAddMode() {
 
 function tryAdd() {
     // addSuccess(addResponseMock.data);
-    var hr = new XMLHttpRequest();
-    hr.onreadystatechange = () => {
-        if (hr.readyState == XMLHttpRequest.DONE) {
-            const json = JSON.parse(hr.responseText);
-            if (hr.status == 200) {
-                addSuccess(json);
-            } else if (
-                json.errorCode ==
-                errorCode.CIGARETTE_ON_LIST.DUPLICATE_CIGARETTE_ON_LIST
-            ) {
-                common.giveToastNoti("이미 목록에 있는 담배입니다");
-                saveBtn.disableBtn();
-            } else {
-                common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
-            }
-        }
-    };
 
-    const data = getAddData();
-    hr.open("POST", "http://localhost:8060/api/cigarette_on_lists");
-    hr.setRequestHeader("Content-Type", "application/json");
-    hr.setRequestHeader("Authorization", common.getAccessToken());
-    hr.send(JSON.stringify(data));
+    stomp.send(
+        "/pub/store/add_cigar",
+        getStompHeader(),
+        JSON.stringify(getAddData())
+    );
+
+    // var hr = new XMLHttpRequest();
+    // hr.onreadystatechange = () => {
+    //     if (hr.readyState == XMLHttpRequest.DONE) {
+    //         const json = JSON.parse(hr.responseText);
+    //         if (hr.status == 200) {
+    //             addSuccess(json);
+    //         } else if (
+    //             json.errorCode ==
+    //             errorCode.CIGARETTE_ON_LIST.DUPLICATE_CIGARETTE_ON_LIST
+    //         ) {
+    //             common.giveToastNoti("이미 목록에 있는 담배입니다");
+    //             saveBtn.disableBtn();
+    //         } else {
+    //             common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
+    //         }
+    //     }
+    // };
+
+    // const data = getAddData();
+    // hr.open("POST", "http://localhost:8060/api/cigarette_on_lists");
+    // hr.setRequestHeader("Content-Type", "application/json");
+    // hr.setRequestHeader("Authorization", common.getAccessToken());
+    // hr.send(JSON.stringify(data));
 }
 
 function addSuccess(json) {
     // 진열순 추가
     const cigaretteListTemplate = common.getTemplate("#cigaretteListTemplate");
 
-    const data = convertCigarData(json);
+    const data = convertCigarData(json.content);
 
     cigaretteListSection.innerHTML += cigaretteListTemplate(data);
 
@@ -922,13 +848,24 @@ function addSuccess(json) {
         data
     );
 
-    checkboxEventHandler();
+    if (json.requestUserId == common.getUserId()) {
+        checkboxEventHandler();
 
-    common.closeDialog(addCigaretteDialogScreen);
-    window.scrollTo({ top: 99999, behavior: "smooth" });
+        common.closeDialog(addCigaretteDialogScreen);
+        window.scrollTo({ top: 99999, behavior: "smooth" });
 
-    cigaretteListEventListeners();
-    showEmptyIfEmpty();
+        removeCigaretteListEventListeners();
+        cigaretteListEventListeners();
+        showEmptyIfEmpty();
+    }
+}
+
+function removeCigaretteListEventListeners() {
+    common.removeEventListenerToDOMbySelector(
+        ".cigarette_on_list input[type='number']",
+        "click",
+        countInputButtonHandler
+    );
 }
 
 export function convertCigarData(json) {
@@ -999,31 +936,72 @@ function openModifyDialog(e) {
 }
 
 function tryModify() {
-    var hr = new XMLHttpRequest();
-    hr.onreadystatechange = () => {
-        if (hr.readyState == XMLHttpRequest.DONE) {
-            const json = JSON.parse(hr.responseText);
-            if (hr.status == 200) modifySuccess(json);
-            else {
-                common.giveToastNoti("알 수 없는 이유로 수정할 수 없습니다.");
-            }
-        }
-    };
-
     const data = getModifyData();
-    const cigaretteOnListId = sessionStorage.getItem("currCigaretteOnListId");
 
-    hr.open(
-        "PUT",
-        `http://localhost:8060/api/cigarette_on_lists/${cigaretteOnListId}`
+    stomp.send(
+        "/pub/store/modify_cigar",
+        getStompHeader(),
+        JSON.stringify(data)
     );
-    hr.setRequestHeader("Content-Type", "application/json");
-    hr.setRequestHeader("Authorization", common.getAccessToken());
-    hr.send(JSON.stringify(data));
+
+    // var hr = new XMLHttpRequest();
+    // hr.onreadystatechange = () => {
+    //     if (hr.readyState == XMLHttpRequest.DONE) {
+    //         const json = JSON.parse(hr.responseText);
+    //         if (hr.status == 200) modifySuccess(json);
+    //         else {
+    //             common.giveToastNoti("알 수 없는 이유로 수정할 수 없습니다.");
+    //         }
+    //     }
+    // };
+
+    // const data = getModifyData();
+    // const cigaretteOnListId = sessionStorage.getItem("currCigaretteOnListId");
+
+    // hr.open(
+    //     "PUT",
+    //     `http://localhost:8060/api/cigarette_on_lists/${cigaretteOnListId}`
+    // );
+    // hr.setRequestHeader("Content-Type", "application/json");
+    // hr.setRequestHeader("Authorization", common.getAccessToken());
+    // hr.send(JSON.stringify(data));
 }
 
-function modifySuccess(cigar) {
-    const id = sessionStorage.getItem("currCigaretteOnListId");
+function getModifyData() {
+    return {
+        requestUserId: common.getUserId(),
+        responseChannel: channel.MODIFY(),
+        content: {
+            customizedName: addCigarCustomizedNameInput.value,
+            id: sessionStorage.getItem("currCigaretteOnListId"),
+            storeId: getStoreId(),
+        },
+    };
+}
+
+function modifyMessageHandler(message) {
+    if (JSON.parse(message.body).status == 200) modifySuccess(message);
+    else if (hr.status == 400) {
+        if (
+            (hr.status == responseBody.errorResponse.errorCode) ==
+            errorCode.ACCESS.ACCESS_NOT_ALLOWED
+        ) {
+            common.redirectToHome();
+        } else {
+            common.giveToastNoti(
+                "알 수 없는 이유로 담배 목록을 불러올 수 없습니다."
+            );
+        }
+    } else {
+        common.giveToastNoti("알 수 없는 이유로 수정할 수 없습니다.");
+    }
+}
+
+function modifySuccess(message) {
+    const data = JSON.parse(message.body).data;
+    const { requestUserId, content } = data;
+
+    const id = content.id;
     const displayOrderItem = findCurrCigarDOM(".cigarette_on_list", id);
 
     const computerizedOrderItem = findCurrCigarDOM(
@@ -1031,44 +1009,62 @@ function modifySuccess(cigar) {
         id
     );
 
-    displayOrderItem.setAttribute("customizedName", cigar.customizedName);
+    displayOrderItem.setAttribute("customizedName", content.customizedName);
     displayOrderItem.querySelector(".customized_name").innerText =
-        cigar.customizedName;
+        content.customizedName;
 
     computerizedOrderItem.querySelector(".customized_name").innerText =
-        cigar.customizedName;
+        content.customizedName;
 
-    common.closeDialog(addCigaretteDialogScreen);
-    common.giveToastNoti("수정 완료되었습니다");
+    if (requestUserId == common.getUserId()) {
+        common.closeDialog(addCigaretteDialogScreen);
+        common.giveToastNoti("수정 완료되었습니다");
+    }
 }
 
 function tryDelete() {
-    var hr = new XMLHttpRequest();
-    hr.onreadystatechange = () => {
-        if (hr.readyState == XMLHttpRequest.DONE) {
-            if (hr.status == 200) {
-                deleteSuccess();
-            } else {
-                // 에러 처리
-                // if (json.errorCode == errorCode.)
-
-                common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
-            }
-        }
+    const data = {
+        requestUserId: common.getUserId(),
+        responseChannel: channel.DELETE(),
+        content: {
+            storeId: getStoreId(),
+            id: sessionStorage.getItem("currCigaretteOnListId"),
+        },
     };
 
-    const cigaretteOnListId = sessionStorage.getItem("currCigaretteOnListId");
-    hr.open(
-        "DELETE",
-        `http://localhost:8060/api/cigarette_on_lists/${cigaretteOnListId}`
+    stomp.send(
+        "/pub/store/delete_cigar",
+        getStompHeader(),
+        JSON.stringify(data)
     );
-    hr.setRequestHeader("Content-Type", "application/json");
-    hr.setRequestHeader("Authorization", common.getAccessToken());
-    hr.send();
 }
 
-function deleteSuccess() {
-    const id = sessionStorage.getItem("currCigaretteOnListId");
+function deleteMessageHandler(message) {
+    const body = JSON.parse(message.body);
+    if (body.status == 200) {
+        deleteSuccess(message);
+    } else if (hr.status == 400) {
+        if (
+            (hr.status == responseBody.errorResponse.errorCode) ==
+            errorCode.ACCESS.ACCESS_NOT_ALLOWED
+        ) {
+            common.redirectToHome();
+        } else {
+            common.giveToastNoti(
+                "알 수 없는 이유로 담배 목록을 불러올 수 없습니다."
+            );
+        }
+    } else if (body.status == 401) {
+        common.redirectToLogin();
+    } else {
+        common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
+    }
+}
+
+function deleteSuccess(message) {
+    const data = JSON.parse(message.body).data;
+    const { requestUserId, content } = data;
+    const id = content.idList[0];
     const displayOrderItem = findCurrCigarDOM(".cigarette_on_list", id);
     const computerizedOrderItem = findCurrCigarDOM(
         ".cigarette_on_list_computerized",
@@ -1077,13 +1073,27 @@ function deleteSuccess() {
     displayOrderItem.remove();
     computerizedOrderItem.remove();
 
-    common.closeDialog(addCigaretteDialogScreen);
-    common.giveToastNoti("담배 1개가 삭제되었습니다.");
-    minusSelectedNum();
+    if (requestUserId == common.getUserId()) {
+        common.closeDialog(addCigaretteDialogScreen);
+        common.giveToastNoti("담배 1개가 삭제되었습니다.");
+        minusSelectedNum();
+    } else {
+        if (
+            common.dialogIsOn(addCigaretteDialogScreen) &&
+            !isAddMode() &&
+            sessionStorage.getItem("currCigaretteOnListId") == content.idList[0]
+        ) {
+            common.closeDialog(addCigaretteDialogScreen);
+            common.giveToastNoti(
+                "해당 담배가 다른 사용자에 의해 삭제되었습니다."
+            );
+            minusSelectedNum();
+        }
+    }
     showEmptyIfEmpty();
 }
 
-function findCurrCigarDOM(selector, id) {
+export function findCurrCigarDOM(selector, id) {
     for (const item of document.querySelectorAll(selector)) {
         if (item.id == id) return item;
     }
@@ -1091,15 +1101,13 @@ function findCurrCigarDOM(selector, id) {
 
 function getAddData() {
     return {
-        storeId: sessionStorage.getItem("storeId"),
-        cigaretteId: sessionStorage.getItem("currSelectedCigaretteId"),
-        customizedName: addCigarCustomizedNameInput.value,
-    };
-}
-
-function getModifyData() {
-    return {
-        customizedName: addCigarCustomizedNameInput.value,
+        requestUserId: common.getUserId(),
+        responseChannel: channel.ADD_CIGAR(),
+        content: {
+            storeId: sessionStorage.getItem("storeId"),
+            cigaretteId: sessionStorage.getItem("currSelectedCigaretteId"),
+            customizedName: addCigarCustomizedNameInput.value,
+        },
     };
 }
 
@@ -1126,6 +1134,7 @@ function cigaretteSearchInteraction() {
 function exitSearchMode() {
     cancelFilter();
     common.showDOM(mainHeader);
+    common.showDOM(sortBtnContainer);
     common.hideDOM(searchHeader);
     searchInput.value = "";
 }
@@ -1199,37 +1208,35 @@ function countInputInteraction() {
 function countInputButtonHandler(e) {
     const countInput = e.target;
     // 값 변할때마다 업데이트
+    countInput.removeEventListener("keyup", common.updateInputValue);
     countInput.addEventListener("keyup", common.updateInputValue);
     // 값 입력 완료할 때마다 수정 쿼리 날림
-    countInput.addEventListener("change", (e) => {
-        const data = {
-            count: e.target.value || -1,
-        };
-        const id = e.target.closest("li").id;
-        updateCount(id, data);
-    });
+    countInput.removeEventListener("change", tryUpdateCount);
+    countInput.addEventListener("change", tryUpdateCount);
+}
+
+function tryUpdateCount(e) {
+    const data = {
+        count: e.target.value || -1,
+    };
+    const id = e.target.closest("li").id;
+    updateCount(id, data);
 }
 
 function updateCount(id, data) {
-    var hr = new XMLHttpRequest();
-    hr.onreadystatechange = () => {
-        if (hr.readyState == XMLHttpRequest.DONE) {
-            if (hr.status == 200) {
-                //
-            } else {
-                common.giveToastNoti(
-                    "알 수 없는 이유로 데이터를 업데이트 할수 없습니다."
-                );
-            }
-        }
-    };
-    hr.open(
-        "PUT",
-        `http://localhost:8060/api/cigarette_on_lists/${id}/update_count`
+    stomp.send(
+        "/pub/store/cigar_num",
+        getStompHeader(),
+        JSON.stringify({
+            responseChannel: channel.CIGAR_NUM(),
+            requestUserId: common.getUserId(),
+            content: {
+                storeId: getStoreId(),
+                cigarOnListId: id,
+                num: data.count,
+            },
+        })
     );
-    hr.setRequestHeader("Content-Type", "application/json");
-    hr.setRequestHeader("Authorization", common.getAccessToken());
-    hr.send(JSON.stringify(data));
 }
 
 export function uncheckAll(page) {
@@ -1256,4 +1263,121 @@ export function minusSelectedNum() {
         movementBtn.disableBtn();
         addCigaretteBtn.enableBtn();
     }
+}
+
+function enableSocket() {
+    var sockJs = new SockJS(`http://localhost:8060/stomp/store`, null, {
+        transports: ["websocket", "xhr-streaming", "xhr-polling"],
+    });
+
+    // 1. SockJS 내부에 들고있는 stomp를 내어줌
+    stomp = Stomp.over(sockJs);
+
+    // 2. connection이 맺어지면 실행
+    stomp.connect({}, function () {
+        console.log("STOMP Connection");
+
+        // 3. subscribe(path, callback)으로 메시지를 받을 수 있음
+        stomp.subscribe(channel.CIGAR_NUM(), cigarNumMessageHandler);
+
+        stomp.subscribe(channel.ADD_CIGAR(), addCigarMessageHandler);
+        stomp.subscribe("/user" + channel.ADD_CIGAR(), addCigarMessageHandler);
+
+        stomp.subscribe(channel.MODIFY(), modifyMessageHandler);
+        stomp.subscribe("/user" + channel.MODIFY(), modifyMessageHandler);
+
+        stomp.subscribe(
+            channel.INITIALIZE_COUNT(),
+            initializeCountMessageHandler
+        );
+        stomp.subscribe(
+            "/user" + channel.INITIALIZE_COUNT(),
+            initializeCountMessageHandler
+        );
+
+        stomp.subscribe(channel.REORDER(), reorder.reorderMessageHandler);
+        stomp.subscribe(
+            "/user" + channel.REORDER(),
+            reorder.reorderMessageHandler
+        );
+
+        stomp.subscribe(channel.DELETE(), deleteMessageHandler);
+        stomp.subscribe("/user" + channel.DELETE(), deleteMessageHandler);
+    });
+}
+
+export const channel = {
+    ADD_CIGAR: () => "/sub/store/" + getStoreId() + "/add_cigar",
+    CIGAR_NUM: () => "/sub/store/" + getStoreId() + "/cigar_num",
+    INITIALIZE_COUNT: () => "/sub/store/" + getStoreId() + "/initialize_count",
+    MODIFY: () => "/sub/store/" + getStoreId() + "/modify_cigar",
+    REORDER: () => "/sub/store/" + getStoreId() + "/reorder",
+    DELETE: () => "/sub/store/" + getStoreId() + "/delete_cigar",
+};
+
+function cigarNumMessageHandler(message) {
+    console.log(message);
+    const body = JSON.parse(message.body);
+    const data = body.data;
+    const { requestUserId, content } = data;
+
+    if (body.status == 200) {
+        console.log(content);
+        const { id, count } = content;
+        modifyCigarNum(id, count);
+    } else if (body.status == 401) {
+        redirectToLogin();
+    } else if (
+        body.status == 400 &&
+        body.errorResponse.errorCode == errorCode.ACCESS.ACCESS_NOT_ALLOWED
+    ) {
+        redirectToHome();
+    } else {
+        common.giveToastNoti("알 수 없는 이유로 저장되지 않습니다.");
+    }
+}
+
+function modifyCigarNum(cigarOnListId, num) {
+    for (const item of document.querySelectorAll(".cigarette_on_list")) {
+        if (item.getAttribute("id") == cigarOnListId) {
+            console.log(item.querySelector("input"));
+            item.querySelector(".count_container input").value = num;
+            item.querySelector(".count_container input").setAttribute(
+                "value",
+                num
+            );
+        }
+    }
+}
+
+function addCigarMessageHandler(message) {
+    console.log("received!!!");
+    console.log(message);
+    const body = JSON.parse(message.body);
+    const data = body.data;
+
+    if (body.status == 200) {
+        addSuccess(data);
+    } else if (
+        body.errorResponse.errorCode ==
+        errorCode.CIGARETTE_ON_LIST.DUPLICATE_CIGARETTE_ON_LIST
+    ) {
+        common.giveToastNoti("이미 목록에 있는 담배입니다");
+        saveBtn.disableBtn();
+    } else if (
+        body.errorResponse.errorCode == errorCode.ACCESS.ACCESS_NOT_ALLOWED
+    ) {
+        common.redirectToHome();
+    } else if (body.status == 401) {
+        common.redirectToLogin();
+    } else {
+        common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
+    }
+}
+
+export function getStompHeader() {
+    return {
+        Authorization: common.getAccessToken(),
+        "Content-Type": "application/json",
+    };
 }

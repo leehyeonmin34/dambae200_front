@@ -112,7 +112,7 @@ function loadMyStores() {
             if (hr.status == 401) {
                 redirectToLogin();
             } else if (hr.status == 200) {
-                const response = JSON.parse(hr.responseText);
+                const response = JSON.parse(hr.responseText).data;
 
                 // 매장 리스트
                 mappingStoreData(response.myStores);
@@ -380,7 +380,10 @@ function deleteStoreRequest(storeDOM) {
         }
     };
 
-    hr.open("DELETE", `http://localhost:8060/api/stores/${id}`);
+    hr.open(
+        "DELETE",
+        `http://localhost:8060/api/stores/${id}?userId=${common.getUserId()}`
+    );
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
 }

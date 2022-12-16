@@ -29,7 +29,7 @@ function loadMoreNotifications() {
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
             if (hr.status == 200) {
-                var response = JSON.parse(hr.responseText);
+                var response = JSON.parse(hr.responseText).data;
                 console.log(response);
 
                 mappingNotifications(response);

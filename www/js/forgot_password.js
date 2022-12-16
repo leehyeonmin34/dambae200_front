@@ -25,8 +25,8 @@ function inputInteraction() {
 }
 
 function trySend() {
-    showCompletePage();
-    // sendRequest();
+    // showCompletePage();
+    sendRequest();
 }
 
 function sendRequest() {
@@ -34,11 +34,16 @@ function sendRequest() {
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
             const responseBody = JSON.parse(hr.responseText);
-            if (hr.status == 200) {
+            console.log(responseBody);
+            if (responseBody.status == 200) {
                 requestSuccess();
-            } else if (hr.status == 400) {
-                if (responseBody.errorCode == errorCode.USER.EMAIL_NOT_EXISTS) {
-                    ommon.giveToastNoti("존재하지 않는 이메일입니다");
+            } else if (responseBody.status == 400) {
+                if (
+                    responseBody.errorResponse.errorCode ==
+                    errorCode.USER.EMAIL_NOT_FOUND
+                ) {
+                    common.giveToastNoti("존재하지 않는 이메일입니다");
+                    sendBtn.disableBtn();
                 } else {
                     common.giveToastNoti(
                         "알 수 없는 이유로 전송할 수 없습니다"
@@ -52,10 +57,10 @@ function sendRequest() {
 
     hr.open(
         "POST",
-        `http://localhost:8060/api/users/send_temp_pw?email=${emailInput.value}`
+        `http://localhost:8060/api/forgot_pw?email=${emailInput.value}`
     );
     hr.setRequestHeader("Content-Type", "application/json");
-    hr.send(JSON.stringify(data));
+    hr.send();
 }
 
 function requestSuccess() {

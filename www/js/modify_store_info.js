@@ -92,11 +92,14 @@ function tryModify() {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
-            const responseBody = JSON.parse(hr.responseText);
+            const responseBody = JSON.parse(hr.responseText).data;
             if (hr.status == 200) {
                 modifySuccess();
             } else if (hr.status == 400) {
-                if (responseBody.errorCode == errorCode.STORE.DUPLICATE_STORE)
+                if (
+                    responseBody.errorResponse.errorCode ==
+                    errorCode.STORE.DUPLICATE_STORE
+                )
                     duplicateStore();
                 else {
                     common.giveToastNoti(
@@ -125,6 +128,7 @@ function getFormData() {
     return {
         name: storeNameInput.value,
         storeBrandCode: checkedBrandCode,
+        userId: common.getUserId(),
     };
 }
 

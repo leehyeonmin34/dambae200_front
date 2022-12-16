@@ -46,7 +46,8 @@ function sendRequest() {
                 requestSuccess();
             } else if (hr.status == 400) {
                 if (
-                    responseBody.errorCode == errorCode.USER.LOGIN_INPUT_INVALID
+                    responseBody.errorResponse.errorCode ==
+                    errorCode.USER.LOGIN_INPUT_INVALID
                 )
                     prevPwFail();
                 else

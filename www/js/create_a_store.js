@@ -73,7 +73,10 @@ function tryCreate() {
             if (hr.status == 200) {
                 postSuccess();
             } else if (hr.status == 400) {
-                if (responseBody.errorCode == errorCode.STORE.DUPLICATE_STORE)
+                if (
+                    responseBody.errorResponse.errorCode ==
+                    errorCode.STORE.DUPLICATE_STORE
+                )
                     duplicateStore();
                 else
                     common.giveToastNoti(

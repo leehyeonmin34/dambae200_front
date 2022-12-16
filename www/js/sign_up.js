@@ -69,7 +69,6 @@ function sendRequest() {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
-            const responseBody = JSON.parse(hr.responseText);
             if (hr.status == 200) {
                 requestSuccess();
             } else common.giveToastNoti("알 수 없는 이유로 수정할 수 없습니다");
@@ -107,16 +106,6 @@ function validateNickname() {
         inputFail(nicknameInput, "닉네임을 입력해주세요");
         nicknameValidBtn.enableBtn();
     } else inputDuplicate("nickname", nicknameInput, "exists_by_nickname");
-}
-
-function emailDuplicate() {
-    // return false;
-    return;
-}
-
-function nicknameDuplicate() {
-    // return false;
-    return inputDuplicate("nickname", nicknameInput, "exists_by_nickname");
 }
 
 function inputDuplicate(field, inputDOM, api) {
