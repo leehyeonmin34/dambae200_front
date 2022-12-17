@@ -237,12 +237,12 @@ function loadCigarette() {
         }
     };
     //hr추가
-    const id = sessionStorage.getItem("storeId");
+    const storeId = sessionStorage.getItem("storeId");
     hr.open(
         "GET",
         `http://${
             common.env.SERVER_HOST_PORT
-        }/api/cigarette_on_lists/${id}/display_order?requestUserId=${common.getUserId()}`
+        }/api/cigarette_on_lists/display_order?storeId=${storeId}&requestUserId=${common.getUserId()}`
     );
 
     hr.setRequestHeader("Authorization", common.getAccessToken());
