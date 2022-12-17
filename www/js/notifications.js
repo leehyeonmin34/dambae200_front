@@ -45,7 +45,9 @@ function loadMoreNotifications() {
     };
     hr.open(
         "GET",
-        `http://localhost:8060/api/notifications?userId=${common.getUserId()}&page=${pageNum}`
+        `http://${
+            common.env.SERVER_HOST_PORT
+        }/api/notifications?userId=${common.getUserId()}&page=${pageNum}`
     );
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
@@ -121,7 +123,10 @@ function deleteNoti(e) {
             }
         }
     };
-    hr.open("DELETE", `http://localhost:8060/api/notifications/${id}`);
+    hr.open(
+        "DELETE",
+        `http://${common.env.SERVER_HOST_PORT}/api/notifications/${id}`
+    );
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
 }
