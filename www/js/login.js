@@ -60,7 +60,7 @@ function sendRequest() {
     };
 
     const data = getData();
-    hr.open("POST", `http://localhost:8060/api/login`);
+    hr.open("POST", `http://${common.env.SERVER_HOST_PORT}/api/login`);
     hr.setRequestHeader("Content-Type", "application/json");
     hr.send(JSON.stringify(data));
 }
