@@ -1389,3 +1389,17 @@ export function getStompHeader() {
         "Content-Type": "application/json",
     };
 }
+
+$(function () {
+    $(document).on("keyup", "input[counterInput]", function (e) {
+        if (e.keyCode === 13) {
+            event.preventDefault();
+            const nextInput = $(this).closest("li").next("li").find("input");
+            if ($nextInput.length > 0) {
+                nextInput.focus();
+            } else {
+                nextInput.blur();
+            }
+        }
+    });
+});
