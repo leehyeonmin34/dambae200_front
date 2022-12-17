@@ -201,6 +201,7 @@ label.input_label {
 input {
     background: #f4f8fc;
     border-radius: 10px;
+    -webkit-border-radius: 10px;
     width: 100%;
     height: 38px;
     border: none;

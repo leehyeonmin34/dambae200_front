@@ -1397,11 +1397,12 @@ $(function () {
             const nextInput = $(this).closest("li").next("li").find("input");
             if (nextInput.length > 0) {
                 nextInput.focus();
-                nextInput.value = nextInput.val();
-                console.log(nextInput.value);
             } else {
                 $(this).blur();
             }
         }
+    });
+    $(document).on("onfocus", "input[counterInput]", function (e) {
+        $(this).value = $(this).val();
     });
 });
