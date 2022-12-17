@@ -1391,6 +1391,9 @@ export function getStompHeader() {
 }
 
 $(function () {
+    $(document).on("onfocus", "input[counterInput]", function (e) {
+        $(this).value = $(this).val();
+    });
     $(document).on("keyup", "input[counterInput]", function (e) {
         if (e.keyCode === 13) {
             event.preventDefault();
@@ -1401,8 +1404,5 @@ $(function () {
                 $(this).blur();
             }
         }
-    });
-    $(document).on("onfocus", "input[counterInput]", function (e) {
-        $(this).value = $(this).val();
     });
 });

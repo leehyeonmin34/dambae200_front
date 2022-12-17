@@ -56,11 +56,17 @@ function sortableUpdate(event, ui, type) {
     const toIdx = item.index();
     // console.log(item.next());
     // console.log(item.next()[0]);
-    const insertBeforeCigarId = item.next()[0].getAttribute("id");
+    const insertBeforeCigar = item.next()[0];
     const movedCigarId = item[0].getAttribute("id");
+    var insertBeforeCigarId = null;
+    if (insertBeforeCigar) {
+        // 놓여진 자리 다음 담배가 있을 때
+        insertBeforeCigarId = insertBeforeCigar.getAttribute("id");
+    }
     console.log("UPDATE");
     console.log(insertBeforeCigarId, movedCigarId);
     console.log("from ", ui.item.data("start_pos"), " to ", ui.item.index());
+
     trySendReorderInfo(type, fromIdx, toIdx, insertBeforeCigarId, movedCigarId);
 
     // console.log($(".cigarette_list").sortable("toArray"));
@@ -187,11 +193,18 @@ function applyNewOrder(section, selector, data) {
     console.log(insertBeforeCigarId);
 
     const movedItem = displayOrder.findCurrCigarDOM(selector, movedCigarId);
-    const insertBeforeCigarItem = displayOrder.findCurrCigarDOM(
-        selector,
-        insertBeforeCigarId
-    );
-    section.insertBefore(movedItem, insertBeforeCigarItem);
+
+    if (insertBeforeCigarId == null) {
+        // 이동된 자리 다음에 아무것도 없을 때 (맨 마지막 자리로 배정받을 때)
+        section.appendChild(movedItem);
+        movedItem.remove();
+    } else {
+        const insertBeforeCigarItem = displayOrder.findCurrCigarDOM(
+            selector,
+            insertBeforeCigarId
+        );
+        section.insertBefore(movedItem, insertBeforeCigarItem);
+    }
 }
 
 function getReorderInfoData(
