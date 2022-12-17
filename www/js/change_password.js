@@ -65,7 +65,9 @@ function sendRequest() {
     const data = getData();
     hr.open(
         "PUT",
-        `http://localhost:8060/api/users/${common.getUserId()}/change_pw`
+        `http://${
+            common.env.SERVER_HOST_PORT
+        }/api/users/${common.getUserId()}/change_pw`
     );
     hr.setRequestHeader("Content-Type", "application/json");
     hr.setRequestHeader("Authorization", common.getAccessToken());

@@ -31,7 +31,10 @@ function loadAndMapMyData() {
         }
     };
 
-    hr.open("GET", `http://localhost:8060/api/users/${common.getUserId()}`);
+    hr.open(
+        "GET",
+        `http://${common.env.SERVER_HOST_PORT}/api/users/${common.getUserId()}`
+    );
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
 }
@@ -91,7 +94,10 @@ function trySend() {
     };
 
     const data = getData();
-    hr.open("PUT", `http://localhost:8060/api/users/${common.getUserId()}`);
+    hr.open(
+        "PUT",
+        `http://${common.env.SERVER_HOST_PORT}/api/users/${common.getUserId()}`
+    );
     hr.setRequestHeader("Content-Type", "application/json");
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send(JSON.stringify(data));

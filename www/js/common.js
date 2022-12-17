@@ -247,3 +247,7 @@ export function stopFunc(e) {
     e.stopPropagation();
     return false;
 }
+
+export const env = {
+    SERVER_HOST_PORT: "118.67.135.98:80",
+};

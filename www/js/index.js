@@ -138,7 +138,9 @@ function loadMyStores() {
     console.log(requestBody);
     hr.open(
         "GET",
-        `http://localhost:8060/api/users/${common.getUserId()}/home`
+        `http://${
+            common.env.SERVER_HOST_PORT
+        }/api/users/${common.getUserId()}/home`
     );
     hr.setRequestHeader("Content-Type", "application/json");
     hr.setRequestHeader("Authorization", common.getAccessToken());
@@ -382,7 +384,9 @@ function deleteStoreRequest(storeDOM) {
 
     hr.open(
         "DELETE",
-        `http://localhost:8060/api/stores/${id}?userId=${common.getUserId()}`
+        `http://${
+            common.env.SERVER_HOST_PORT
+        }/api/stores/${id}?userId=${common.getUserId()}`
     );
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
@@ -406,7 +410,10 @@ function deleteAccessRequest(storeDOM, successMsg) {
         }
     };
 
-    hr.open("DELETE", `http://localhost:8060/api/accesses/${id}`);
+    hr.open(
+        "DELETE",
+        `http://${common.env.SERVER_HOST_PORT}/api/accesses/${id}`
+    );
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
 }

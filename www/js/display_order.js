@@ -240,7 +240,9 @@ function loadCigarette() {
     const id = sessionStorage.getItem("storeId");
     hr.open(
         "GET",
-        `http://localhost:8060/api/cigarette_on_lists/${id}/display_order?requestUserId=${common.getUserId()}`
+        `http://${
+            common.env.SERVER_HOST_PORT
+        }/api/cigarette_on_lists/${id}/display_order?requestUserId=${common.getUserId()}`
     );
 
     hr.setRequestHeader("Authorization", common.getAccessToken());
@@ -476,7 +478,7 @@ function tryInitializeCount() {
     // const storeId = sessionStorage.getItem("storeId");
     // hr.open(
     //     "PUT",
-    //     `http://localhost:8060/api/cigarette_on_lists/initialize_count?store_id=${storeId}&requestUserId=${common.getUserId()}`
+    //     `http://${common.env.SERVER_HOST_PORT}/api/cigarette_on_lists/initialize_count?store_id=${storeId}&requestUserId=${common.getUserId()}`
     // );
     // hr.setRequestHeader("Content-Type", "application/json");
     // hr.setRequestHeader("Authorization", common.getAccessToken());
@@ -693,7 +695,9 @@ function loadAllCigarettes() {
 
     hr.open(
         "GET",
-        `http://localhost:8060/api/cigarettes/all?requestUserId=${common.getUserId()}`
+        `http://${
+            common.env.SERVER_HOST_PORT
+        }/api/cigarettes/all?requestUserId=${common.getUserId()}`
     );
     hr.setRequestHeader("Content-Type", "application/json");
     hr.setRequestHeader("Authorization", common.getAccessToken());
@@ -823,7 +827,7 @@ function tryAdd() {
     // };
 
     // const data = getAddData();
-    // hr.open("POST", "http://localhost:8060/api/cigarette_on_lists");
+    // hr.open("POST", "http://${common.env.SERVER_HOST_PORT}/api/cigarette_on_lists");
     // hr.setRequestHeader("Content-Type", "application/json");
     // hr.setRequestHeader("Authorization", common.getAccessToken());
     // hr.send(JSON.stringify(data));
@@ -960,7 +964,7 @@ function tryModify() {
 
     // hr.open(
     //     "PUT",
-    //     `http://localhost:8060/api/cigarette_on_lists/${cigaretteOnListId}`
+    //     `http://${common.env.SERVER_HOST_PORT}/api/cigarette_on_lists/${cigaretteOnListId}`
     // );
     // hr.setRequestHeader("Content-Type", "application/json");
     // hr.setRequestHeader("Authorization", common.getAccessToken());
@@ -1266,9 +1270,13 @@ export function minusSelectedNum() {
 }
 
 function enableSocket() {
-    var sockJs = new SockJS(`http://localhost:8060/stomp/store`, null, {
-        transports: ["websocket", "xhr-streaming", "xhr-polling"],
-    });
+    var sockJs = new SockJS(
+        `http://${common.env.SERVER_HOST_PORT}/stomp/store`,
+        null,
+        {
+            transports: ["websocket", "xhr-streaming", "xhr-polling"],
+        }
+    );
 
     // 1. SockJS 내부에 들고있는 stomp를 내어줌
     stomp = Stomp.over(sockJs);

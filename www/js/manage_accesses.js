@@ -37,7 +37,10 @@ function loadStoreAccesses() {
     };
 
     const storeId = sessionStorage.getItem("currStoreId");
-    hr.open("GET", "http://localhost:8060/api/accesses?storeId=" + storeId);
+    hr.open(
+        "GET",
+        `http://${common.env.SERVER_HOST_PORT}/api/accesses?storeId=` + storeId
+    );
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();
 }
@@ -255,7 +258,7 @@ function modifyAccessRequest(accessId, accessType, successMsg) {
 
     hr.open(
         "PUT",
-        `http://localhost:8060/api/accesses/${accessId}/byadmin?accessTypeCode=${accessType.code}`
+        `http://${common.env.SERVER_HOST_PORT}/api/accesses/${accessId}/byadmin?accessTypeCode=${accessType.code}`
     );
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send();

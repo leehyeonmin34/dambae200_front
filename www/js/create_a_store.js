@@ -90,7 +90,7 @@ function tryCreate() {
     };
 
     const data = getFormData();
-    hr.open("POST", "http://localhost:8060/api/stores");
+    hr.open("POST", `http://${common.env.SERVER_HOST_PORT}/api/stores`);
     hr.setRequestHeader("Content-Type", "application/json");
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send(JSON.stringify(data));

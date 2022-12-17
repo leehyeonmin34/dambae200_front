@@ -57,7 +57,7 @@ function sendRequest() {
 
     hr.open(
         "POST",
-        `http://localhost:8060/api/forgot_pw?email=${emailInput.value}`
+        `http://${common.env.SERVER_HOST_PORT}/api/forgot_pw?email=${emailInput.value}`
     );
     hr.setRequestHeader("Content-Type", "application/json");
     hr.send();

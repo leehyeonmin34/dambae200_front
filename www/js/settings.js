@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         };
-        hr.open("POST", "http://localhost:8060/api/logout");
+        hr.open("POST", `http://${common.env.SERVER_HOST_PORT}/api/logout`);
         hr.setRequestHeader("Authorization", common.getAccessToken());
         hr.send();
     }

@@ -116,7 +116,10 @@ function tryModify() {
 
     const data = getFormData();
     const storeId = getStoreId();
-    hr.open("PUT", `http://localhost:8060/api/stores/${storeId}`);
+    hr.open(
+        "PUT",
+        `http://${common.env.SERVER_HOST_PORT}/api/stores/${storeId}`
+    );
     hr.setRequestHeader("Content-Type", "application/json");
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send(JSON.stringify(data));

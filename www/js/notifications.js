@@ -200,7 +200,10 @@ function markAsRead(unread) {
         };
 
         var hr = new XMLHttpRequest();
-        hr.open("PUT", `http://localhost:8060/api/notifications/read`);
+        hr.open(
+            "PUT",
+            `http://${common.env.SERVER_HOST_PORT}/api/notifications/read`
+        );
         hr.setRequestHeader("Content-Type", "application/json");
         hr.setRequestHeader("Authorization", common.getAccessToken());
         hr.send(JSON.stringify(data));

@@ -45,7 +45,7 @@ function loadStoresByNameLike(name) {
 
         hr.open(
             "GET",
-            `http://localhost:8060/api/stores?name=${encodedInputValue}`
+            `http://${common.env.SERVER_HOST_PORT}/api/stores?name=${encodedInputValue}`
         );
         hr.setRequestHeader("Authorization", common.getAccessToken());
         hr.send();
@@ -164,7 +164,7 @@ function applyRequest(storeId, userId) {
         userId,
     };
     console.log(data);
-    hr.open("POST", "http://localhost:8060/api/accesses");
+    hr.open("POST", `http://${common.env.SERVER_HOST_PORT}/api/accesses`);
     hr.setRequestHeader("Content-type", "application/json");
     hr.setRequestHeader("Authorization", common.getAccessToken());
     hr.send(JSON.stringify(data));

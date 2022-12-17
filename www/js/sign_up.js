@@ -76,7 +76,7 @@ function sendRequest() {
     };
 
     const data = getData();
-    hr.open("POST", `http://localhost:8060/api/users`);
+    hr.open("POST", `http://${common.env.SERVER_HOST_PORT}/api/users`);
     hr.setRequestHeader("Content-Type", "application/json");
     hr.send(JSON.stringify(data));
 }
@@ -112,34 +112,40 @@ function inputDuplicate(field, inputDOM, api) {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
-            const response = hr.responseText;
-            if (field == "nickname") {
-                if (response == "false") nicknameValidBtn.disableBtn();
-                else {
-                    console.log(response);
-                    nicknameValidBtn.enableBtn();
-                    inputFail(nicknameInput, "중복된 닉네임입니다.");
-                }
-            } else if (field == "email") {
-                if (response == "false") emailValidBtn.disableBtn();
-                else {
-                    emailValidBtn.enableBtn();
-                    inputFail(emailInput, "중복된 이메일입니다.");
+            // const response = hr.responseText;
+            const responseBody = JSON.parse(hr.responseText);
+            const data = responseBody.data;
+            console.log(responseBody);
+            if (responseBody.status == 200) {
+                if (field == "nickname") {
+                    if (data == false) nicknameValidBtn.disableBtn();
+                    else {
+                        console.log(data);
+                        nicknameValidBtn.enableBtn();
+                        inputFail(nicknameInput, "중복된 닉네임입니다.");
+                    }
+                } else if (field == "email") {
+                    if (data == false) emailValidBtn.disableBtn();
+                    else {
+                        emailValidBtn.enableBtn();
+                        inputFail(emailInput, "중복된 이메일입니다.");
+                    }
+                } else {
+                    common.giveToastNoti(
+                        "알 수 없는 이유로 확인할 수 없습니다."
+                    );
                 }
             } else {
+                console.log(10);
                 common.giveToastNoti("알 수 없는 이유로 확인할 수 없습니다.");
             }
-            const responseBody = JSON.parse(hr.responseText);
-            if (hr.status == 200) {
-                return responseBody;
-            } else common.giveToastNoti("알 수 없는 이유로 확인할 수 없습니다");
         }
     };
 
     const data = getData();
     hr.open(
         "GET",
-        `http://localhost:8060/api/users/${api}?${field}=${inputDOM.value}`
+        `http://${common.env.SERVER_HOST_PORT}/api/users/${api}?${field}=${inputDOM.value}`
     );
     hr.setRequestHeader("Content-Type", "application/json");
     hr.send(JSON.stringify(data));
