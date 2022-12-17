@@ -1398,6 +1398,7 @@ $(function () {
             if (nextInput.length > 0) {
                 nextInput.focus();
                 nextInput.value = nextInput.val();
+                console.log(nextInput.value);
             } else {
                 $(this).blur();
             }
