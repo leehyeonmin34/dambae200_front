@@ -1397,8 +1397,9 @@ $(function () {
             const nextInput = $(this).closest("li").next("li").find("input");
             if (nextInput.length > 0) {
                 nextInput.focus();
+                nextInput.value = nextInput.value;
             } else {
-                nextInput.blur();
+                $(this).blur();
             }
         }
     });
