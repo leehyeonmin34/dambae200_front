@@ -55,7 +55,7 @@ function goNext() {
 }
 
 function moveToNewPage() {
-    page_offset = -1 * screen.width * page;
+    page_offset = -1 * window.innerWidth * page;
     content_containers.setAttribute(
         "style",
         `transform:translateX(${page_offset}px);`

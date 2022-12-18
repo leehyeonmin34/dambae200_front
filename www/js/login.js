@@ -3,6 +3,7 @@ import errorCode from "./errorCode.js";
 
 const loginBtnDOM = document.querySelector("#login_btn");
 const signUpBtnDOM = document.querySelector("#sign_up_btn");
+const onboardingBtnDOM = document.querySelector("#onboarding_btn");
 const forgotPwBtnDOM = document.querySelector("a");
 const emailInput = document.querySelector("input[name='email']");
 const pwInput = document.querySelector("input[name='pw']");
@@ -21,9 +22,14 @@ function btnInteraction() {
         signUpBtnDOM,
         () => (location.href = "sign_up.html")
     );
+    const onboardingBtn = new common.ButtonManager(
+        onboardingBtnDOM,
+        () => (location.href = "onboarding.html")
+    );
 
     loginBtn.enableBtn();
     signUpBtn.enableBtn();
+    onboardingBtn.enableBtn();
 }
 
 function tryLogin() {

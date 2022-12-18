@@ -1,14 +1,26 @@
 @import "common.css";
 
 .section_top {
-    margin: 20px 20px 0;
+    margin: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
     height: 264px;
-    margin-bottom: 20px;
+}
+
+.section_top .section-top-mid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    /* margin-top: 20px; */
+}
+
+.section_top .section-top-mid .top-left {
+    position: relative;
 }
 
 img[alt="logo"] {
@@ -21,13 +33,34 @@ img[alt="logo"] {
 #welcome {
     font-weight: 700;
     font-size: 20px;
-    line-height: 170%;
+    line-height: 150%;
     color: #2d313e;
 }
 
+#onboarding_btn {
+    width: max-content;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background-color: #2d313e;
+    color: #ebf0f8;
+    font-size: 12px;
+    margin-top: 10px;
+    position: absolute;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+#onboarding_btn img {
+    width: 16px;
+    margin-left: 4px;
+}
+
 img[alt="login_icon"] {
-    width: 80px;
-    margin-bottom: 4px;
+    width: 60px;
+    transform: translate(-30px, 20px);
+    /* margin-right: 25%; */
+    /* margin-bottom: 4px; */
 }
 
 a {
@@ -40,6 +73,7 @@ a {
     letter-spacing: -0.24px;
     text-decoration-line: underline;
     color: #9baab7;
+    margin-right: 20px;
 }
 
 a:active {
