@@ -92,27 +92,6 @@ export function trySendReorderInfo(
         displayOrder.getStompHeader(),
         JSON.stringify(data)
     );
-    // var hr = new XMLHttpRequest();
-    // hr.onreadystatechange = () => {
-    //     if (hr.readyState == XMLHttpRequest.DONE) {
-    //         const json = JSON.parse(hr.responseText);
-    //         if (hr.status == 200) {
-    //             sendReorderInfoSuccess();
-    //         } else {
-    //             // 에러 처리
-    //             // if (json.errorCode == errorCode.)
-
-    //             common.giveToastNoti("알 수 없는 이유로 수행할 수 없습니다.");
-    //         }
-    //     }
-    // };
-
-    // const data = getReorderInfoData();
-
-    // hr.open("PUT", "http://localhost:8060/api/cigarette_on_lists/reorder");
-    // hr.setRequestHeader("Content-Type", "application/json");
-    // hr.setRequestHeader("Authorization", common.getAccessToken());
-    // hr.send(JSON.stringify(data));
 }
 
 export function reorderMessageHandler(message) {
@@ -245,6 +224,7 @@ function mergeOrderData(l1, l2) {
     return result;
 }
 
+// 진열순 목록의 담배들을 DOM 순서대로 진열순서 재지정
 function getDisplayOrderData() {
     const displayOrderItems = document.querySelectorAll("li.cigarette_on_list");
     const result = [];
@@ -257,10 +237,11 @@ function getDisplayOrderData() {
         result.push(data);
         i++;
     }
-    result.sort((a, b) => a.id - b.id);
+    result.sort((a, b) => a.id - b.id); // id 순서대로 오름차 정렬
     return result;
 }
 
+// 전산순 목록의 담배들을 DOM 순서대로 전산순서 재지정
 function getComputerizedOrderData() {
     const computerizedOrderItems = document.querySelectorAll(
         "li.cigarette_on_list_computerized"
@@ -276,6 +257,6 @@ function getComputerizedOrderData() {
         result.push(data);
         i++;
     }
-    result.sort((a, b) => a.id - b.id);
+    result.sort((a, b) => a.id - b.id); // id 순서대로 오름차정렬
     return result;
 }

@@ -218,6 +218,10 @@ export function getUserId() {
     return localStorage.getItem("userId");
 }
 
+export function getStoreId() {
+    return sessionStorage.getItem("currStoreId");
+}
+
 export function getAccessToken() {
     return localStorage.getItem("userAccessToken");
 }
@@ -239,7 +243,7 @@ export function redirectToLogin() {
 }
 
 export function redirectToHome() {
-    location.href = "index.html";
+    location.href = "/index.html";
 }
 
 export function stopFunc(e) {
@@ -249,5 +253,7 @@ export function stopFunc(e) {
 }
 
 export const env = {
-    SERVER_HOST_PORT: "118.67.135.98:80",
+    // SERVER_HOST_PORT: "localhost:1024",
+    // SERVER_HOST_PORT: "192.100.0.223:1024",
+    SERVER_HOST_PORT: "49.50.164.244:9090",
 };

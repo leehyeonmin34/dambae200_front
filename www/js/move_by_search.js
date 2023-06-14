@@ -156,6 +156,9 @@ function tryMove() {
             "id"
         );
         const movedCigarId = item.getAttribute("id");
+
+        // DOM을 먼저 변경할 것이냐 vs 요청을 먼저 보낼것이냐
+        insertAfter(criterionDOM, item);
         reorder.trySendReorderInfo(
             "display",
             0,
@@ -163,13 +166,12 @@ function tryMove() {
             insertBeforeCigarId,
             movedCigarId
         );
-        insertAfter(criterionDOM, item);
     }
 
-    execMovementSuccess();
+    execMovementSuccess(selectedElements);
 }
 
-function execMovementSuccess() {
+function execMovementSuccess(selectedElements) {
     closeMovementPage();
     uncheckAll();
     displayOrder.initializeSelection();

@@ -160,7 +160,7 @@ function loadFail() {
 
 function initStoreEnter() {
     common.addEventListenerToDOMbySelector(
-        ".store_card .btn_pressed",
+        ".store_card.accessible .btn_pressed, .store_card.admin_access .btn_pressed",
         "click",
         enterStore
     );

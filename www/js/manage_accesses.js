@@ -1,5 +1,6 @@
 import * as common from "./common.js";
 import accessEnum from "./accessType.js";
+import errorCode from "./errorCode.js";
 
 const popup = document.querySelector("#popup");
 
@@ -22,13 +23,19 @@ function loadStoreAccesses() {
     var hr = new XMLHttpRequest();
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
-            if (hr.status == 200) {
+            var response = JSON.parse(hr.responseText);
+            console.log(response.errorResponse);
+            if (response.status == 200) {
                 var json = JSON.parse(hr.responseText).data;
                 mappingAccessData(json);
                 accessItemUnit();
-            } else if (hr.status == 401) {
-                console.log(common.getAccessToken());
-                // common.redirectToLogin();
+            } else if (response.status == 401) {
+                if (
+                    response.errorResponse.errorCode ==
+                    errorCode.ACCESS.ACCESS_NOT_ALLOWED
+                ) {
+                    common.redirectToHome();
+                } else common.redirectToLogin();
             } else {
                 common.giveToastNoti("알 수 없는 이유로 불러올 수 없습니다");
             }
@@ -36,12 +43,13 @@ function loadStoreAccesses() {
         showEmpty();
     };
 
-    const storeId = sessionStorage.getItem("currStoreId");
+    const storeId = common.getStoreId();
     hr.open(
         "GET",
         `http://${common.env.SERVER_HOST_PORT}/api/accesses?storeId=` + storeId
     );
     hr.setRequestHeader("Authorization", common.getAccessToken());
+    hr.setRequestHeader("storeId", common.getStoreId());
     hr.send();
 }
 
@@ -164,7 +172,7 @@ function getAccessIdFromBtn(e) {
 
 const popupEnum = {
     HAND_OVER_ADMIN: {
-        title: "닉네임 님에게\n관리자 권한을 넘겨주시겠어요?",
+        title: "해당 사용자에게\n관리자 권한을 넘겨주시겠어요?",
         desc:
             "해당 담배 목록에 대한 관리자 권한을\n해당 유저에게 넘겨주고\n일반 접근 권한을 갖게됩니다.",
         action_btn_label: "확인",
@@ -173,11 +181,12 @@ const popupEnum = {
         action_btn_event: function (accessId) {
             handOverAdmin(accessId);
             // 메인화면으로 리다이렉트
+
             setTimeout(() => (location.href = "/index.html"), 3000);
         },
     },
     DELETE_ACCESS: {
-        title: "닉네임 님의 접근 권한을\n삭제하시겠어요?",
+        title: "해당 사용자의 접근 권한을\n삭제하시겠어요?",
         desc: "해당 담배 목록에 대한\n열람/편집 권한을 잃게됩니다.",
         action_btn_label: "삭제",
         action_btn_color: "red",
@@ -187,7 +196,7 @@ const popupEnum = {
         },
     },
     APPROVE_APPLICATION: {
-        title: "닉네임 님의 접근 신청을\n승인하시겠어요?",
+        title: "해당 사용자의 접근 신청을\n승인하시겠어요?",
         desc: "해당 담배 목록에 대한\n열람/편집 권한을 얻게됩니다.",
         action_btn_label: "승인",
         action_btn_color: "green",
@@ -197,7 +206,7 @@ const popupEnum = {
         },
     },
     DENY_APPLICATION: {
-        title: "닉네임 님의 접근 신청을\n거절하시겠어요?",
+        title: "해당 사용자의 접근 신청을\n거절하시겠어요?",
         desc: "접근 신청 거절이 통보되고,\n권한 신청자 목록에서 제거됩니다.",
         action_btn_label: "거절",
         action_btn_color: "red",
@@ -237,7 +246,7 @@ function modifyAccessRequest(accessId, accessType, successMsg) {
     hr.onreadystatechange = () => {
         if (hr.readyState == XMLHttpRequest.DONE) {
             if (hr.status == 200) {
-                init();
+                // init();
                 common.giveToastNoti(successMsg);
 
                 // 관리자 권한 양도라면, 메인으로 리다이렉션 되기 전까지
@@ -246,11 +255,15 @@ function modifyAccessRequest(accessId, accessType, successMsg) {
                     disableInteraction();
                 }
             } else if (hr.status == 401) {
-                // console.log(getAccessToken());
-                common.redirectToLogin();
+                if (
+                    body.errorResponse.errorCode ==
+                    errorCode.ACCESS.ACCESS_NOT_ALLOWED
+                ) {
+                    common.redirectToHome();
+                } else common.redirectToLogin();
             } else {
                 init();
-                common.giveToastNoti("알 수 없는 이유로 불러올 수 없습니다");
+                common.giveToastNoti("알 수 없는 이유로 적용할 수 없습니다");
             }
             showEmpty();
         }
@@ -261,6 +274,7 @@ function modifyAccessRequest(accessId, accessType, successMsg) {
         `http://${common.env.SERVER_HOST_PORT}/api/accesses/${accessId}/byadmin?accessTypeCode=${accessType.code}`
     );
     hr.setRequestHeader("Authorization", common.getAccessToken());
+    hr.setRequestHeader("storeId", common.getStoreId());
     hr.send();
 }
 

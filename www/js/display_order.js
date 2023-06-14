@@ -246,6 +246,7 @@ function loadCigarette() {
     );
 
     hr.setRequestHeader("Authorization", common.getAccessToken());
+    hr.setRequestHeader("storeId", getStoreId());
     hr.send();
 }
 
@@ -1047,9 +1048,9 @@ function deleteMessageHandler(message) {
     const body = JSON.parse(message.body);
     if (body.status == 200) {
         deleteSuccess(message);
-    } else if (hr.status == 400) {
+    } else if (body.status == 400) {
         if (
-            (hr.status == responseBody.errorResponse.errorCode) ==
+            (body.status == responseBody.errorResponse.errorCode) ==
             errorCode.ACCESS.ACCESS_NOT_ALLOWED
         ) {
             common.redirectToHome();
@@ -1282,37 +1283,73 @@ function enableSocket() {
     stomp = Stomp.over(sockJs);
 
     // 2. connection이 맺어지면 실행
-    stomp.connect({}, function () {
-        console.log("STOMP Connection");
+    stomp.connect(
+        getStompHeader(),
+        function () {
+            console.log("STOMP Connection");
 
-        // 3. subscribe(path, callback)으로 메시지를 받을 수 있음
-        stomp.subscribe(channel.CIGAR_NUM(), cigarNumMessageHandler);
+            // 3. subscribe(path, callback)으로 메시지를 받을 수 있음
+            stomp.subscribe(channel.CIGAR_NUM(), cigarNumMessageHandler);
 
-        stomp.subscribe(channel.ADD_CIGAR(), addCigarMessageHandler);
-        stomp.subscribe("/user" + channel.ADD_CIGAR(), addCigarMessageHandler);
+            stomp.subscribe(channel.ADD_CIGAR(), addCigarMessageHandler);
+            stomp.subscribe(
+                "/user" + channel.ADD_CIGAR(),
+                addCigarMessageHandler
+            );
 
-        stomp.subscribe(channel.MODIFY(), modifyMessageHandler);
-        stomp.subscribe("/user" + channel.MODIFY(), modifyMessageHandler);
+            stomp.subscribe(channel.MODIFY(), modifyMessageHandler);
+            stomp.subscribe("/user" + channel.MODIFY(), modifyMessageHandler);
 
-        stomp.subscribe(
-            channel.INITIALIZE_COUNT(),
-            initializeCountMessageHandler
-        );
-        stomp.subscribe(
-            "/user" + channel.INITIALIZE_COUNT(),
-            initializeCountMessageHandler
-        );
+            stomp.subscribe(
+                channel.INITIALIZE_COUNT(),
+                initializeCountMessageHandler
+            );
+            stomp.subscribe(
+                "/user" + channel.INITIALIZE_COUNT(),
+                initializeCountMessageHandler
+            );
 
-        stomp.subscribe(channel.REORDER(), reorder.reorderMessageHandler);
-        stomp.subscribe(
-            "/user" + channel.REORDER(),
-            reorder.reorderMessageHandler
-        );
+            stomp.subscribe(channel.REORDER(), reorder.reorderMessageHandler);
+            stomp.subscribe(
+                "/user" + channel.REORDER(),
+                reorder.reorderMessageHandler
+            );
 
-        stomp.subscribe(channel.DELETE(), deleteMessageHandler);
-        stomp.subscribe("/user" + channel.DELETE(), deleteMessageHandler);
-    });
+            stomp.subscribe(channel.DELETE(), deleteMessageHandler);
+            stomp.subscribe("/user" + channel.DELETE(), deleteMessageHandler);
+        },
+        (error) => {
+            if (!!error.body) {
+                console.log(error);
+                const body = JSON.parse(error.body);
+                console.log(body);
+                if (
+                    body.errorResponse.errorCode ==
+                    errorCode.ACCESS.ACCESS_NOT_ALLOWED
+                )
+                    location.href = "../index.html";
+                if (
+                    body.errorResponse.errorCode ==
+                    errorCode.SESSION.SESSION_INFO_NOT_EXISTS
+                )
+                    common.redirectToLogin();
+            }
+            // location.href = "../index.html";
+        }
+    );
 }
+
+// function open() {
+//     common.givePopup(initializationPopupInfo);
+// }
+
+// const initializationPopupInfo = {
+//     title: "입력된 담배 갯수를\n모두 지우시겠어요?",
+//     desc: "담배는 그대로 두고,\n입력된 갯수를 모두 지우게 됩니다",
+//     action_btn_label: "지우기",
+//     action_btn_color: "red",
+//     action_btn_event: tryInitializeCount,
+// };
 
 export const channel = {
     ADD_CIGAR: () => "/sub/store/" + getStoreId() + "/add_cigar",
@@ -1387,6 +1424,9 @@ export function getStompHeader() {
     return {
         Authorization: common.getAccessToken(),
         "Content-Type": "application/json",
+        storeId: getStoreId(),
+        // userId: 0,
+        userId: common.getUserId(),
     };
 }
 
