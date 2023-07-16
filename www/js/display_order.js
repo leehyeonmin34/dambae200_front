@@ -839,6 +839,7 @@ function addSuccess(json) {
     const cigaretteListTemplate = common.getTemplate("#cigaretteListTemplate");
 
     const data = convertCigarData(json.content);
+    console.log(json.content, data);
 
     cigaretteListSection.innerHTML += cigaretteListTemplate(data);
 
