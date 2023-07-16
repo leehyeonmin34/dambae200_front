@@ -879,7 +879,7 @@ export function convertCigarData(json) {
         cigar_id: json.cigaretteId,
         vertical: json.vertical ? "vertical" : "",
         official_name: json.officialName,
-        customized_name: json.customizedName,
+        customized_name: json.customizedName || json.simpleName,
         count: json.count == -1 ? "" : json.count,
         file_path_medium: json.filePathMedium,
         file_path_large: json.filePathLarge,
@@ -1425,7 +1425,6 @@ export function getStompHeader() {
         Authorization: common.getAccessToken(),
         "Content-Type": "application/json",
         storeId: getStoreId(),
-        // userId: 0,
         userId: common.getUserId(),
     };
 }
