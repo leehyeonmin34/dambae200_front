@@ -256,5 +256,5 @@ export const env = {
     // SERVER_HOST_PORT: "localhost:1024",
     // SERVER_HOST_PORT: "172.20.10.3:1024",
     // SERVER_HOST_PORT: "49.50.164.244:9090",
-    SERVER_HOST_PORT: "101.101.208.16:80",
+    SERVER_HOST_PORT: "172.20.10.3:1024",
 };
