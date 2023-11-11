@@ -881,8 +881,9 @@ export function convertCigarData(json) {
         vertical: json.vertical ? "vertical" : "",
         official_name: json.officialName,
         customized_name:
-            (json.customizedName == null || json.customizedName == "") &&
-            json.simpleName,
+            json.customizedName == null || json.customizedName == ""
+                ? json.simpleName
+                : json.customizedName,
         count: json.count == -1 ? "" : json.count,
         file_path_medium: json.filePathMedium,
         file_path_large: json.filePathLarge,
