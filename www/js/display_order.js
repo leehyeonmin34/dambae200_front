@@ -297,11 +297,9 @@ function mappingCigarettes(cigarettesJson) {
 }
 
 function mappingDisplayOrder(cigarettes) {
-    console.log(9999)
     const cigaretteListTemplate = common.getTemplate("#cigaretteListTemplate");
     for (const item of cigarettes) {
         const data = convertCigarData(item);
-        console.log(data);
 
         cigaretteListSection.innerHTML += cigaretteListTemplate(data);
     }
@@ -328,7 +326,6 @@ function mappingComputerziedOrder(cigarettes) {
 
 function addDivider(i) {
     if ((parseInt(i) + 1) % 5 == 0) {
-        console.log(1000000);
         computerizedCigaretteListSection.innerHTML += `<div class="divider"></div>`;
     }
 }
@@ -708,7 +705,6 @@ function loadAllCigarettes() {
 }
 
 function cigaretteDropdownInteraction() {
-    console.log(10);
     common.addEventListenerToDOMbySelector(
         ".cigarette_dropdown_list",
         "click",
@@ -717,11 +713,9 @@ function cigaretteDropdownInteraction() {
             onClickDropdownCigar(e);
         }
     );
-    console.log(100);
 }
 
 function onClickDropdownCigar(e) {
-    console.log(10);
     common.hideDOM(addCigaretteDropdownContainer);
     saveBtn.enableBtn();
 
@@ -841,7 +835,6 @@ function addSuccess(json) {
     const cigaretteListTemplate = common.getTemplate("#cigaretteListTemplate");
 
     const data = convertCigarData(json.content);
-    console.log(json.content, data);
 
     cigaretteListSection.innerHTML += cigaretteListTemplate(data);
 
@@ -877,12 +870,6 @@ function removeCigaretteListEventListeners() {
 }
 
 export function convertCigarData(json) {
-    console.log(json);
-    console.log(
-        json.customizedName == null || json.customizedName == ""
-            ? json.simpleName
-            : json.customizedName
-    );
     return {
         id: json.id,
         cigar_id: json.cigaretteId,
