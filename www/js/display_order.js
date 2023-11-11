@@ -875,6 +875,12 @@ function removeCigaretteListEventListeners() {
 }
 
 export function convertCigarData(json) {
+    console.log(json);
+    console.log(
+        json.customizedName == null || json.customizedName == ""
+            ? json.simpleName
+            : json.customizedName
+    );
     return {
         id: json.id,
         cigar_id: json.cigaretteId,
