@@ -300,6 +300,7 @@ function mappingDisplayOrder(cigarettes) {
     const cigaretteListTemplate = common.getTemplate("#cigaretteListTemplate");
     for (const item of cigarettes) {
         const data = convertCigarData(item);
+        console.log(data);
 
         cigaretteListSection.innerHTML += cigaretteListTemplate(data);
     }
