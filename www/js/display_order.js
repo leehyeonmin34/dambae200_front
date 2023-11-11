@@ -297,6 +297,7 @@ function mappingCigarettes(cigarettesJson) {
 }
 
 function mappingDisplayOrder(cigarettes) {
+    console.log(9999)
     const cigaretteListTemplate = common.getTemplate("#cigaretteListTemplate");
     for (const item of cigarettes) {
         const data = convertCigarData(item);
